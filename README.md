@@ -13,5 +13,4 @@ NEXUS is a real-time Decision Support System (DSS) designed for railway dispatch
 * **Frontend**: React + TypeScript + Vite + Tailwind CSS + MapLibre GL JS
 * **Backend**: FastAPI + NetworkX (Graph Topology) + SimPy (Discrete Event Simulation)
 
----
-*Created as part of a 4-day Hackathon project.*
+
