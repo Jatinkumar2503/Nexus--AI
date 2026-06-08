@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Shield, Activity, RefreshCw, AlertTriangle, Play, Pause, ChevronRight } from 'lucide-react';
+import { RailMap } from './components/RailMap';
 import './App.css';
 
 function App() {
@@ -63,13 +64,7 @@ function App() {
       <main className="flex flex-1 overflow-hidden relative">
         {/* Left Side: Rail Network Visualization Map */}
         <section className="flex-1 h-full relative border-r border-border bg-zinc-950/20">
-          <div className="absolute inset-0 flex items-center justify-center">
-            {/* Map Placeholder - will be loaded in Commit 12 */}
-            <div className="text-center space-y-2">
-              <RefreshCw className="w-8 h-8 text-zinc-600 animate-spin mx-auto" />
-              <p className="text-sm text-zinc-500">Initializing GIS Map Canvas...</p>
-            </div>
-          </div>
+          <RailMap />
         </section>
 
         {/* Right Side: Operational Metrics & Controller */}
