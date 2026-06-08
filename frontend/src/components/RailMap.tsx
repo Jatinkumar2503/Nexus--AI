@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { api, TopologyResponse, TrackEdge, TrainState } from '../services/api';
+import { api, type TopologyResponse, type TrackEdge, type TrainState } from '../services/api';
 
 interface RailMapProps {
   trains?: TrainState[];
@@ -13,7 +13,6 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<maplibregl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
-  const [topologyData, setTopologyData] = useState<TopologyResponse | null>(null);
 
   // Effect to initialize the map
   useEffect(() => {
@@ -34,7 +33,6 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
     map.on('load', async () => {
       try {
         const data = await api.getTopology();
-        setTopologyData(data);
 
         // Render network graph
         drawTracks(map, data);
@@ -306,6 +304,13 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
         if (stationId && onStationSelect) {
           onStationSelect(stationId);
         }
+      }
+    });
+
+    // Handle track click if requested
+    map.on('click', 'outbound-tracks-layer', (e) => {
+      if (onTrackSelect && e.features && e.features.length > 0) {
+        // Simple track click handler logic can go here
       }
     });
 

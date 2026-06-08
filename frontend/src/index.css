@@ -1,19 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  body {
-    @apply bg-background text-zinc-100 font-sans antialiased overflow-hidden;
-    margin: 0;
-    padding: 0;
-  }
+@theme {
+  --color-background: #09090b;
+  --color-card: rgba(24, 24, 27, 0.65);
+  --color-border: rgba(63, 63, 70, 0.4);
+  --color-primary: #3b82f6;
+  --color-accent: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  --font-sans: "Outfit", "Inter", sans-serif;
+
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.5);
 }
 
-/* Custom Glassmorphism card utility */
-.glass-panel {
+@utility glass-panel {
   background: rgba(18, 18, 24, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -21,14 +25,23 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
-.glass-panel-hover {
+@utility glass-panel-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover {
+    background: rgba(24, 24, 32, 0.85);
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.15);
+  }
 }
 
-.glass-panel-hover:hover {
-  background: rgba(24, 24, 32, 0.85);
-  border-color: rgba(59, 130, 246, 0.6);
-  box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.15);
+body {
+  background-color: var(--color-background);
+  color: var(--color-zinc-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 /* Pulsing radar indicator for disruptions */
@@ -43,20 +56,19 @@
   }
 }
 
-.radar-glow {
+@utility radar-glow {
   position: relative;
-}
-
-.radar-glow::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  border-radius: 50%;
-  background: rgba(239, 68, 68, 0.4);
-  animation: radar-pulse 1.8s infinite linear;
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.4);
+    animation: radar-pulse 1.8s infinite linear;
+  }
 }
 
 /* Custom Scrollbar for premium dark feel */

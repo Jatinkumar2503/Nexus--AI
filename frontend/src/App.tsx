@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Shield, Activity, RefreshCw, AlertTriangle, Play, Pause, Train, Clock } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Shield, Activity, Play, Pause, Train } from 'lucide-react';
 import { RailMap } from './components/RailMap';
-import { api, TrainState } from './services/api';
+import { api, type TrainState } from './services/api';
 import './App.css';
 
 function App() {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [simTime, setSimTime] = useState<string>("10:00:00");
-  const [systemStatus, setSystemStatus] = useState<"NORMAL" | "DISRUPTED">("NORMAL");
+  const [systemStatus] = useState<"NORMAL" | "DISRUPTED">("NORMAL");
   const [trains, setTrains] = useState<TrainState[]>([]);
 
   // Fetch live train coordinates and simulation time
