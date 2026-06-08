@@ -1,23 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { api, TopologyResponse, TrackEdge } from '../services/api';
+import { api, TopologyResponse, TrackEdge, TrainState } from '../services/api';
 
 interface RailMapProps {
+  trains?: TrainState[];
   onStationSelect?: (stationId: string) => void;
   onTrackSelect?: (fromNode: string, toNode: string) => void;
 }
 
-export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect }) => {
+export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, onTrackSelect }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<maplibregl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const [topologyData, setTopologyData] = useState<TopologyResponse | null>(null);
 
+  // Effect to initialize the map
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    // Initialize MapLibre GL Map
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
@@ -32,14 +33,11 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
 
     map.on('load', async () => {
       try {
-        // Fetch Shinkansen topology from FastAPI backend
         const data = await api.getTopology();
         setTopologyData(data);
 
-        // Draw track vector lines
+        // Render network graph
         drawTracks(map, data);
-
-        // Draw station marker nodes
         drawStations(map, data);
 
         setMapLoaded(true);
@@ -53,6 +51,108 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
       map.remove();
     };
   }, []);
+
+  // Effect to update train positions dynamically
+  useEffect(() => {
+    const map = mapInstance.current;
+    if (!map || !mapLoaded) return;
+
+    // Build GeoJSON features for active trains
+    const features = trains.map((train) => ({
+      type: 'Feature' as const,
+      properties: {
+        id: train.train_id,
+        type: train.service_type,
+        status: train.status,
+        delay: train.delay_minutes,
+        passengers: train.passenger_count
+      },
+      geometry: {
+        type: 'Point' as const,
+        coordinates: [train.coordinates[1], train.coordinates[0]] // [Longitude, Latitude]
+      }
+    }));
+
+    const geojsonData = {
+      type: 'FeatureCollection' as const,
+      features: features
+    };
+
+    const sourceId = 'trains-source';
+
+    // If source doesn't exist, create it and register the layers
+    if (!map.getSource(sourceId)) {
+      map.addSource(sourceId, {
+        type: 'geojson',
+        data: geojsonData
+      });
+
+      // Train outer pulsing/glowing ring
+      map.addLayer({
+        id: 'train-glows',
+        type: 'circle',
+        source: sourceId,
+        paint: {
+          'circle-radius': 11,
+          'circle-color': [
+            'match',
+            ['get', 'status'],
+            'RUNNING', '#eab308', // Glowing yellow
+            'DWELLING', '#10b981', // Neon green at stations
+            'WAITING', '#a1a1aa', // Gray
+            '#ef4444' // Red if delayed/stopped
+          ],
+          'circle-opacity': 0.3,
+          'circle-stroke-width': 1.5,
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-opacity': 0.5
+        }
+      });
+
+      // Core train dots
+      map.addLayer({
+        id: 'train-dots',
+        type: 'circle',
+        source: sourceId,
+        paint: {
+          'circle-radius': 6,
+          'circle-color': [
+            'match',
+            ['get', 'status'],
+            'RUNNING', '#eab308',
+            'DWELLING', '#10b981',
+            'WAITING', '#71717a',
+            '#ef4444'
+          ],
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff'
+        }
+      });
+
+      // Train ID labels
+      map.addLayer({
+        id: 'train-labels',
+        type: 'symbol',
+        source: sourceId,
+        layout: {
+          'text-field': ['get', 'id'],
+          'text-size': 9,
+          'text-offset': [0, -1.5],
+          'text-anchor': 'bottom',
+          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold']
+        },
+        paint: {
+          'text-color': '#ffffff',
+          'text-halo-color': '#09090b',
+          'text-halo-width': 2
+        }
+      });
+    } else {
+      // Source already exists, just update data payload (extremely fast HMR-like updates)
+      const source = map.getSource(sourceId) as maplibregl.GeoJSONSource;
+      source.setData(geojsonData);
+    }
+  }, [trains, mapLoaded]);
 
   // Draws rail track segments as vector lines on the map
   const drawTracks = (map: maplibregl.Map, data: TopologyResponse) => {
@@ -75,7 +175,6 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
       }
     });
 
-    // Add source and layer for outbound tracks
     map.addSource('outbound-tracks', {
       type: 'geojson',
       data: {
@@ -103,7 +202,6 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
       }
     });
 
-    // Add source and layer for inbound tracks
     map.addSource('inbound-tracks', {
       type: 'geojson',
       data: {
@@ -144,11 +242,10 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
       },
       geometry: {
         type: 'Point' as const,
-        coordinates: [info.coords[1], info.coords[0]] // [Longitude, Latitude]
+        coordinates: [info.coords[1], info.coords[0]]
       }
     }));
 
-    // Add stations source
     map.addSource('stations', {
       type: 'geojson',
       data: {
@@ -157,7 +254,6 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
       }
     });
 
-    // Outer glow layer for stations
     map.addLayer({
       id: 'station-glows',
       type: 'circle',
@@ -172,7 +268,6 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
       }
     });
 
-    // Primary station dots
     map.addLayer({
       id: 'station-dots',
       type: 'circle',
@@ -181,11 +276,10 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
         'circle-radius': 5,
         'circle-color': '#ffffff',
         'circle-stroke-width': 3,
-        'circle-stroke-color': '#09090b' // Blends with dark map background
+        'circle-stroke-color': '#09090b'
       }
     });
 
-    // Station name labels
     map.addLayer({
       id: 'station-labels',
       type: 'symbol',
@@ -198,13 +292,12 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
         'text-max-width': 8
       },
       paint: {
-        'text-color': '#a1a1aa', // Muted zinc-400 color
+        'text-color': '#a1a1aa',
         'text-halo-color': '#09090b',
         'text-halo-width': 1.5
       }
     });
 
-    // Handle station click events
     map.on('click', 'station-dots', (e) => {
       const features = map.queryRenderedFeatures(e.point, { layers: ['station-dots'] });
       if (features.length > 0) {
@@ -216,7 +309,6 @@ export const RailMap: React.FC<RailMapProps> = ({ onStationSelect, onTrackSelect
       }
     });
 
-    // Hover mouse pointer changes
     map.on('mouseenter', 'station-dots', () => {
       map.getCanvas().style.cursor = 'pointer';
     });

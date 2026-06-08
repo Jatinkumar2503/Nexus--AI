@@ -1,12 +1,46 @@
-import React, { useState } from 'react';
-import { Shield, Activity, RefreshCw, AlertTriangle, Play, Pause, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Shield, Activity, RefreshCw, AlertTriangle, Play, Pause, Train, Clock } from 'lucide-react';
 import { RailMap } from './components/RailMap';
+import { api, TrainState } from './services/api';
 import './App.css';
 
 function App() {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [simTime, setSimTime] = useState<string>("10:00:00");
   const [systemStatus, setSystemStatus] = useState<"NORMAL" | "DISRUPTED">("NORMAL");
+  const [trains, setTrains] = useState<TrainState[]>([]);
+
+  // Fetch live train coordinates and simulation time
+  useEffect(() => {
+    let interval: any;
+
+    const fetchSimState = async () => {
+      try {
+        const response = await api.getLiveTrains();
+        setTrains(response.trains);
+        setSimTime(response.simulation_time);
+      } catch (err) {
+        console.error("Failed to poll simulator states:", err);
+      }
+    };
+
+    fetchSimState();
+
+    if (isPlaying) {
+      interval = setInterval(fetchSimState, 1000);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isPlaying]);
+
+  // Derived KPI metrics
+  const activeTrainsCount = trains.filter(t => t.status === "RUNNING" || t.status === "DWELLING").length;
+  const delayedTrainsCount = trains.filter(t => t.delay_minutes > 0).length;
+  const punctuality = activeTrainsCount > 0 
+    ? Math.max(0, Math.min(100, 100 - (delayedTrainsCount / activeTrainsCount) * 100))
+    : 100;
 
   return (
     <div className="flex flex-col h-screen w-screen bg-background text-zinc-100 overflow-hidden font-sans">
@@ -64,7 +98,7 @@ function App() {
       <main className="flex flex-1 overflow-hidden relative">
         {/* Left Side: Rail Network Visualization Map */}
         <section className="flex-1 h-full relative border-r border-border bg-zinc-950/20">
-          <RailMap />
+          <RailMap trains={trains} />
         </section>
 
         {/* Right Side: Operational Metrics & Controller */}
@@ -78,16 +112,55 @@ function App() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="glass-panel p-4 rounded-xl flex flex-col justify-between h-24">
                   <span className="text-[10px] text-zinc-500 font-semibold uppercase">Punctuality</span>
-                  <span className="text-2xl font-bold text-accent">99.8%</span>
+                  <span className="text-2xl font-bold text-accent">{punctuality.toFixed(1)}%</span>
                 </div>
                 <div className="glass-panel p-4 rounded-xl flex flex-col justify-between h-24">
                   <span className="text-[10px] text-zinc-500 font-semibold uppercase">Active Trains</span>
-                  <span className="text-2xl font-bold text-primary">12</span>
+                  <span className="text-2xl font-bold text-primary">{activeTrainsCount}</span>
                 </div>
               </div>
             </div>
 
-            {/* Logs/Control placeholders */}
+            {/* Live Train Roster */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-semibold tracking-widest text-zinc-500 uppercase">
+                Live Train Fleet
+              </h3>
+              <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                {trains.map((train) => (
+                  <div key={train.train_id} className="glass-panel p-3.5 rounded-xl flex items-center justify-between border border-border/60 hover:border-primary/50 transition-colors">
+                    <div className="flex items-center space-x-3">
+                      <div className={`p-2 rounded-lg bg-zinc-900 border ${
+                        train.status === "RUNNING" ? "border-accent/40" : "border-zinc-700"
+                      }`}>
+                        <Train className={`w-4 h-4 ${
+                          train.status === "RUNNING" ? "text-accent animate-pulse" : "text-zinc-400"
+                        }`} />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold tracking-wide">{train.train_id}</div>
+                        <div className="text-[10px] text-zinc-500 font-medium">
+                          {train.service_type} • {train.direction.toUpperCase()}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className={`text-xs font-bold ${
+                        train.status === "RUNNING" ? "text-primary" : 
+                        train.status === "DWELLING" ? "text-accent" : "text-zinc-500"
+                      }`}>
+                        {train.status}
+                      </div>
+                      <div className="text-[10px] text-zinc-500 font-medium mt-0.5">
+                        {train.speed_kmh.toFixed(0)} km/h
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Control Instructions */}
             <div className="glass-panel p-5 rounded-xl space-y-3">
               <div className="flex items-center justify-between border-b border-border pb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">

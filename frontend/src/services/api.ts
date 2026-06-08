@@ -24,6 +24,25 @@ export interface TopologyResponse {
   edges: TrackEdge[];
 }
 
+export interface TrainState {
+  train_id: string;
+  service_type: string;
+  direction: string;
+  current_node: string;
+  next_node: string;
+  speed_kmh: number;
+  delay_minutes: number;
+  passenger_count: number;
+  coordinates: [number, number]; // [Latitude, Longitude]
+  status: string; // "WAITING", "RUNNING", "DWELLING", "TERMINATED"
+}
+
+export interface LiveTrainsResponse {
+  status: string;
+  simulation_time: string;
+  trains: TrainState[];
+}
+
 export const api = {
   /**
    * Fetch the static rail network topology (station nodes and track edges).
@@ -32,6 +51,17 @@ export const api = {
     const response = await fetch(`${BASE_URL}/api/topology`);
     if (!response.ok) {
       throw new Error(`Failed to fetch topology: ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  /**
+   * Fetch the current position and status of all trains.
+   */
+  async getLiveTrains(): Promise<LiveTrainsResponse> {
+    const response = await fetch(`${BASE_URL}/api/live-trains`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch live trains: ${response.statusText}`);
     }
     return response.json();
   },
