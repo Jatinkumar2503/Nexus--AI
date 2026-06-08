@@ -1,0 +1,31 @@
+# Python virtual environments
+venv/
+.venv/
+env/
+.env
+bin/
+lib/
+include/
+
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js dependencies
+node_modules/
+dist/
+build/
+.eslintcache
+
+# Logs and databases
+*.log
+*.db
+*.sqlite3
+
+# IDE / System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
