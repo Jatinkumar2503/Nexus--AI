@@ -21,9 +21,9 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
-      center: [137.5, 35.2], // Centered on Tokaido Shinkansen route
-      zoom: 6.8,
-      minZoom: 5,
+      center: [72.84, 21.20], // Centered on Western India (Mumbai-Ahmedabad corridor)
+      zoom: 6.5,
+      minZoom: 4,
       maxZoom: 12,
       attributionControl: false
     });

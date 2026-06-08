@@ -1,36 +1,32 @@
 import networkx as nx
 from typing import Dict, Any, List
 
-# Tokaido Shinkansen Stations (Tokyo to Shin-Osaka)
+# Mumbai-Ahmedabad High-Speed Rail Corridor (MAHSR) - Bullet Train India
 # Coordinates: [Latitude, Longitude]
 STATIONS: Dict[str, Dict[str, Any]] = {
-    "TYO": {"name": "Tokyo", "coords": [35.681236, 139.767125], "platforms": 6, "base_dwell_time": 2},
-    "SYO": {"name": "Shin-Yokohama", "coords": [35.507456, 139.617585], "platforms": 4, "base_dwell_time": 1},
-    "ODW": {"name": "Odawara", "coords": [35.256139, 139.154944], "platforms": 2, "base_dwell_time": 1},
-    "ATM": {"name": "Atami", "coords": [35.103722, 139.077694], "platforms": 2, "base_dwell_time": 1},
-    "MSM": {"name": "Mishima", "coords": [35.127083, 138.910833], "platforms": 3, "base_dwell_time": 1},
-    "SFJ": {"name": "Shin-Fuji", "coords": [35.142222, 138.662778], "platforms": 2, "base_dwell_time": 1},
-    "SZO": {"name": "Shizuoka", "coords": [34.971667, 138.388889], "platforms": 4, "base_dwell_time": 1.5},
-    "KKG": {"name": "Kakegawa", "coords": [34.769444, 138.015], "platforms": 2, "base_dwell_time": 1},
-    "HMM": {"name": "Hamamatsu", "coords": [34.703611, 137.734722], "platforms": 4, "base_dwell_time": 1.5},
-    "TYH": {"name": "Toyohashi", "coords": [34.762778, 137.381944], "platforms": 3, "base_dwell_time": 1},
-    "MKA": {"name": "Mikawa-Anjo", "coords": [34.966944, 137.061389], "platforms": 2, "base_dwell_time": 1},
-    "NGO": {"name": "Nagoya", "coords": [35.170915, 136.881537], "platforms": 4, "base_dwell_time": 2},
-    "GFH": {"name": "Gifu-Hashima", "coords": [35.315833, 136.685833], "platforms": 2, "base_dwell_time": 1},
-    "MBR": {"name": "Maibara", "coords": [35.314444, 136.290278], "platforms": 3, "base_dwell_time": 1},
-    "KYT": {"name": "Kyoto", "coords": [34.985849, 135.758767], "platforms": 4, "base_dwell_time": 2},
-    "OSA": {"name": "Shin-Osaka", "coords": [34.73348, 135.500109], "platforms": 6, "base_dwell_time": 3}
+    "MUM": {"name": "Mumbai BKC", "coords": [19.0601, 72.8601], "platforms": 6, "base_dwell_time": 3},
+    "TNA": {"name": "Thane", "coords": [19.1860, 72.9734], "platforms": 4, "base_dwell_time": 2},
+    "VIR": {"name": "Virar", "coords": [19.4564, 72.8122], "platforms": 2, "base_dwell_time": 1},
+    "BOI": {"name": "Boisar", "coords": [19.8015, 72.7641], "platforms": 2, "base_dwell_time": 1},
+    "VAP": {"name": "Vapi", "coords": [20.3756, 72.9067], "platforms": 2, "base_dwell_time": 1},
+    "BIL": {"name": "Bilimora", "coords": [20.7816, 72.9644], "platforms": 2, "base_dwell_time": 1},
+    "SUR": {"name": "Surat", "coords": [21.2044, 72.8406], "platforms": 4, "base_dwell_time": 2},
+    "BHA": {"name": "Bharuch", "coords": [21.7107, 72.9972], "platforms": 2, "base_dwell_time": 1},
+    "VAD": {"name": "Vadodara", "coords": [22.3129, 73.1812], "platforms": 4, "base_dwell_time": 2},
+    "ANA": {"name": "Anand", "coords": [22.5645, 72.9498], "platforms": 2, "base_dwell_time": 1},
+    "ADI": {"name": "Ahmedabad", "coords": [23.0276, 72.6022], "platforms": 6, "base_dwell_time": 3},
+    "SAB": {"name": "Sabarmati", "coords": [23.0805, 72.5855], "platforms": 4, "base_dwell_time": 2}
 }
 
 class RailTopology:
-    """Represents the static rail network graph using NetworkX."""
+    """Represents the static Indian rail network graph using NetworkX."""
     def __init__(self):
         self.graph = nx.DiGraph()
         self._load_nodes()
         self._load_edges()
 
     def _load_nodes(self):
-        """Load Shinkansen stations as nodes in the graph."""
+        """Load stations as nodes in the graph."""
         for code, info in STATIONS.items():
             self.graph.add_node(
                 code,
@@ -41,33 +37,29 @@ class RailTopology:
             )
 
     def _load_edges(self):
-        """Load Shinkansen track segments as directional edges with distance and travel times."""
-        # Sequence of stations from Tokyo to Shin-Osaka
-        sequence = ["TYO", "SYO", "ODW", "ATM", "MSM", "SFJ", "SZO", "KKG", "HMM", "TYH", "MKA", "NGO", "GFH", "MBR", "KYT", "OSA"]
+        """Load track segments as directional edges with distance and travel times."""
+        # Sequence of stations from Mumbai BKC to Sabarmati
+        sequence = ["MUM", "TNA", "VIR", "BOI", "VAP", "BIL", "SUR", "BHA", "VAD", "ANA", "ADI", "SAB"]
         
-        # Link distances (km) and estimated travel times (minutes) under normal operating speeds (~250-285 km/h)
+        # Link distances (km) and estimated travel times (minutes)
         segments = [
-            ("TYO", "SYO", 25.5, 11),
-            ("SYO", "ODW", 50.8, 16),
-            ("ODW", "ATM", 20.7, 8),
-            ("ATM", "MSM", 11.6, 6),
-            ("MSM", "SFJ", 20.6, 7),
-            ("SFJ", "SZO", 31.7, 10),
-            ("SZO", "KKG", 40.2, 12),
-            ("KKG", "HMM", 29.3, 9),
-            ("HMM", "TYH", 28.9, 9),
-            ("TYH", "MKA", 38.6, 11),
-            ("MKA", "NGO", 22.0, 9),
-            ("NGO", "GFH", 24.2, 9),
-            ("GFH", "MBR", 37.1, 11),
-            ("MBR", "KYT", 67.7, 19),
-            ("KYT", "OSA", 39.0, 12)
+            ("MUM", "TNA", 28.0, 10),
+            ("TNA", "VIR", 43.0, 12),
+            ("VIR", "BOI", 40.0, 11),
+            ("BOI", "VAP", 66.0, 15),
+            ("VAP", "BIL", 47.0, 12),
+            ("BIL", "SUR", 50.0, 12),
+            ("SUR", "BHA", 60.0, 14),
+            ("BHA", "VAD", 80.0, 17),
+            ("VAD", "ANA", 32.0, 10),
+            ("ANA", "ADI", 55.0, 13),
+            ("ADI", "SAB", 7.0, 5)
         ]
 
         for u, v, dist, time in segments:
-            # Outbound direction (Tokyo -> Shin-Osaka)
+            # Outbound direction (Mumbai -> Sabarmati)
             self.graph.add_edge(u, v, distance_km=dist, travel_time_min=time, direction="outbound", status="open")
-            # Inbound direction (Shin-Osaka -> Tokyo)
+            # Inbound direction (Sabarmati -> Mumbai)
             self.graph.add_edge(v, u, distance_km=dist, travel_time_min=time, direction="inbound", status="open")
 
     def get_nodes(self) -> Dict[str, Dict[str, Any]]:
@@ -94,4 +86,3 @@ class RailTopology:
             return nx.shortest_path(self.graph, source=origin, target=destination, weight="travel_time_min")
         except (nx.NetworkXNoPath, nx.NodeNotFound):
             return []
-
