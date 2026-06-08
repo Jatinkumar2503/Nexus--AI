@@ -2,6 +2,8 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from simulation.topology import RailTopology
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("nexus-api")
@@ -11,6 +13,9 @@ app = FastAPI(
     description="Backend API and Simulation Engine for NEXUS Rail Network Operations Simulator",
     version="1.0.0"
 )
+
+# Initialize rail network topology
+topology = RailTopology()
 
 # Set up CORS middleware for integration with the React frontend
 app.add_middleware(
@@ -39,6 +44,15 @@ async def health():
             "api": "online",
             "simulation_engine": "initialized"
         }
+    }
+
+@app.get("/api/topology")
+async def get_topology():
+    """Fetch the rail network nodes and edges."""
+    return {
+        "status": "success",
+        "nodes": topology.get_nodes(),
+        "edges": topology.get_edges()
     }
 
 if __name__ == "__main__":
