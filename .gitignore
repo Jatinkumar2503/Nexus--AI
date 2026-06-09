@@ -29,3 +29,7 @@ build/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Office / Presentation files
+*.pptx
+
