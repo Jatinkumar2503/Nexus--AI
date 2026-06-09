@@ -34,13 +34,59 @@ export interface TrainState {
   delay_minutes: number;
   passenger_count: number;
   coordinates: [number, number]; // [Latitude, Longitude]
-  status: string; // "WAITING", "RUNNING", "DWELLING", "TERMINATED"
+  status: string; // "WAITING", "RUNNING", "DWELLING", "TERMINATED", "DELAYED"
+  energy_consumed_kwh: number;
 }
 
-export interface LiveTrainsResponse {
-  status: string;
+export interface StationState {
+  station_id: string;
+  name: string;
+  occupied_platforms: string[];
+  capacity: number;
+  queue: string[];
+}
+
+export interface Disruption {
+  id: string;
+  node_id: string | null;
+  edge_id: string | null;
+  duration: number;
+  severity: string;
+  description: string;
+  start_time: number;
+}
+
+export interface SimulationMetrics {
+  total_passenger_delay_minutes: number;
+  total_energy_kwh: number;
+  crew_violation_count: number;
+  resilience_score: number;
+}
+
+export interface SimulationStateResponse {
   simulation_time: string;
   trains: TrainState[];
+  stations: StationState[];
+  active_disruptions: Disruption[];
+  metrics: SimulationMetrics;
+  negotiation_logs: string[];
+}
+
+export interface ScenarioOption {
+  id: string;
+  name: string;
+  description: string;
+  delay_minutes: number;
+  energy_cost_kwh: number;
+  crew_violations_count: number;
+  is_legal: boolean;
+  resilience_score: number;
+  explainer: string;
+}
+
+export interface CompareScenariosResponse {
+  status: string;
+  scenarios: ScenarioOption[];
 }
 
 export const api = {
@@ -58,7 +104,7 @@ export const api = {
   /**
    * Fetch the current position and status of all trains.
    */
-  async getLiveTrains(): Promise<LiveTrainsResponse> {
+  async getLiveTrains(): Promise<{ status: string; simulation_time: string; trains: TrainState[] }> {
     const response = await fetch(`${BASE_URL}/api/live-trains`);
     if (!response.ok) {
       throw new Error(`Failed to fetch live trains: ${response.statusText}`);
@@ -67,12 +113,74 @@ export const api = {
   },
 
   /**
-   * Fetch the detailed system health status.
+   * Fetch the full, detailed state of the running simulation.
    */
-  async getHealth(): Promise<{ status: string; components: Record<string, string> }> {
-    const response = await fetch(`${BASE_URL}/api/health`);
+  async getSimulationState(): Promise<SimulationStateResponse> {
+    const response = await fetch(`${BASE_URL}/api/simulation/state`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch health check: ${response.statusText}`);
+      throw new Error(`Failed to fetch simulation state: ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  /**
+   * Control the simulation playback clock (play, pause, reset, step).
+   */
+  async controlSimulation(action: "play" | "pause" | "reset" | "step", speed: number = 30.0): Promise<any> {
+    const response = await fetch(`${BASE_URL}/api/simulation/control`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, speed })
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to control simulation: ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  /**
+   * Inject a network disruption (block track or station).
+   */
+  async injectDisruption(nodeId: string | null, edgeId: string | null, duration: number, description: string): Promise<any> {
+    const response = await fetch(`${BASE_URL}/api/disruption/inject`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        node_id: nodeId,
+        edge_id: edgeId,
+        duration,
+        severity: "HIGH",
+        description
+      })
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to inject disruption: ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  /**
+   * Fetch parallel simulation scenario comparisons.
+   */
+  async compareScenarios(): Promise<CompareScenariosResponse> {
+    const response = await fetch(`${BASE_URL}/api/scenarios/compare`);
+    if (!response.ok) {
+      throw new Error(`Failed to compare scenarios: ${response.statusText}`);
+    }
+    return response.json();
+  },
+
+  /**
+   * Commit a chosen recovery scenario.
+   */
+  async resolveScenario(strategy: string): Promise<any> {
+    const response = await fetch(`${BASE_URL}/api/scenarios/resolve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ strategy })
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to resolve scenario: ${response.statusText}`);
     }
     return response.json();
   }
