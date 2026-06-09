@@ -1,28 +1,35 @@
 import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { api, type TopologyResponse, type TrackEdge, type TrainState } from '../services/api';
+import { api, type TopologyResponse, type TrackEdge, type TrainState, type Disruption } from '../services/api';
 
 interface RailMapProps {
   trains?: TrainState[];
+  activeDisruptions?: Disruption[];
   onStationSelect?: (stationId: string) => void;
   onTrackSelect?: (fromNode: string, toNode: string) => void;
 }
 
-export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, onTrackSelect }) => {
+export const RailMap: React.FC<RailMapProps> = ({ 
+  trains = [], 
+  activeDisruptions = [], 
+  onStationSelect, 
+  onTrackSelect 
+}) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<maplibregl.Map | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
+  const [topology, setTopology] = useState<TopologyResponse | null>(null);
 
-  // Effect to initialize the map
+  // Initialize Map
   useEffect(() => {
     if (!mapContainer.current) return;
 
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
-      center: [72.84, 21.20], // Centered on Western India (Mumbai-Ahmedabad corridor)
-      zoom: 6.5,
+      center: [72.84, 21.20], // Centered on Western India
+      zoom: 6.8,
       minZoom: 4,
       maxZoom: 12,
       attributionControl: false
@@ -33,9 +40,65 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
     map.on('load', async () => {
       try {
         const data = await api.getTopology();
+        setTopology(data);
 
-        // Render network graph
-        drawTracks(map, data);
+        // 1. Set up track source and layers with empty data initially
+        map.addSource('outbound-tracks', {
+          type: 'geojson',
+          data: { type: 'FeatureCollection', features: [] }
+        });
+
+        map.addLayer({
+          id: 'outbound-tracks-layer',
+          type: 'line',
+          source: 'outbound-tracks',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': [
+              'match',
+              ['get', 'status'],
+              'blocked', '#ef4444', // Neon/glowing red
+              '#3b82f6' // Tech blue
+            ],
+            'line-width': [
+              'match',
+              ['get', 'status'],
+              'blocked', 5,
+              3.5
+            ],
+            'line-opacity': 0.9
+          }
+        });
+
+        map.addSource('inbound-tracks', {
+          type: 'geojson',
+          data: { type: 'FeatureCollection', features: [] }
+        });
+
+        map.addLayer({
+          id: 'inbound-tracks-layer',
+          type: 'line',
+          source: 'inbound-tracks',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': [
+              'match',
+              ['get', 'status'],
+              'blocked', '#ef4444',
+              '#1d4ed8'
+            ],
+            'line-width': [
+              'match',
+              ['get', 'status'],
+              'blocked', 5,
+              2.5
+            ],
+            'line-opacity': 0.8,
+            'line-dasharray': [2, 2]
+          }
+        });
+
+        // 2. Draw stations
         drawStations(map, data);
 
         setMapLoaded(true);
@@ -50,12 +113,83 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
     };
   }, []);
 
+  // Update track blocking visual states dynamically
+  useEffect(() => {
+    const map = mapInstance.current;
+    if (!map || !mapLoaded || !topology) return;
+
+    // Helper to generate geojson features
+    const outboundFeatures = topology.edges
+      .filter(e => e.direction === "outbound")
+      .map(edge => {
+        const fromStation = topology.nodes[edge.from_node];
+        const toStation = topology.nodes[edge.to_node];
+        if (fromStation && toStation) {
+          const key = `${edge.from_node}->${edge.to_node}`;
+          const isBlocked = activeDisruptions.some(
+            d => d.edge_id === key || d.node_id === edge.from_node || d.node_id === edge.to_node
+          );
+          return {
+            type: 'Feature' as const,
+            properties: {
+              from_node: edge.from_node,
+              to_node: edge.to_node,
+              status: isBlocked ? 'blocked' : 'open'
+            },
+            geometry: {
+              type: 'LineString' as const,
+              coordinates: [
+                [fromStation.coords[1], fromStation.coords[0]],
+                [toStation.coords[1], toStation.coords[0]]
+              ]
+            }
+          };
+        }
+        return null;
+      }).filter((f): f is Exclude<typeof f, null> => f !== null);
+
+    const inboundFeatures = topology.edges
+      .filter(e => e.direction === "inbound")
+      .map(edge => {
+        const fromStation = topology.nodes[edge.from_node];
+        const toStation = topology.nodes[edge.to_node];
+        if (fromStation && toStation) {
+          const key = `${edge.from_node}->${edge.to_node}`; // Directed key
+          const isBlocked = activeDisruptions.some(
+            d => d.edge_id === key || d.node_id === edge.from_node || d.node_id === edge.to_node
+          );
+          return {
+            type: 'Feature' as const,
+            properties: {
+              from_node: edge.from_node,
+              to_node: edge.to_node,
+              status: isBlocked ? 'blocked' : 'open'
+            },
+            geometry: {
+              type: 'LineString' as const,
+              coordinates: [
+                [fromStation.coords[1], fromStation.coords[0]],
+                [toStation.coords[1], toStation.coords[0]]
+              ]
+            }
+          };
+        }
+        return null;
+      }).filter((f): f is Exclude<typeof f, null> => f !== null);
+
+    const outSource = map.getSource('outbound-tracks') as maplibregl.GeoJSONSource;
+    if (outSource) outSource.setData({ type: 'FeatureCollection', features: outboundFeatures });
+
+    const inSource = map.getSource('inbound-tracks') as maplibregl.GeoJSONSource;
+    if (inSource) inSource.setData({ type: 'FeatureCollection', features: inboundFeatures });
+
+  }, [activeDisruptions, mapLoaded, topology]);
+
   // Effect to update train positions dynamically
   useEffect(() => {
     const map = mapInstance.current;
     if (!map || !mapLoaded) return;
 
-    // Build GeoJSON features for active trains
     const features = trains.map((train) => ({
       type: 'Feature' as const,
       properties: {
@@ -78,7 +212,6 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
 
     const sourceId = 'trains-source';
 
-    // If source doesn't exist, create it and register the layers
     if (!map.getSource(sourceId)) {
       map.addSource(sourceId, {
         type: 'geojson',
@@ -98,9 +231,10 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
             'RUNNING', '#eab308', // Glowing yellow
             'DWELLING', '#10b981', // Neon green at stations
             'WAITING', '#a1a1aa', // Gray
-            '#ef4444' // Red if delayed/stopped
+            'DELAYED', '#ef4444', // Red
+            '#ef4444' // Default
           ],
-          'circle-opacity': 0.3,
+          'circle-opacity': 0.35,
           'circle-stroke-width': 1.5,
           'circle-stroke-color': '#ffffff',
           'circle-stroke-opacity': 0.5
@@ -113,13 +247,14 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
         type: 'circle',
         source: sourceId,
         paint: {
-          'circle-radius': 6,
+          'circle-radius': 6.5,
           'circle-color': [
             'match',
             ['get', 'status'],
             'RUNNING', '#eab308',
             'DWELLING', '#10b981',
             'WAITING', '#71717a',
+            'DELAYED', '#ef4444',
             '#ef4444'
           ],
           'circle-stroke-width': 2,
@@ -146,88 +281,10 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
         }
       });
     } else {
-      // Source already exists, just update data payload (extremely fast HMR-like updates)
       const source = map.getSource(sourceId) as maplibregl.GeoJSONSource;
       source.setData(geojsonData);
     }
   }, [trains, mapLoaded]);
-
-  // Draws rail track segments as vector lines on the map
-  const drawTracks = (map: maplibregl.Map, data: TopologyResponse) => {
-    const outboundCoords: number[][][] = [];
-    const inboundCoords: number[][][] = [];
-
-    data.edges.forEach((edge: TrackEdge) => {
-      const fromStation = data.nodes[edge.from_node];
-      const toStation = data.nodes[edge.to_node];
-
-      if (fromStation && toStation) {
-        const fromCoords = [fromStation.coords[1], fromStation.coords[0]];
-        const toCoords = [toStation.coords[1], toStation.coords[0]];
-
-        if (edge.direction === "outbound") {
-          outboundCoords.push([fromCoords, toCoords]);
-        } else {
-          inboundCoords.push([fromCoords, toCoords]);
-        }
-      }
-    });
-
-    map.addSource('outbound-tracks', {
-      type: 'geojson',
-      data: {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'MultiLineString',
-          coordinates: outboundCoords
-        }
-      }
-    });
-
-    map.addLayer({
-      id: 'outbound-tracks-layer',
-      type: 'line',
-      source: 'outbound-tracks',
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
-      },
-      paint: {
-        'line-color': '#3b82f6',
-        'line-width': 3.5,
-        'line-opacity': 0.85
-      }
-    });
-
-    map.addSource('inbound-tracks', {
-      type: 'geojson',
-      data: {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'MultiLineString',
-          coordinates: inboundCoords
-        }
-      }
-    });
-
-    map.addLayer({
-      id: 'inbound-tracks-layer',
-      type: 'line',
-      source: 'inbound-tracks',
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
-      },
-      paint: {
-        'line-color': '#1d4ed8',
-        'line-width': 2.5,
-        'line-opacity': 0.7,
-        'line-dasharray': [2, 2]
-      }
-    });
-  };
 
   // Draws stations as circles and text labels
   const drawStations = (map: maplibregl.Map, data: TopologyResponse) => {
@@ -257,10 +314,10 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
       type: 'circle',
       source: 'stations',
       paint: {
-        'circle-radius': 9,
+        'circle-radius': 10,
         'circle-color': '#3b82f6',
-        'circle-opacity': 0.2,
-        'circle-stroke-width': 1,
+        'circle-opacity': 0.15,
+        'circle-stroke-width': 1.2,
         'circle-stroke-color': '#3b82f6',
         'circle-stroke-opacity': 0.4
       }
@@ -271,7 +328,7 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
       type: 'circle',
       source: 'stations',
       paint: {
-        'circle-radius': 5,
+        'circle-radius': 5.5,
         'circle-color': '#ffffff',
         'circle-stroke-width': 3,
         'circle-stroke-color': '#09090b'
@@ -296,30 +353,40 @@ export const RailMap: React.FC<RailMapProps> = ({ trains = [], onStationSelect, 
       }
     });
 
+    // Handle station click
     map.on('click', 'station-dots', (e) => {
       const features = map.queryRenderedFeatures(e.point, { layers: ['station-dots'] });
       if (features.length > 0) {
         const stationId = features[0].properties?.id;
-        console.log(`Station selected: ${stationId}`);
         if (stationId && onStationSelect) {
           onStationSelect(stationId);
         }
       }
     });
 
-    // Handle track click if requested
-    map.on('click', 'outbound-tracks-layer', (e) => {
-      if (onTrackSelect && e.features && e.features.length > 0) {
-        // Simple track click handler logic can go here
+    // Handle track clicks
+    const handleTrackClick = (e: maplibregl.MapMouseEvent & maplibregl.EventData, layerId: string) => {
+      const features = map.queryRenderedFeatures(e.point, { layers: [layerId] });
+      if (features.length > 0 && onTrackSelect) {
+        const props = features[0].properties;
+        if (props?.from_node && props?.to_node) {
+          onTrackSelect(props.from_node, props.to_node);
+        }
       }
-    });
+    };
 
-    map.on('mouseenter', 'station-dots', () => {
-      map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave', 'station-dots', () => {
-      map.getCanvas().style.cursor = '';
-    });
+    map.on('click', 'outbound-tracks-layer', (e) => handleTrackClick(e, 'outbound-tracks-layer'));
+    map.on('click', 'inbound-tracks-layer', (e) => handleTrackClick(e, 'inbound-tracks-layer'));
+
+    // Cursors
+    map.on('mouseenter', 'station-dots', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'station-dots', () => { map.getCanvas().style.cursor = ''; });
+
+    map.on('mouseenter', 'outbound-tracks-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'outbound-tracks-layer', () => { map.getCanvas().style.cursor = ''; });
+
+    map.on('mouseenter', 'inbound-tracks-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'inbound-tracks-layer', () => { map.getCanvas().style.cursor = ''; });
   };
 
   return (
