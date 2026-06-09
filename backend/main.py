@@ -166,6 +166,7 @@ async def get_simulation_state():
 @app.post("/api/simulation/control")
 async def control_simulation(payload: ControlPayload):
     """Play, pause, reset, or step the simulation clock."""
+    global engine
     if payload.action == "play":
         engine.isPlaying = True
         engine.last_update_real_time = time.time()
@@ -174,7 +175,6 @@ async def control_simulation(payload: ControlPayload):
     elif payload.action == "pause":
         engine.isPlaying = False
     elif payload.action == "reset":
-        global engine
         engine = SimulationEngine()
     elif payload.action == "step":
         engine.isPlaying = False

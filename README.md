@@ -10,7 +10,35 @@ NEXUS is a real-time Decision Support System (DSS) designed for railway dispatch
 * **LLM Explainability**: Natural language summaries of agent negotiations and recommendations.
 
 ## 🛠️ Architecture
-* **Frontend**: React + TypeScript + Vite + Tailwind CSS + MapLibre GL JS
+* **Frontend**: React + TypeScript + Vite + Tailwind CSS v4 + MapLibre GL JS
 * **Backend**: FastAPI + NetworkX (Graph Topology) + SimPy (Discrete Event Simulation)
+
+## 🚦 How to Run the System
+
+### Prerequisites
+* Python 3.10+
+* Node.js 18+
+
+### 1. Start the FastAPI Simulation Backend
+```bash
+cd backend
+# Create virtual environment if needed: python -m venv venv
+# Activate virtualenv:
+# Windows: .\venv\Scripts\activate  |  macOS/Linux: source venv/bin/activate
+pip install -r requirements.txt
+python main.py
+```
+
+### 2. Start the React Frontend Dashboard
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 3. Running Automated Tests
+```bash
+python backend/simulation/test_simulator.py
+```
 
 
