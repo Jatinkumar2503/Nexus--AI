@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { api, type TopologyResponse, type TrackEdge, type TrainState, type Disruption } from '../services/api';
+import { api, type TopologyResponse, type TrainState, type Disruption } from '../services/api';
 
 interface RailMapProps {
   trains?: TrainState[];
@@ -365,7 +365,7 @@ export const RailMap: React.FC<RailMapProps> = ({
     });
 
     // Handle track clicks
-    const handleTrackClick = (e: maplibregl.MapMouseEvent & maplibregl.EventData, layerId: string) => {
+    const handleTrackClick = (e: any, layerId: string) => {
       const features = map.queryRenderedFeatures(e.point, { layers: [layerId] });
       if (features.length > 0 && onTrackSelect) {
         const props = features[0].properties;
