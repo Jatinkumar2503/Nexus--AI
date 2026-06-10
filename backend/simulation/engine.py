@@ -30,6 +30,8 @@ class SimulationEngine:
         self.trains: List[TrainAgent] = []
         self.disruptions: List[Dict[str, Any]] = []
         self.negotiation_logs: List[str] = []
+        self.substation_tripped: Dict[str, Optional[float]] = {}
+        self.substation_limit = 350.0
 
         # Scheduled timetable baseline arrival times: (train_id, station_id) -> mins
         self.scheduled_arrivals: Dict[tuple, float] = {}
@@ -306,6 +308,9 @@ class SimulationEngine:
                         self.disruptions = [disruption]
                         self.scheduled_arrivals = parent_engine.scheduled_arrivals
                         self.negotiation_logs = []
+                        self.substation_tripped = copy.deepcopy(parent_engine.substation_tripped)
+                        self.substation_limit = parent_engine.substation_limit
+                        self.trains = []
 
                     def get_scheduled_arrival(self, train_id, station_id):
                         return self.scheduled_arrivals.get((train_id, station_id), None)
@@ -325,6 +330,16 @@ class SimulationEngine:
 
                     def log_negotiation(self, msg):
                         self.negotiation_logs.append(msg)
+
+                    def get_edge_current_draw(self, u, v):
+                        total_amps = 0.0
+                        for t in self.trains:
+                            if t.from_node == u and t.to_node == v and t.status == "RUNNING":
+                                mass = 600.0 if t.service_type == "Vande Bharat" else 500.0 if t.service_type == "Tejas Express" else 400.0
+                                speed = t.speed_kmh
+                                t_amps = (mass * 0.01 + 0.0005 * (speed ** 2)) * 3.5
+                                total_amps += t_amps
+                        return total_amps
 
                 ff_engine = FastForwardEngine(self, ff_env, ff_stations, ff_edge_resources, strat, active_disp)
 
@@ -378,6 +393,8 @@ class SimulationEngine:
                     ff_train.traveled_distance_on_segment = getattr(t, "traveled_distance_on_segment", 0.0)
                     ff_trains.append(ff_train)
                     ff_env.process(ff_train.run())
+
+                ff_engine.trains = ff_trains
 
                 # 5. Run the fast-forward simulation to completion
                 try:
@@ -504,4 +521,15 @@ class SimulationEngine:
         )
         self.log_negotiation(msg)
         return msg
+
+    def get_edge_current_draw(self, u: str, v: str) -> float:
+        """Calculate the total current draw (Amperes) of all trains on edge u->v."""
+        total_amps = 0.0
+        for t in self.trains:
+            if t.from_node == u and t.to_node == v and t.status == "RUNNING":
+                mass = 600.0 if t.service_type == "Vande Bharat" else 500.0 if t.service_type == "Tejas Express" else 400.0
+                speed = t.speed_kmh
+                t_amps = (mass * 0.01 + 0.0005 * (speed ** 2)) * 3.5
+                total_amps += t_amps
+        return total_amps
 

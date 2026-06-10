@@ -173,8 +173,32 @@ class TrainAgent:
             drag_factor = 0.0035
             efficiency = 0.85
 
+            edge_key = f"{u}->{v}"
+
             while self.traveled_distance_on_segment < distance:
-                # 1. Find leading train and distance on the same segment
+                # 1. Check substation breaker status and power limits
+                max_speed_limit = base_speed
+                trip_time = self.engine.substation_tripped.get(edge_key, None)
+                if trip_time is not None:
+                    if self.env.now - trip_time >= 1.5:
+                        self.engine.substation_tripped[edge_key] = None
+                        self.engine.log_negotiation(f"⚡ Substation breaker on {u}->{v} reset. Catenary power restored to full 25kV.")
+                        max_speed_limit = base_speed
+                    else:
+                        max_speed_limit = 50.0
+                else:
+                    # Calculate total current draw on the edge
+                    total_amps = self.engine.get_edge_current_draw(u, v)
+                    if total_amps > self.engine.substation_limit:
+                        self.engine.substation_tripped[edge_key] = self.env.now
+                        self.engine.log_negotiation(
+                            f"⚠️ SUBSTATION TRIP: Catenary load on {u}->{v} exceeded capacity "
+                            f"({total_amps:.1f}A > {self.engine.substation_limit}A). Circuit breaker tripped! "
+                            f"Restricting speeds to 50 km/h."
+                        )
+                        max_speed_limit = 50.0
+
+                # 2. Find leading train and distance on the same segment
                 leading_dist = float('inf')
                 leading_train_id = None
                 
@@ -201,7 +225,7 @@ class TrainAgent:
                             leading_dist = dist
                             leading_train_id = other.train_id
 
-                # 2. Determine target speed based on ATC Braking Curve
+                # 3. Determine target speed based on ATC Braking Curve
                 if leading_dist >= 5.0:
                     target_speed = base_speed
                     state = "NORMAL"
@@ -216,6 +240,11 @@ class TrainAgent:
                     target_speed = 0.0
                     state = "STOPPED"
 
+                # Apply catenary power speed restriction if tripped
+                if max_speed_limit < target_speed:
+                    target_speed = max_speed_limit
+                    state = "SUBSTATION_THROTTLED"
+
                 self.speed_kmh = target_speed
                 
                 # Log state change to avoid spam
@@ -226,6 +255,8 @@ class TrainAgent:
                         self.engine.log_negotiation(f"Train {self.train_id} entering ATC crawl (15 km/h) due to close headway spacing behind {leading_train_id}")
                     elif state == "STOPPED":
                         self.engine.log_negotiation(f"Train {self.train_id} stopped to avoid collision behind {leading_train_id}")
+                    elif state == "SUBSTATION_THROTTLED":
+                        self.engine.log_negotiation(f"Train {self.train_id} throttled to {self.speed_kmh:.1f} km/h due to catenary substation trip on segment {u}->{v}")
                     last_log_state = state
 
                 # 3. Compute distance covered in this time step (in hours)

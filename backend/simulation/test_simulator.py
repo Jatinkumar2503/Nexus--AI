@@ -211,6 +211,67 @@ def test_non_linear_delay_cost():
     print(f"OK: Non-linear delay cost verified: 10m -> {get_non_linear_delay(10.0)}m, 25m -> {cost_25}m")
     print("OK: Non-Linear Delay Cost Curve passed.\n")
 
+def test_catenary_substation_solver():
+    print("Testing Catenary Substation Power Flow Solver...")
+    engine = SimulationEngine()
+    
+    t1 = next(t for t in engine.trains if t.train_id == "VB-20901")
+    t2 = next(t for t in engine.trains if t.train_id == "TJ-12009")
+    
+    t1.from_node = "MUM"
+    t1.to_node = "TNA"
+    t1.status = "RUNNING"
+    t1.speed_kmh = 270.0
+    
+    t2.from_node = "MUM"
+    t2.to_node = "TNA"
+    t2.status = "RUNNING"
+    t2.speed_kmh = 270.0
+    
+    # Check total current draw on MUM->TNA
+    total_amps = engine.get_edge_current_draw("MUM", "TNA")
+    assert 290.0 < total_amps < 296.0, f"Expected draw around 293 Amps, got {total_amps}"
+    print(f"OK: Verified combined current draw of {total_amps:.1f}A on segment MUM->TNA.")
+    
+    # Check trip logic under high load
+    from simulation.schedule import MOCK_SCHEDULES
+    orig_dep_1 = MOCK_SCHEDULES[0]["departure_time_mins"]
+    orig_dep_2 = MOCK_SCHEDULES[1]["departure_time_mins"]
+    MOCK_SCHEDULES[0]["departure_time_mins"] = 0
+    MOCK_SCHEDULES[1]["departure_time_mins"] = 0
+    
+    try:
+        engine_trip = SimulationEngine()
+        engine_trip.substation_limit = 200.0
+        
+        t1_trip = next(t for t in engine_trip.trains if t.train_id == "VB-20901")
+        t2_trip = next(t for t in engine_trip.trains if t.train_id == "TJ-12009")
+        
+        # Override positions past initialization to keep them on MUM->TNA
+        engine_trip.env.run(until=0.01)
+        t1_trip.traveled_distance_on_segment = 8.0
+        t2_trip.traveled_distance_on_segment = 1.0
+        
+        # Override speeds to draw high current
+        t1_trip.speed_kmh = 270.0
+        t2_trip.speed_kmh = 270.0
+        
+        # Run environment slightly to trigger next step and evaluate power flow
+        engine_trip.env.run(until=0.11)
+        
+        # Substation trip should be active
+        trip_active = engine_trip.substation_tripped.get("MUM->TNA") is not None
+        assert trip_active, "Substation breaker should have tripped!"
+        # Speed of trailing train t2 should be restricted to 50 km/h due to substation throttling
+        assert t2_trip.speed_kmh == 50.0, f"Expected throttled speed 50 km/h, got {t2_trip.speed_kmh}"
+        print(f"OK: Substation limiter successfully tripped and throttled trailing train speed to {t2_trip.speed_kmh:.1f} km/h.")
+        
+    finally:
+        MOCK_SCHEDULES[0]["departure_time_mins"] = orig_dep_1
+        MOCK_SCHEDULES[1]["departure_time_mins"] = orig_dep_2
+        
+    print("OK: Catenary Substation Power Flow Solver passed.\n")
+
 def run_all_tests():
     test_simulation_initialization()
     test_detour_routing_mechanics()
@@ -220,6 +281,7 @@ def run_all_tests():
     test_dynamic_spacing_headways()
     test_axle_telemetry_ingest()
     test_non_linear_delay_cost()
+    test_catenary_substation_solver()
     print("All unit tests passed successfully!")
 
 if __name__ == "__main__":
