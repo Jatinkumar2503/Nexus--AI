@@ -282,10 +282,10 @@ function App() {
       </header>
 
       {/* Main Structural Layout */}
-      <main className="flex flex-1 overflow-hidden relative">
+      <main className="flex flex-col lg:flex-row flex-1 overflow-hidden relative">
         
         {/* Left Side: Rail Network Visualization Map */}
-        <section className="flex-1 h-full relative border-r border-border bg-zinc-950/20">
+        <section className="flex-1 h-[55%] lg:h-full relative border-b lg:border-b-0 lg:border-r border-border bg-zinc-950/20">
           <RailMap 
             trains={trains} 
             activeDisruptions={activeDisruptions} 
@@ -295,7 +295,7 @@ function App() {
         </section>
 
         {/* Right Side: Operational Metrics & Controller */}
-        <aside className="w-96 h-full flex flex-col bg-zinc-950/45 backdrop-blur-lg border-l border-zinc-900 overflow-hidden">
+        <aside className="w-full lg:w-96 h-[45%] lg:h-full flex flex-col bg-zinc-950/45 backdrop-blur-lg border-t lg:border-t-0 lg:border-l border-zinc-900 overflow-hidden">
           
           {/* KPI Dashboard section */}
           <div className="p-5 border-b border-border/40 space-y-4">
@@ -645,7 +645,7 @@ function App() {
 
       {/* Three-way Scenario Comparison Panel Overlay (Slides up when disruption active) */}
       {hasActiveDisruption && (
-        <div className="absolute bottom-0 left-0 right-0 p-5 bg-zinc-950/90 backdrop-blur-xl border-t border-zinc-900 shadow-glass z-20 animate-slide-up flex flex-col space-y-4 max-h-[380px] overflow-hidden">
+        <div className="absolute bottom-0 left-0 right-0 p-5 bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-900 shadow-glass z-20 animate-slide-up flex flex-col space-y-4 max-h-[90vh] lg:max-h-[380px] overflow-y-auto">
           
           <div className="flex items-center justify-between border-b border-border/40 pb-2">
             <div>
@@ -665,7 +665,7 @@ function App() {
           </div>
 
           {/* Three side-by-side cards */}
-          <div className="grid grid-cols-3 gap-4 flex-1">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
             {loadingScenarios ? (
               <div className="col-span-3 flex flex-col items-center justify-center py-10 space-y-3">
                 <div className="w-8 h-8 border-3 border-danger border-t-transparent rounded-full animate-spin"></div>
