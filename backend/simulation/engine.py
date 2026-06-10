@@ -267,7 +267,8 @@ class SimulationEngine:
             for run in range(NUM_MC_RUNS):
                 # 1. Create fresh SimPy environment
                 ff_env = simpy.Environment()
-                ff_env.run(until=self.env.now) # Align time clock
+                if self.env.now > 0.0:
+                    ff_env.run(until=self.env.now) # Align time clock
 
                 # 2. Recreate station and edge states
                 ff_stations = {}

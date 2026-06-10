@@ -5,50 +5,142 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from simulation.engine import SimulationEngine
+from simulation.agents import CrewAgent, TrainAgent
 
-def test_simulation_run():
-    print("Initializing SimulationEngine...")
+def test_simulation_initialization():
+    print("Testing Simulation Initialization...")
+    engine = SimulationEngine()
+    assert len(engine.stations) == 12, f"Expected 12 stations, got {len(engine.stations)}"
+    assert len(engine.trains) == 8, f"Expected 8 trains, got {len(engine.trains)}"
+    assert len(engine.scheduled_arrivals) > 0, "Scheduled baseline timetable is empty!"
+    print("OK: Simulation Initialization passed.\n")
+
+def test_detour_routing_mechanics():
+    print("Testing Detour Routing Mechanics...")
     engine = SimulationEngine()
     
-    # Check that stations and trains are loaded
-    assert len(engine.stations) > 0, "No station agents loaded!"
-    assert len(engine.trains) > 0, "No train agents loaded!"
-    print(f"Loaded {len(engine.stations)} stations and {len(engine.trains)} trains.")
-
-    # Run for a few simulated minutes
-    print("Stepping simulation forward by 5 simulated minutes...")
-    engine.env.run(until=5.0)
-    assert engine.env.now == 5.0, "Time did not advance correctly!"
-    print(f"Simulation time is now {engine.get_sim_time_str()} ({engine.env.now} minutes)")
-
-    # Inject disruption
-    print("Injecting track disruption between Surat (SUR) and Bharuch (BHA)...")
-    disruption = engine.inject_disruption(
+    # Inject disruption on SUR->BHA segment
+    engine.inject_disruption(
         node_id=None,
         edge_id="SUR->BHA",
-        duration=60,
+        duration=120,
         severity="HIGH",
-        description="Signal failure at Surat-Bharuch segment"
+        description="Signal cables theft"
     )
-    assert len(engine.disruptions) == 1, "Disruption was not injected!"
-    print(f"Disruption injected successfully: {disruption['description']}")
+    
+    # Resolve using detour strategy
+    engine.resolve_scenario("detour")
+    assert engine.active_recovery_strategy == "detour"
+    
+    # Find a train that traverses SUR->BHA, e.g. LC-901
+    target_train = next((t for t in engine.trains if "SUR" in t.stops and "BHA" in t.stops), None)
+    assert target_train is not None, "Could not find a train traversing SUR->BHA"
+    
+    # Run simulation forward until LC-901 enters the SUR->BHA segment
+    max_time = 200.0
+    detour_detected = False
+    while engine.env.now < max_time:
+        engine.env.run(until=engine.env.now + 2.0)
+        # Check active status of LC-901
+        for t in engine.trains:
+            if t.train_id == "LC-901" and t.from_node == "SUR" and t.to_node == "BHA" and t.status == "RUNNING":
+                detour_detected = True
+                assert t.speed_kmh == 150.0, f"Expected detour speed of 150 km/h, got {t.speed_kmh}"
+                break
+        if detour_detected:
+            break
+            
+    assert detour_detected, "LC-901 never reached SUR->BHA detour segment during the test window!"
+    print("OK: Detour Routing Mechanics passed.\n")
 
-    # Evaluate scenarios
-    print("Evaluating recovery scenarios...")
+def test_short_turn_mechanics():
+    print("Testing Short-Turn Routing Mechanics...")
+    engine = SimulationEngine()
+    
+    # Run the simulation for 20 minutes first so trains are active and in RUNNING status
+    engine.env.run(until=20.0)
+    
+    # Inject disruption on SUR->BHA segment
+    engine.inject_disruption(
+        node_id=None,
+        edge_id="SUR->BHA",
+        duration=120,
+        severity="HIGH",
+        description="Track derailment at Surat"
+    )
+    
+    # Find a train heading towards the block, e.g. LC-901
+    target_train = next((t for t in engine.trains if t.train_id == "LC-901"), None)
+    assert target_train is not None
+    assert target_train.status in ["RUNNING", "DWELLING", "DELAYED"]
+    original_stops = list(target_train.stops)
+    
+    # Resolve using short-turn strategy
+    engine.resolve_scenario("short_turn")
+    assert engine.active_recovery_strategy == "short_turn"
+    
+    # Verify stops are updated to return early
+    new_stops = target_train.stops
+    assert len(new_stops) > 0
+    assert "BHA" not in new_stops, "Block station should be removed from stops under short-turn!"
+    assert new_stops[-1] == original_stops[0], "Train should return to its origin station!"
+    print(f"Short-turn stops: {' -> '.join(new_stops)}")
+    print("OK: Short-Turn Routing Mechanics passed.\n")
+
+def test_crew_roster_violation():
+    print("Testing Crew Roster Violations...")
+    # Standard crew agent with max shift duration 480 mins (8 hours)
+    crew = CrewAgent("CRW-TEST", "TEST-TRAIN", shift_start_mins=10.0)
+    
+    # Current time = 100.0, remaining = 300.0 => 400.0 < 490.0 (shift end) -> No violation
+    assert not crew.check_violation(current_time_mins=100.0, estimated_remaining_mins=300.0)
+    
+    # Current time = 100.0, remaining = 400.0 => 500.0 > 490.0 -> Violation!
+    assert crew.check_violation(current_time_mins=100.0, estimated_remaining_mins=400.0)
+    
+    # Train agent exposes crew violation check
+    engine = SimulationEngine()
+    train = engine.trains[0]
+    # Set high remaining stops to trigger violation
+    train.stops = ["SAB"] * 40
+    active_trains = engine.get_active_trains()
+    # Find active train state for the first train
+    train_state = next(t for t in active_trains if t["train_id"] == train.train_id)
+    assert train_state["crew_violated"] is True, "Crew violation flag not set on train state!"
+    print("OK: Crew Roster Violations passed.\n")
+
+def test_monte_carlo_scenarios():
+    print("Testing Monte Carlo Scenario Evaluation...")
+    engine = SimulationEngine()
+    engine.inject_disruption(
+        node_id="SUR",
+        edge_id=None,
+        duration=90,
+        severity="HIGH",
+        description="Signal failures"
+    )
+    
     scenarios = engine.evaluate_scenarios()
-    assert len(scenarios) == 3, f"Expected 3 scenarios, got {len(scenarios)}"
+    assert len(scenarios) == 3, f"Expected 3 recovery scenarios, got {len(scenarios)}"
     
     for s in scenarios:
-        print(f"Scenario Option: {s['name']} (ORS: {s['resilience_score']})")
-        print(f"  Delay minutes: {s['delay_minutes']}, Energy (kWh): {s['energy_cost_kwh']}, Crew violations: {s['crew_violations_count']}")
-        print(f"  Negotiation logic: {s['explainer']}")
-        assert s["resilience_score"] > 0, "Resilience score is invalid!"
+        assert s["id"] in ["do_nothing", "detour", "short_turn"]
+        assert s["resilience_score"] > 0
+        assert s["delay_minutes"] >= 0
+        assert s["energy_cost_kwh"] >= 0
+        assert "explainer" in s
+        assert len(s["explainer"]) > 0
+        print(f"Scenario: {s['name']} | ORS: {s['resilience_score']} | Explainer: {s['explainer']}")
+        
+    print("OK: Monte Carlo Scenario Evaluation passed.\n")
 
-    # Resolve scenario
-    print("Resolving disruption by applying Detour strategy...")
-    engine.resolve_scenario("detour")
-    assert engine.active_recovery_strategy == "detour", "Scenario was not resolved!"
-    print("Success: Test run passed.")
+def run_all_tests():
+    test_simulation_initialization()
+    test_detour_routing_mechanics()
+    test_short_turn_mechanics()
+    test_crew_roster_violation()
+    test_monte_carlo_scenarios()
+    print("All unit tests passed successfully!")
 
 if __name__ == "__main__":
-    test_simulation_run()
+    run_all_tests()
