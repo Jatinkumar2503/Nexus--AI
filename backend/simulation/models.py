@@ -41,6 +41,7 @@ class ScenarioOption(BaseModel):
     is_legal: bool = True
     resilience_score: float
     explainer: str
+    is_pareto_optimal: bool = True
 
 class SimulationMetrics(BaseModel):
     total_passenger_delay_minutes: float

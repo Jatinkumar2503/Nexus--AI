@@ -465,5 +465,26 @@ class SimulationEngine:
                 "resilience_score": float(round(ors, 1)),
                 "explainer": explainers[strat]
             })
+
+        # Calculate Pareto-optimality (non-dominated scenarios)
+        for s1 in scenarios:
+            dominated = False
+            for s2 in scenarios:
+                if s1["id"] == s2["id"]:
+                    continue
+                s2_better_or_equal = (
+                    s2["delay_minutes"] <= s1["delay_minutes"] and
+                    s2["energy_cost_kwh"] <= s1["energy_cost_kwh"] and
+                    s2["crew_violations_count"] <= s1["crew_violations_count"]
+                )
+                s2_strictly_better = (
+                    s2["delay_minutes"] < s1["delay_minutes"] or
+                    s2["energy_cost_kwh"] < s1["energy_cost_kwh"] or
+                    s2["crew_violations_count"] < s1["crew_violations_count"]
+                )
+                if s2_better_or_equal and s2_strictly_better:
+                    dominated = True
+                    break
+            s1["is_pareto_optimal"] = not dominated
             
         return scenarios

@@ -130,7 +130,9 @@ def test_monte_carlo_scenarios():
         assert s["energy_cost_kwh"] >= 0
         assert "explainer" in s
         assert len(s["explainer"]) > 0
-        print(f"Scenario: {s['name']} | ORS: {s['resilience_score']} | Explainer: {s['explainer']}")
+        assert "is_pareto_optimal" in s
+        assert isinstance(s["is_pareto_optimal"], bool)
+        print(f"Scenario: {s['name']} | ORS: {s['resilience_score']} | Pareto: {s['is_pareto_optimal']} | Explainer: {s['explainer']}")
         
     print("OK: Monte Carlo Scenario Evaluation passed.\n")
 

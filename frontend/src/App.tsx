@@ -688,7 +688,16 @@ function App() {
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black tracking-wide text-zinc-200">{sc.name}</span>
                         <div className="flex items-center space-x-1">
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded font-mono ${
+                          {sc.is_pareto_optimal ? (
+                            <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded font-mono bg-primary/15 text-primary border border-primary/25 animate-pulse" title="Pareto Optimal Strategy: Not dominated by any other strategy across delay, energy, and crew compliance.">
+                              PARETO: OPTIMAL
+                            </span>
+                          ) : (
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded font-mono bg-zinc-800 text-zinc-500 border border-zinc-700/50" title="Sub-optimal Strategy: Dominated by another option in all metrics.">
+                              SUB-OPTIMAL
+                            </span>
+                          )}
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded font-mono ${
                             sc.resilience_score > 90 ? "bg-accent/15 text-accent border border-accent/25" :
                             sc.resilience_score > 70 ? "bg-warning/15 text-warning border border-warning/25" :
                             "bg-danger/15 text-danger border border-danger/25"

@@ -290,7 +290,8 @@ async def compare_scenarios():
             crew_violations_count=s["crew_violations_count"],
             is_legal=s["is_legal"],
             resilience_score=s["resilience_score"],
-            explainer=s["explainer"]
+            explainer=s["explainer"],
+            is_pareto_optimal=s["is_pareto_optimal"]
         ))
     return {"status": "success", "scenarios": scenarios_list}
 

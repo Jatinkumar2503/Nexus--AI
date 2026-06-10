@@ -83,6 +83,7 @@ export interface ScenarioOption {
   is_legal: boolean;
   resilience_score: number;
   explainer: string;
+  is_pareto_optimal: boolean;
 }
 
 export interface CompareScenariosResponse {
