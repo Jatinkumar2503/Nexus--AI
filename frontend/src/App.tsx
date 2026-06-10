@@ -22,6 +22,7 @@ import {
   type SimulationMetrics, 
   type ScenarioOption 
 } from './services/api';
+import { audioService } from './services/audio';
 import './App.css';
 
 const getTrainStops = (trainId: string, serviceType: string, direction: string) => {
@@ -97,8 +98,11 @@ function App() {
 
   // If a disruption gets injected, fetch scenarios if not loaded yet
   useEffect(() => {
-    if (activeDisruptions.length > 0 && scenarios.length === 0 && !loadingScenarios) {
-      fetchScenarios();
+    if (activeDisruptions.length > 0) {
+      if (scenarios.length === 0 && !loadingScenarios) {
+        fetchScenarios();
+        audioService.playWarning();
+      }
     } else if (activeDisruptions.length === 0 && scenarios.length > 0) {
       // Clear scenarios if disruption resolved
       setScenarios([]);
@@ -120,12 +124,14 @@ function App() {
 
   // Control action handlings
   const handlePlayPause = async () => {
+    audioService.playClick();
     const nextPlay = !isPlaying;
     setIsPlaying(nextPlay);
     await api.controlSimulation(nextPlay ? "play" : "pause", simSpeed);
   };
 
   const handleSpeedChange = async (newSpeed: number) => {
+    audioService.playClick();
     setSimSpeed(newSpeed);
     if (isPlaying) {
       await api.controlSimulation("play", newSpeed);
@@ -133,6 +139,7 @@ function App() {
   };
 
   const handleReset = async () => {
+    audioService.playClick();
     setIsPlaying(false);
     await api.controlSimulation("reset");
     setScenarios([]);
@@ -167,6 +174,7 @@ function App() {
 
   const handleResolveScenario = async (strategyId: string) => {
     try {
+      audioService.playSuccess();
       setSelectedStrategy(strategyId);
       await api.resolveScenario(strategyId);
       // Resume simulation running
@@ -348,7 +356,7 @@ function App() {
           {/* Sidebar Tabs Controls */}
           <div className="flex border-b border-border/40 text-xs">
             <button 
-              onClick={() => setActiveTab("trains")}
+              onClick={() => { audioService.playClick(); setActiveTab("trains"); }}
               className={`flex-1 py-3 text-center font-bold border-b-2 transition-all ${
                 activeTab === "trains" ? "border-primary text-white bg-primary/5" : "border-transparent text-zinc-500 hover:text-zinc-300"
               }`}
@@ -356,7 +364,7 @@ function App() {
               Trains ({activeTrainsCount})
             </button>
             <button 
-              onClick={() => setActiveTab("stations")}
+              onClick={() => { audioService.playClick(); setActiveTab("stations"); }}
               className={`flex-1 py-3 text-center font-bold border-b-2 transition-all ${
                 activeTab === "stations" ? "border-primary text-white bg-primary/5" : "border-transparent text-zinc-500 hover:text-zinc-300"
               }`}
@@ -364,7 +372,7 @@ function App() {
               Stations
             </button>
             <button 
-              onClick={() => setActiveTab("logs")}
+              onClick={() => { audioService.playClick(); setActiveTab("logs"); }}
               className={`flex-1 py-3 text-center font-bold border-b-2 transition-all ${
                 activeTab === "logs" ? "border-primary text-white bg-primary/5" : "border-transparent text-zinc-500 hover:text-zinc-300"
               }`}
@@ -637,7 +645,7 @@ function App() {
 
       {/* Three-way Scenario Comparison Panel Overlay (Slides up when disruption active) */}
       {hasActiveDisruption && (
-        <div className="absolute bottom-0 left-0 right-0 p-5 bg-zinc-950/90 backdrop-blur-xl border-t border-zinc-900 shadow-glass z-20 transition-all flex flex-col space-y-4 max-h-[380px] overflow-hidden">
+        <div className="absolute bottom-0 left-0 right-0 p-5 bg-zinc-950/90 backdrop-blur-xl border-t border-zinc-900 shadow-glass z-20 animate-slide-up flex flex-col space-y-4 max-h-[380px] overflow-hidden">
           
           <div className="flex items-center justify-between border-b border-border/40 pb-2">
             <div>
@@ -691,20 +699,57 @@ function App() {
                       </div>
                       <p className="text-[10px] text-zinc-500 leading-relaxed font-medium">{sc.description}</p>
                       
-                      {/* Metric Comparison rows */}
-                      <div className="grid grid-cols-3 gap-1.5 pt-1 text-[9px] font-mono border-t border-border/30 mt-1">
-                        <div>
-                          <div className="text-zinc-500 uppercase font-semibold">Delays</div>
-                          <div className="text-zinc-300 font-bold mt-0.5 font-mono">{sc.delay_minutes.toFixed(0)}m</div>
-                        </div>
-                        <div>
-                          <div className="text-zinc-500 uppercase font-semibold">Energy</div>
-                          <div className="text-zinc-300 font-bold mt-0.5 font-mono">{sc.energy_cost_kwh.toFixed(0)} kWh</div>
-                        </div>
-                        <div>
-                          <div className="text-zinc-500 uppercase font-semibold">Crews</div>
-                          <div className={`font-bold mt-0.5 font-mono ${sc.crew_violations_count > 0 ? "text-danger" : "text-zinc-300"}`}>
-                            {sc.crew_violations_count}
+                      {/* Visual SVG Comparison Chart */}
+                      <div className="space-y-1.5 pt-2 border-t border-border/30 mt-2">
+                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider block">
+                          Scenario Profile Chart
+                        </span>
+                        <div className="space-y-1 text-[8px] font-mono">
+                          {/* ORS Bar */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-zinc-400">ORS Resilience</span>
+                            <span className="text-white font-bold">{sc.resilience_score.toFixed(0)}%</span>
+                          </div>
+                          <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full rounded-full transition-all duration-500 ${
+                                sc.resilience_score > 90 ? "bg-accent" :
+                                sc.resilience_score > 70 ? "bg-warning" : "bg-danger"
+                              }`}
+                              style={{ width: `${sc.resilience_score}%` }}
+                            />
+                          </div>
+
+                          {/* Delay Bar */}
+                          <div className="flex items-center justify-between mt-1">
+                            <span className="text-zinc-400">Delay Factor</span>
+                            <span className="text-zinc-300">{sc.delay_minutes.toFixed(0)}m</span>
+                          </div>
+                          <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full rounded-full bg-warning transition-all duration-500"
+                              style={{ width: `${Math.min(100, (sc.delay_minutes / 240) * 100)}%` }}
+                            />
+                          </div>
+
+                          {/* Energy Bar */}
+                          <div className="flex items-center justify-between mt-1">
+                            <span className="text-zinc-400">Energy Draw</span>
+                            <span className="text-zinc-300">{sc.energy_cost_kwh.toFixed(0)} kWh</span>
+                          </div>
+                          <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full rounded-full bg-primary transition-all duration-500"
+                              style={{ width: `${Math.min(100, (sc.energy_cost_kwh / 3000) * 100)}%` }}
+                            />
+                          </div>
+
+                          {/* Crew Violations text indicator */}
+                          <div className="flex items-center justify-between mt-1">
+                            <span className="text-zinc-400">Crew Compliance</span>
+                            <span className={sc.crew_violations_count > 0 ? "text-danger font-bold animate-pulse" : "text-accent"}>
+                              {sc.crew_violations_count > 0 ? `${sc.crew_violations_count} VIOLATIONS` : "100% OK"}
+                            </span>
                           </div>
                         </div>
                       </div>
