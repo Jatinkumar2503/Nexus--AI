@@ -178,4 +178,29 @@ body {
   animation: shimmer 1.6s infinite linear;
 }
 
+/* Custom maplibre tooltip glassmorphism styling */
+.nexus-map-tooltip .maplibregl-popup-content {
+  background: rgba(15, 15, 20, 0.9) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  padding: 0 !important;
+}
+
+.nexus-map-tooltip .maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: rgba(15, 15, 20, 0.9) !important;
+}
+.nexus-map-tooltip .maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: rgba(15, 15, 20, 0.9) !important;
+}
+.nexus-map-tooltip .maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: rgba(15, 15, 20, 0.9) !important;
+}
+.nexus-map-tooltip .maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: rgba(15, 15, 20, 0.9) !important;
+}
+
+
 

@@ -18,6 +18,7 @@ export const RailMap: React.FC<RailMapProps> = ({
 }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<maplibregl.Map | null>(null);
+  const popupInstance = useRef<maplibregl.Popup | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
   const [topology, setTopology] = useState<TopologyResponse | null>(null);
 
@@ -36,6 +37,12 @@ export const RailMap: React.FC<RailMapProps> = ({
     });
 
     mapInstance.current = map;
+
+    popupInstance.current = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      className: 'nexus-map-tooltip'
+    });
 
     map.on('load', async () => {
       try {
@@ -280,6 +287,43 @@ export const RailMap: React.FC<RailMapProps> = ({
           'text-halo-width': 2
         }
       });
+
+      // Hover popups for trains
+      map.on('mouseenter', 'train-dots', (e) => {
+        map.getCanvas().style.cursor = 'pointer';
+        const coordinates = (e.features?.[0]?.geometry as any).coordinates.slice();
+        const props = e.features?.[0]?.properties;
+        if (!props) return;
+
+        const html = `
+          <div class="p-2.5 font-sans text-xs bg-zinc-950/95 border border-zinc-800 rounded-xl shadow-glass text-zinc-100 min-w-[150px] space-y-1">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-1 font-bold">
+              <span class="text-primary">${props.id}</span>
+              <span class="${props.status === 'DELAYED' ? 'text-danger font-semibold' : 'text-accent'}">${props.status}</span>
+            </div>
+            <div class="text-[10px] space-y-0.5 text-zinc-400 font-medium">
+              <div>Type: <span class="text-zinc-200 font-bold">${props.type}</span></div>
+              <div>Passengers: <span class="text-zinc-200 font-bold">${props.passengers}</span></div>
+              <div>Delay: <span class="text-warning font-bold">${Number(props.delay).toFixed(0)}m</span></div>
+            </div>
+          </div>
+        `;
+
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        popupInstance.current
+          ?.setLngLat(coordinates)
+          .setHTML(html)
+          .addTo(map);
+      });
+
+      map.on('mouseleave', 'train-dots', () => {
+        map.getCanvas().style.cursor = '';
+        popupInstance.current?.remove();
+      });
+
     } else {
       const source = map.getSource(sourceId) as maplibregl.GeoJSONSource;
       source.setData(geojsonData);
@@ -378,15 +422,80 @@ export const RailMap: React.FC<RailMapProps> = ({
     map.on('click', 'outbound-tracks-layer', (e) => handleTrackClick(e, 'outbound-tracks-layer'));
     map.on('click', 'inbound-tracks-layer', (e) => handleTrackClick(e, 'inbound-tracks-layer'));
 
-    // Cursors
-    map.on('mouseenter', 'station-dots', () => { map.getCanvas().style.cursor = 'pointer'; });
-    map.on('mouseleave', 'station-dots', () => { map.getCanvas().style.cursor = ''; });
+    // Hover popups for stations
+    map.on('mouseenter', 'station-dots', (e) => {
+      map.getCanvas().style.cursor = 'pointer';
+      const coordinates = (e.features?.[0]?.geometry as any).coordinates.slice();
+      const props = e.features?.[0]?.properties;
+      if (!props) return;
 
-    map.on('mouseenter', 'outbound-tracks-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
-    map.on('mouseleave', 'outbound-tracks-layer', () => { map.getCanvas().style.cursor = ''; });
+      const html = `
+        <div class="p-2.5 font-sans text-xs bg-zinc-950/95 border border-zinc-800 rounded-xl shadow-glass text-zinc-100 min-w-[150px] space-y-1">
+          <div class="border-b border-zinc-800 pb-1 font-bold text-primary">
+            ${props.name} (${props.id})
+          </div>
+          <div class="text-[10px] text-zinc-400 font-medium">
+            <div>Platforms: <span class="text-zinc-200 font-bold">${props.platforms}</span></div>
+            <div class="text-[9px] text-zinc-500 mt-1 italic">Click station to disrupt</div>
+          </div>
+        </div>
+      `;
 
-    map.on('mouseenter', 'inbound-tracks-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
-    map.on('mouseleave', 'inbound-tracks-layer', () => { map.getCanvas().style.cursor = ''; });
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+
+      popupInstance.current
+        ?.setLngLat(coordinates)
+        .setHTML(html)
+        .addTo(map);
+    });
+
+    map.on('mouseleave', 'station-dots', () => {
+      map.getCanvas().style.cursor = '';
+      popupInstance.current?.remove();
+    });
+
+    // Hover popups for tracks
+    const handleTrackMouseEnter = (e: any, layerId: string) => {
+      map.getCanvas().style.cursor = 'pointer';
+      const props = e.features?.[0]?.properties;
+      if (!props) return;
+
+      const isBlocked = props.status === 'blocked';
+      const html = `
+        <div class="p-2.5 font-sans text-xs bg-zinc-950/95 border border-zinc-800 rounded-xl shadow-glass text-zinc-100 min-w-[170px] space-y-1">
+          <div class="border-b border-zinc-800 pb-1 font-bold flex items-center justify-between">
+            <span class="text-zinc-200">Track Segment</span>
+            <span class="${isBlocked ? 'text-danger font-bold animate-pulse' : 'text-accent'}">
+              ${isBlocked ? 'BLOCKED' : 'OPEN'}
+            </span>
+          </div>
+          <div class="text-[10px] text-zinc-400 font-medium">
+            <div>From: <span class="text-zinc-200 font-bold">${props.from_node}</span></div>
+            <div>To: <span class="text-zinc-200 font-bold">${props.to_node}</span></div>
+            <div class="text-[9px] text-zinc-500 mt-1 italic">Click track to disrupt segment</div>
+          </div>
+        </div>
+      `;
+
+      popupInstance.current
+        ?.setLngLat(e.lngLat)
+        .setHTML(html)
+        .addTo(map);
+    };
+
+    map.on('mouseenter', 'outbound-tracks-layer', (e) => handleTrackMouseEnter(e, 'outbound-tracks-layer'));
+    map.on('mouseleave', 'outbound-tracks-layer', () => {
+      map.getCanvas().style.cursor = '';
+      popupInstance.current?.remove();
+    });
+
+    map.on('mouseenter', 'inbound-tracks-layer', (e) => handleTrackMouseEnter(e, 'inbound-tracks-layer'));
+    map.on('mouseleave', 'inbound-tracks-layer', () => {
+      map.getCanvas().style.cursor = '';
+      popupInstance.current?.remove();
+    });
   };
 
   return (
