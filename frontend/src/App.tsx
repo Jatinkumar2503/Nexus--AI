@@ -805,6 +805,43 @@ function App() {
                         <CheckCircle className="w-3 h-3 text-primary shrink-0 mt-0.5" />
                         <span>{sc.explainer}</span>
                       </div>
+
+                      {/* COSMOS command box */}
+                      {(() => {
+                        const edgeId = activeDisruptions[0]?.edge_id;
+                        const nodeId = activeDisruptions[0]?.node_id || (edgeId ? edgeId.split("->")[0] : "SUR");
+                        const match = sc.explainer.match(/(VB-\d+|TJ-\d+|LC-\d+)/);
+                        const targetTrain = match ? match[1] : "VB-20901";
+                        
+                        let cosmosCmd = "";
+                        if (sc.id === "do_nothing") {
+                          cosmosCmd = `CMD/HOLD/TR-${targetTrain}/${nodeId}`;
+                        } else if (sc.id === "detour") {
+                          cosmosCmd = `CMD/ROUTE/TR-${targetTrain}/${edgeId || "SUR->BHA"}/DETOUR`;
+                        } else if (sc.id === "short_turn") {
+                          cosmosCmd = `CMD/TURN/TR-${targetTrain}/${nodeId}/SHORT_TURN`;
+                        }
+                        
+                        return (
+                          <div className="mt-3 bg-zinc-900 border border-zinc-800 p-2 rounded-lg flex items-center justify-between font-mono text-[9px] text-zinc-300">
+                            <div className="flex flex-col">
+                              <span className="text-[7px] text-zinc-500 uppercase tracking-widest font-bold">COSMOS Command Stream</span>
+                              <span className="text-primary font-bold">{cosmosCmd}</span>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigator.clipboard.writeText(cosmosCmd);
+                                audioService.playClick();
+                                alert("COSMOS Command copied to clipboard!");
+                              }}
+                              className="px-2 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded transition-all cursor-pointer font-sans text-[8px] font-bold border border-zinc-700"
+                            >
+                              COPY
+                            </button>
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     <button 
