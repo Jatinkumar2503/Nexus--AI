@@ -260,6 +260,7 @@ class SimulationEngine:
                     self.stations = stations
                     self.edge_resources = edge_resources
                     self.strategy = strategy
+                    self.active_recovery_strategy = strategy
                     self.disruptions = [disruption]
                     self.scheduled_arrivals = parent_engine.scheduled_arrivals
                     self.negotiation_logs = []
@@ -272,11 +273,6 @@ class SimulationEngine:
                     return self.edge_resources[key]
 
                 def is_track_blocked(self, u, v):
-                    # For detour, detour trains bypass block. For do_nothing/short_turn, block is active
-                    if self.strategy == "detour":
-                        # Detour path doesn't get blocked because it bypasses the block via parallel line
-                        return False
-                    
                     disp = self.disruptions[0]
                     if disp.get("edge_id") == f"{u}->{v}" or disp.get("node_id") == u or disp.get("node_id") == v:
                         start = disp.get("start_time", 0.0)

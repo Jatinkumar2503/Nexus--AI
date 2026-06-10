@@ -133,39 +133,54 @@ class TrainAgent:
             self.to_node = v
             
             # Check if this edge is currently blocked by disruption
-            while self.engine.is_track_blocked(u, v):
-                self.status = "DELAYED"
-                self.speed_kmh = 0.0
-                self.engine.log_negotiation(f"Train {self.train_id} held at {u} due to blocked track segment {u}->{v}")
-                yield self.env.timeout(1.0)  # Wait for 1 min and check again
+            is_detoured_segment = False
+            if self.engine.is_track_blocked(u, v):
+                if self.engine.active_recovery_strategy == "detour":
+                    is_detoured_segment = True
+                    self.engine.log_negotiation(f"Train {self.train_id} detouring blocked segment {u}->{v} via parallel slow line.")
+                else:
+                    while self.engine.is_track_blocked(u, v):
+                        if self.engine.active_recovery_strategy == "detour":
+                            is_detoured_segment = True
+                            self.engine.log_negotiation(f"Train {self.train_id} detouring blocked segment {u}->{v} via parallel slow line.")
+                            break
+                        self.status = "DELAYED"
+                        self.speed_kmh = 0.0
+                        self.engine.log_negotiation(f"Train {self.train_id} held at {u} due to blocked track segment {u}->{v}")
+                        yield self.env.timeout(1.0)  # Wait for 1 min and check again
 
             self.status = "RUNNING"
-            self.speed_kmh = 270.0  # Base speed
+            current_speed = 150.0 if is_detoured_segment else 270.0
+            self.speed_kmh = current_speed
+            current_travel_time = travel_time * 1.8 if is_detoured_segment else travel_time
 
-            # Request directional track edge block resource
-            edge_resource = self.engine.get_edge_resource(u, v)
-            edge_req = edge_resource.request()
-            
-            # Wait for track clearance (headway interlocking)
-            yield edge_req
-            self.engine.log_negotiation(f"Train {self.train_id} cleared block segment {u}->{v} at min {self.env.now:.1f}")
+            edge_resource = None
+            edge_req = None
+            if not is_detoured_segment:
+                # Request directional track edge block resource
+                edge_resource = self.engine.get_edge_resource(u, v)
+                edge_req = edge_resource.request()
+                # Wait for track clearance (headway interlocking)
+                yield edge_req
+                self.engine.log_negotiation(f"Train {self.train_id} cleared block segment {u}->{v} at min {self.env.now:.1f}")
+            else:
+                self.engine.log_negotiation(f"Train {self.train_id} bypassing block segment {u}->{v} via detour track.")
 
             # Calculate start/end times for coordinates interpolation
             self.segment_start_time = self.env.now
-            self.segment_end_time = self.env.now + travel_time
+            self.segment_end_time = self.env.now + current_travel_time
             
             # Model travel time along edge
-            yield self.env.timeout(travel_time)
+            yield self.env.timeout(current_travel_time)
 
             # Consume energy during travel (heuristic calculation)
             # VB/Tejas have different weights, drag profiles
             mass_tons = 600.0 if self.service_type == "Vande Bharat" else 500.0 if self.service_type == "Tejas Express" else 400.0
             drag_factor = 0.0035
             efficiency = 0.85
-            # Simple traction energy consumed: Force * distance
-            # Force ~ mass * acceleration + drag * v^2
-            # Here simplified: (mass_tons * 0.1 + drag_factor * (270**2)) * distance / efficiency * scale
-            travel_energy = (mass_tons * 0.01 + drag_factor * 270) * distance / efficiency * 0.1
+            travel_energy = (mass_tons * 0.01 + drag_factor * current_speed) * distance / efficiency * 0.1
+            if is_detoured_segment:
+                travel_energy *= 1.35
             self.energy_consumed_kwh += travel_energy
 
             # Request platform at destination station
@@ -178,7 +193,8 @@ class TrainAgent:
             wait_end = self.env.now
             
             # Release track block segment immediately after entering station
-            edge_resource.release(edge_req)
+            if edge_resource and edge_req:
+                edge_resource.release(edge_req)
 
             # Dwell at station
             station_agent.enter_platform(self.train_id)
