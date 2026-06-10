@@ -137,7 +137,15 @@ async def get_simulation_state():
             ))
 
     # 4. Global Metrics
-    total_delay = sum(t.delay_minutes for t in trains_list)
+    PRIORITY_WEIGHTS = {
+        "Vande Bharat": 1.5,
+        "Tejas Express": 1.2,
+        "Local": 0.8
+    }
+    total_delay = sum(
+        t.delay_minutes * t.passenger_count * PRIORITY_WEIGHTS.get(t.service_type, 1.0)
+        for t in trains_list
+    ) / 500.0
     total_energy = sum(t.energy_consumed_kwh for t in trains_list)
     crew_violations = sum(1 for t in engine.trains if t.crew.check_violation(sim_now, 0.0))
     

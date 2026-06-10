@@ -82,6 +82,7 @@ class TrainAgent:
         self.departure_time_mins = departure_time_mins
         self.passenger_count = passenger_count
         self.direction = direction
+        self.original_direction = direction
         self.engine = engine
 
         # Operational attributes
@@ -119,6 +120,12 @@ class TrainAgent:
             u = self.stops[i]
             v = self.stops[i+1]
             self.current_stop_idx = i
+
+            # Update direction representation for return run under short-turn
+            if len(self.stops) > 2 and self.stops[0] == self.stops[-1]:
+                midpoint = len(self.stops) // 2
+                if self.current_stop_idx >= midpoint:
+                    self.direction = "inbound" if self.original_direction == "outbound" else "outbound"
             
             # Fetch segment details from topology
             edge_data = self.engine.topology.graph.get_edge_data(u, v)

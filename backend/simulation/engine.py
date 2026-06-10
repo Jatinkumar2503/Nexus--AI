@@ -217,8 +217,11 @@ class SimulationEngine:
                         if self.is_track_blocked(u, v):
                             # Short-turn at station u (preceding the block)
                             short_turn_station = u
-                            t.stops = t.stops[:t.current_stop_idx + 1] # Truncate remaining stops
-                            self.log_negotiation(f"Train {t.train_id} short-turned early at {short_turn_station}.")
+                            traversed = t.stops[:i + 1]
+                            return_stops = list(reversed(traversed))[1:]
+                            t.stops = traversed + return_stops
+                            self.log_negotiation(f"Train {t.train_id} short-turned early at {short_turn_station} and returning to origin.")
+                            break
 
     def evaluate_scenarios(self) -> List[Dict[str, Any]]:
         """Fast-forward duplicate simulations to compare Do Nothing, Detour, and Short-Turn policies."""
@@ -309,7 +312,9 @@ class SimulationEngine:
                         u, v = stops[idx], stops[idx+1]
                         if self.is_track_blocked(u, v):
                             # Short-turn at station u (preceding the block)
-                            stops = stops[:idx + 1]
+                            traversed = stops[:idx + 1]
+                            return_stops = list(reversed(traversed))[1:]
+                            stops = traversed + return_stops
                             break
 
                 # Create fast-forward train agent
@@ -356,7 +361,15 @@ class SimulationEngine:
                 pass
 
             # 6. Aggregate outcomes
-            total_delay = sum(train.delay_minutes for train in ff_trains)
+            PRIORITY_WEIGHTS = {
+                "Vande Bharat": 1.5,
+                "Tejas Express": 1.2,
+                "Local": 0.8
+            }
+            total_delay = sum(
+                train.delay_minutes * train.passenger_count * PRIORITY_WEIGHTS.get(train.service_type, 1.0)
+                for train in ff_trains
+            ) / 500.0
             total_energy = sum(train.energy_consumed_kwh for train in ff_trains)
             crew_violations = sum(1 for train in ff_trains if train.crew.check_violation(ff_env.now, 0.0))
 
