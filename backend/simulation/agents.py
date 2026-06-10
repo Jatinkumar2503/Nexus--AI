@@ -100,6 +100,7 @@ class TrainAgent:
         self.is_dwelling = False
         self.is_waiting = True
         self.is_terminated = False
+        self.traveled_distance_on_segment = 0.0
         
         # Crew agent associated with train
         self.crew = CrewAgent(f"CRW-{train_id}", train_id, shift_start_mins=max(0.0, departure_time_mins - 30.0))
@@ -157,56 +158,111 @@ class TrainAgent:
                         yield self.env.timeout(1.0)  # Wait for 1 min and check again
 
             self.status = "RUNNING"
-            current_speed = 150.0 if is_detoured_segment else 270.0
-            self.speed_kmh = current_speed
-            current_travel_time = travel_time * 1.8 if is_detoured_segment else travel_time
+            base_speed = 150.0 if is_detoured_segment else 270.0
+            self.speed_kmh = base_speed
 
-            edge_resource = None
-            edge_req = None
-            if not is_detoured_segment:
-                # Request directional track edge block resource
-                edge_resource = self.engine.get_edge_resource(u, v)
-                edge_req = edge_resource.request()
-                # Wait for track clearance (headway interlocking)
-                yield edge_req
-                self.engine.log_negotiation(f"Train {self.train_id} cleared block segment {u}->{v} at min {self.env.now:.1f}")
-            else:
-                self.engine.log_negotiation(f"Train {self.train_id} bypassing block segment {u}->{v} via detour track.")
-
-            # Calculate start/end times for coordinates interpolation
-            if hasattr(self.engine, "strategy"):
-                import random
-                current_travel_time += random.uniform(-0.2, 0.8)
-                current_travel_time = max(1.0, current_travel_time)
-
+            self.traveled_distance_on_segment = 0.0
             self.segment_start_time = self.env.now
-            self.segment_end_time = self.env.now + current_travel_time
+            self.segment_end_time = self.env.now + (travel_time * 1.8 if is_detoured_segment else travel_time)
             
-            # Model travel time along edge
-            yield self.env.timeout(current_travel_time)
-
-            # Consume energy during travel (heuristic calculation)
-            # VB/Tejas have different weights, drag profiles
+            # Step size in minutes (e.g. 0.1 minutes)
+            dt = 0.1
+            last_log_state = None
+            
             mass_tons = 600.0 if self.service_type == "Vande Bharat" else 500.0 if self.service_type == "Tejas Express" else 400.0
             drag_factor = 0.0035
             efficiency = 0.85
-            travel_energy = (mass_tons * 0.01 + drag_factor * current_speed) * distance / efficiency * 0.1
-            if is_detoured_segment:
-                travel_energy *= 1.35
-            self.energy_consumed_kwh += travel_energy
+
+            while self.traveled_distance_on_segment < distance:
+                # 1. Find leading train and distance on the same segment
+                leading_dist = float('inf')
+                leading_train_id = None
+                
+                for other in self.engine.trains:
+                    if other.train_id == self.train_id:
+                        continue
+                    if other.is_terminated or other.is_waiting:
+                        continue
+                    
+                    # Case A: Leading train is running on the same segment u -> v ahead of us
+                    if other.from_node == u and other.to_node == v and not other.is_dwelling:
+                        if hasattr(other, "traveled_distance_on_segment"):
+                            other_dist = other.traveled_distance_on_segment
+                            if other_dist > self.traveled_distance_on_segment:
+                                dist = other_dist - self.traveled_distance_on_segment
+                                if dist < leading_dist:
+                                    leading_dist = dist
+                                    leading_train_id = other.train_id
+                                    
+                    # Case B: Leading train is dwelling at the destination station v
+                    elif other.to_node == v and other.is_dwelling:
+                        dist = distance - self.traveled_distance_on_segment
+                        if dist < leading_dist:
+                            leading_dist = dist
+                            leading_train_id = other.train_id
+
+                # 2. Determine target speed based on ATC Braking Curve
+                if leading_dist >= 5.0:
+                    target_speed = base_speed
+                    state = "NORMAL"
+                elif leading_dist >= 1.0:
+                    # Linear braking curve down to 30 km/h
+                    target_speed = 30.0 + (base_speed - 30.0) * ((leading_dist - 1.0) / 4.0)
+                    state = "THROTTLED"
+                elif leading_dist >= 0.2:
+                    target_speed = 15.0
+                    state = "CRAWLING"
+                else:
+                    target_speed = 0.0
+                    state = "STOPPED"
+
+                self.speed_kmh = target_speed
+                
+                # Log state change to avoid spam
+                if state != last_log_state:
+                    if state == "THROTTLED":
+                        self.engine.log_negotiation(f"Train {self.train_id} speed throttled to {self.speed_kmh:.1f} km/h due to spacing headway ({leading_dist:.2f} km) behind {leading_train_id}")
+                    elif state == "CRAWLING":
+                        self.engine.log_negotiation(f"Train {self.train_id} entering ATC crawl (15 km/h) due to close headway spacing behind {leading_train_id}")
+                    elif state == "STOPPED":
+                        self.engine.log_negotiation(f"Train {self.train_id} stopped to avoid collision behind {leading_train_id}")
+                    last_log_state = state
+
+                # 3. Compute distance covered in this time step (in hours)
+                dt_hours = dt / 60.0
+                distance_step = self.speed_kmh * dt_hours
+                
+                # Consume energy for this step
+                step_energy = (mass_tons * 0.01 + drag_factor * self.speed_kmh) * distance_step / efficiency * 0.1
+                if is_detoured_segment:
+                    step_energy *= 1.35
+                self.energy_consumed_kwh += step_energy
+
+                # Check if we reach the destination in this step
+                if self.traveled_distance_on_segment + distance_step >= distance:
+                    remaining_dist = distance - self.traveled_distance_on_segment
+                    if self.speed_kmh > 0:
+                        actual_dt = (remaining_dist / self.speed_kmh) * 60.0
+                    else:
+                        actual_dt = dt
+                    self.traveled_distance_on_segment = distance
+                    yield self.env.timeout(actual_dt)
+                    break
+                else:
+                    self.traveled_distance_on_segment += distance_step
+                    # Dynamically update segment_end_time so coordinate interpolation remains accurate
+                    if self.speed_kmh > 0:
+                        self.segment_end_time = self.env.now + ((distance - self.traveled_distance_on_segment) / self.speed_kmh) * 60.0
+                    else:
+                        self.segment_end_time = self.env.now + 999.0
+                    yield self.env.timeout(dt)
 
             # Request platform at destination station
             station_agent: StationAgent = self.engine.stations[v]
             platform_req = station_agent.request_platform(self.train_id)
             
             # Wait until a platform is available
-            wait_start = self.env.now
             yield platform_req
-            wait_end = self.env.now
-            
-            # Release track block segment immediately after entering station
-            if edge_resource and edge_req:
-                edge_resource.release(edge_req)
 
             # Dwell at station
             station_agent.enter_platform(self.train_id)
@@ -264,6 +320,14 @@ class TrainAgent:
         coords_from = self.engine.topology.get_nodes()[self.from_node]["coords"]
         coords_to = self.engine.topology.get_nodes()[self.to_node]["coords"]
         
+        edge_data = self.engine.topology.graph.get_edge_data(self.from_node, self.to_node)
+        if edge_data and "distance_km" in edge_data:
+            distance = edge_data["distance_km"]
+            if distance > 0:
+                ratio = self.traveled_distance_on_segment / distance
+                ratio = max(0.0, min(1.0, ratio))
+                return interpolate_coords(coords_from, coords_to, ratio)
+
         total_time = self.segment_end_time - self.segment_start_time
         if total_time <= 0:
             return coords_to

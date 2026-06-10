@@ -368,6 +368,7 @@ class SimulationEngine:
                     ff_train.segment_end_time = t.segment_end_time
                     ff_train.is_dwelling = t.is_dwelling
                     ff_train.is_waiting = t.is_waiting
+                    ff_train.traveled_distance_on_segment = getattr(t, "traveled_distance_on_segment", 0.0)
                     ff_trains.append(ff_train)
                     ff_env.process(ff_train.run())
 

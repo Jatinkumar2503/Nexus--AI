@@ -134,12 +134,51 @@ def test_monte_carlo_scenarios():
         
     print("OK: Monte Carlo Scenario Evaluation passed.\n")
 
+def test_dynamic_spacing_headways():
+    print("Testing Dynamic Spacing Headways (ATC Braking Curves)...")
+    from simulation.schedule import MOCK_SCHEDULES
+    
+    # Temporarily set departure times of the first two trains to 0.0
+    orig_dep_1 = MOCK_SCHEDULES[0]["departure_time_mins"]
+    orig_dep_2 = MOCK_SCHEDULES[1]["departure_time_mins"]
+    MOCK_SCHEDULES[0]["departure_time_mins"] = 0
+    MOCK_SCHEDULES[1]["departure_time_mins"] = 0
+    
+    try:
+        engine = SimulationEngine()
+        
+        t1 = next(t for t in engine.trains if t.train_id == "VB-20901")
+        t2 = next(t for t in engine.trains if t.train_id == "TJ-12009")
+        
+        # Run a tiny bit to initialize the segment loop inside SimPy
+        engine.env.run(until=0.01)
+        
+        # Override positions now that they have passed initialization
+        t1.traveled_distance_on_segment = 4.0
+        t2.traveled_distance_on_segment = 1.0
+        
+        # Advance simulation past the first event wakeup (0.1 mins) to 0.11 mins
+        engine.env.run(until=0.11)
+        
+        # Headway is 4.45 - 1.0 = 3.45 km.
+        # Target speed for Tejas (base speed 270 km/h) with 3.45 km headway is:
+        # 30 + (270 - 30) * ((3.45 - 1.0) / 4.0) = 30 + 240 * 0.6125 = 177.0 km/h.
+        assert 170.0 < t2.speed_kmh < 180.0, f"Expected speed around 177 km/h, got {t2.speed_kmh}"
+        print(f"OK: Spacing headway throttled train speed to {t2.speed_kmh:.1f} km/h (base was 270 km/h).")
+    finally:
+        # Restore original schedules
+        MOCK_SCHEDULES[0]["departure_time_mins"] = orig_dep_1
+        MOCK_SCHEDULES[1]["departure_time_mins"] = orig_dep_2
+        
+    print("OK: Dynamic Spacing Headways passed.\n")
+
 def run_all_tests():
     test_simulation_initialization()
     test_detour_routing_mechanics()
     test_short_turn_mechanics()
     test_crew_roster_violation()
     test_monte_carlo_scenarios()
+    test_dynamic_spacing_headways()
     print("All unit tests passed successfully!")
 
 if __name__ == "__main__":
