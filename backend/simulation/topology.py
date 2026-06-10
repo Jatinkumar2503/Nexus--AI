@@ -26,7 +26,7 @@ class RailTopology:
         self._load_edges()
 
     def _load_nodes(self):
-        """Load stations as nodes in the graph."""
+        """Load stations as nodes in the graph, including slow-line detour nodes."""
         for code, info in STATIONS.items():
             self.graph.add_node(
                 code,
@@ -35,13 +35,19 @@ class RailTopology:
                 platforms=info["platforms"],
                 base_dwell_time=info["base_dwell_time"]
             )
+            # Add parallel slow-line node
+            self.graph.add_node(
+                f"{code}_SLOW",
+                name=f"{info['name']} (Slow Line)",
+                coords=[info["coords"][0] + 0.001, info["coords"][1] + 0.001],
+                platforms=2,
+                base_dwell_time=info["base_dwell_time"]
+            )
 
     def _load_edges(self):
-        """Load track segments as directional edges with distance and travel times."""
-        # Sequence of stations from Mumbai BKC to Sabarmati
+        """Load track segments as directional edges with distance and travel times, including slow lines."""
         sequence = ["MUM", "TNA", "VIR", "BOI", "VAP", "BIL", "SUR", "BHA", "VAD", "ANA", "ADI", "SAB"]
         
-        # Link distances (km) and estimated travel times (minutes)
         segments = [
             ("MUM", "TNA", 28.0, 10),
             ("TNA", "VIR", 43.0, 12),
@@ -57,10 +63,19 @@ class RailTopology:
         ]
 
         for u, v, dist, time in segments:
-            # Outbound direction (Mumbai -> Sabarmati)
-            self.graph.add_edge(u, v, distance_km=dist, travel_time_min=time, direction="outbound", status="open")
-            # Inbound direction (Sabarmati -> Mumbai)
-            self.graph.add_edge(v, u, distance_km=dist, travel_time_min=time, direction="inbound", status="open")
+            # Main line edges
+            self.graph.add_edge(u, v, distance_km=dist, travel_time_min=time, direction="outbound", status="open", is_slow=False)
+            self.graph.add_edge(v, u, distance_km=dist, travel_time_min=time, direction="inbound", status="open", is_slow=False)
+            
+            # Slow line parallel detour edges (takes 1.5x travel time)
+            slow_time = int(time * 1.5)
+            self.graph.add_edge(f"{u}_SLOW", f"{v}_SLOW", distance_km=dist, travel_time_min=slow_time, direction="outbound", status="open", is_slow=True)
+            self.graph.add_edge(f"{v}_SLOW", f"{u}_SLOW", distance_km=dist, travel_time_min=slow_time, direction="inbound", status="open", is_slow=True)
+
+        # Connect main line to slow line switches at each station (1.5 min penalty)
+        for code in STATIONS:
+            self.graph.add_edge(code, f"{code}_SLOW", distance_km=0.5, travel_time_min=1.5, direction="switch", status="open", is_slow=True)
+            self.graph.add_edge(f"{code}_SLOW", code, distance_km=0.5, travel_time_min=1.5, direction="switch", status="open", is_slow=True)
 
     def get_nodes(self) -> Dict[str, Dict[str, Any]]:
         """Return all station nodes with their attributes."""
@@ -80,9 +95,27 @@ class RailTopology:
             })
         return edges
 
-    def get_path(self, origin: str, destination: str) -> List[str]:
-        """Compute the shortest path between stations using Dijkstra."""
+    def get_path(self, origin: str, destination: str, blocked_edges: List[str] = None) -> List[str]:
+        """Compute the shortest path between stations using Dijkstra, optionally avoiding blocked edges."""
+        if not blocked_edges:
+            try:
+                return nx.shortest_path(self.graph, source=origin, target=destination, weight="travel_time_min")
+            except (nx.NetworkXNoPath, nx.NodeNotFound):
+                return []
+        
+        # Create a temporary graph copy to avoid modifying global network state
+        temp_graph = self.graph.copy()
+        for edge in blocked_edges:
+            if "->" in edge:
+                u, v = edge.split("->")
+                if temp_graph.has_edge(u, v):
+                    temp_graph[u][v]["travel_time_min"] = 9999.0
+            else:
+                # Node blockage: block all incident edges
+                for neighbor in list(temp_graph.neighbors(edge)):
+                    temp_graph[edge][neighbor]["travel_time_min"] = 9999.0
+                    temp_graph[neighbor][edge]["travel_time_min"] = 9999.0
         try:
-            return nx.shortest_path(self.graph, source=origin, target=destination, weight="travel_time_min")
+            return nx.shortest_path(temp_graph, source=origin, target=destination, weight="travel_time_min")
         except (nx.NetworkXNoPath, nx.NodeNotFound):
             return []

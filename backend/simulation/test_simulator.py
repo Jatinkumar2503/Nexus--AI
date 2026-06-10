@@ -10,7 +10,7 @@ from simulation.agents import CrewAgent, TrainAgent
 def test_simulation_initialization():
     print("Testing Simulation Initialization...")
     engine = SimulationEngine()
-    assert len(engine.stations) == 12, f"Expected 12 stations, got {len(engine.stations)}"
+    assert len(engine.stations) == 24, f"Expected 24 stations (12 main + 12 slow), got {len(engine.stations)}"
     assert len(engine.trains) == 8, f"Expected 8 trains, got {len(engine.trains)}"
     assert len(engine.scheduled_arrivals) > 0, "Scheduled baseline timetable is empty!"
     print("OK: Simulation Initialization passed.\n")
@@ -43,14 +43,14 @@ def test_detour_routing_mechanics():
         engine.env.run(until=engine.env.now + 2.0)
         # Check active status of LC-901
         for t in engine.trains:
-            if t.train_id == "LC-901" and t.from_node == "SUR" and t.to_node == "BHA" and t.status == "RUNNING":
+            if t.train_id == "LC-901" and t.from_node == "SUR_SLOW" and t.to_node == "BHA_SLOW" and t.status == "RUNNING":
                 detour_detected = True
                 assert t.speed_kmh == 150.0, f"Expected detour speed of 150 km/h, got {t.speed_kmh}"
                 break
         if detour_detected:
             break
             
-    assert detour_detected, "LC-901 never reached SUR->BHA detour segment during the test window!"
+    assert detour_detected, "LC-901 never reached SUR_SLOW->BHA_SLOW detour segment during the test window!"
     print("OK: Detour Routing Mechanics passed.\n")
 
 def test_short_turn_mechanics():

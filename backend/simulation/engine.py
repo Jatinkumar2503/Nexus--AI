@@ -67,6 +67,15 @@ class SimulationEngine:
                 platforms=info["platforms"],
                 base_dwell_time=info["base_dwell_time"]
             )
+            # Add slow-line station agent with offset coordinates
+            self.stations[f"{code}_SLOW"] = StationAgent(
+                env=self.env,
+                station_id=f"{code}_SLOW",
+                name=f"{info['name']} (Slow Line)",
+                coords=[info["coords"][0] + 0.001, info["coords"][1] + 0.001],
+                platforms=2,
+                base_dwell_time=0.1
+            )
 
         # 2. Create edge resources for headway safety
         for edge in self.topology.get_edges():
@@ -234,16 +243,49 @@ class SimulationEngine:
             # Let it ride
             pass
         elif strategy == "detour":
-            # Reroute trains around the block via slower parallel line
-            for t in self.trains:
-                if t.status in ["RUNNING", "DWELLING", "DELAYED"]:
-                    # Find if train's path contains the block
-                    for i in range(t.current_stop_idx, len(t.stops) - 1):
-                        u, v = t.stops[i], t.stops[i+1]
-                        if self.is_track_blocked(u, v):
-                            # In MAHSR linear corridor, detour means we traverse a virtual slow link
-                            # We modify the TrainAgent to note it is bypassing, which runs slower
-                            self.log_negotiation(f"Train {t.train_id} rerouted via Slow Line parallel tracks.")
+            # Reroute trains around the block via slower parallel line in NetworkX Graph
+            active_disp = self.disruptions[-1] if self.disruptions else None
+            if active_disp:
+                edge_block = active_disp.get("edge_id")
+                u_block = active_disp.get("node_id")
+                
+                blocked_edges = []
+                if edge_block:
+                    blocked_edges.append(edge_block)
+                    u_node, v_node = edge_block.split("->")
+                    blocked_edges.append(f"{v_node}->{u_node}")
+                elif u_block:
+                    for neighbor in list(self.topology.graph.neighbors(u_block)):
+                        blocked_edges.append(f"{u_block}->{neighbor}")
+                        blocked_edges.append(f"{neighbor}->{u_block}")
+                
+                for t in self.trains:
+                    if t.status in ["RUNNING", "DWELLING", "DELAYED", "WAITING"]:
+                        # Check if remaining schedule contains blocked edge
+                        has_blockage = False
+                        for idx in range(t.current_stop_idx, len(t.stops) - 1):
+                            su, sv = t.stops[idx], t.stops[idx+1]
+                            if f"{su}->{sv}" in blocked_edges or su == u_block or sv == u_block:
+                                has_blockage = True
+                                break
+                        
+                        if has_blockage:
+                            if t.status == "WAITING":
+                                start_node = t.stops[0]
+                                new_path = self.topology.get_path(start_node, t.stops[-1], blocked_edges=blocked_edges)
+                                if new_path:
+                                    t.stops = new_path
+                            elif t.status == "RUNNING":
+                                start_node = t.to_node
+                                new_path = self.topology.get_path(start_node, t.stops[-1], blocked_edges=blocked_edges)
+                                if new_path:
+                                    t.stops = t.stops[:t.current_stop_idx + 1] + new_path
+                            else: # DWELLING or DELAYED
+                                start_node = t.from_node
+                                new_path = self.topology.get_path(start_node, t.stops[-1], blocked_edges=blocked_edges)
+                                if new_path:
+                                    t.stops = t.stops[:t.current_stop_idx] + new_path
+                            self.log_negotiation(f"Train {t.train_id} dynamically detour-routed via NetworkX: {' -> '.join(t.stops)}")
         elif strategy == "short_turn":
             # Find trains heading towards the block and short turn them at closest crew depot
             CREW_DEPOT_STATIONS = ["MUM", "TNA", "VAP", "SUR", "VAD", "ADI", "SAB"]
@@ -370,7 +412,45 @@ class SimulationEngine:
                     stops = copy.deepcopy(t.stops)
                     current_idx = t.current_stop_idx
                     
-                    if strat == "short_turn":
+                    if strat == "detour":
+                        # Check if remaining schedule intersects the blocked segment
+                        edge_block = active_disp.get("edge_id")
+                        u_block = active_disp.get("node_id")
+                        blocked_edges = []
+                        if edge_block:
+                            blocked_edges.append(edge_block)
+                            u_node, v_node = edge_block.split("->")
+                            blocked_edges.append(f"{v_node}->{u_node}")
+                        elif u_block:
+                            for neighbor in list(self.topology.graph.neighbors(u_block)):
+                                blocked_edges.append(f"{u_block}->{neighbor}")
+                                blocked_edges.append(f"{neighbor}->{u_block}")
+                                
+                        has_blockage = False
+                        for idx in range(current_idx, len(stops) - 1):
+                            su, sv = stops[idx], stops[idx+1]
+                            if f"{su}->{sv}" in blocked_edges or su == u_block or sv == u_block:
+                                has_blockage = True
+                                break
+                                
+                        if has_blockage:
+                            if t.status == "WAITING":
+                                start_node = stops[0]
+                                new_path = self.topology.get_path(start_node, t.stops[-1], blocked_edges=blocked_edges)
+                                if new_path:
+                                    stops = new_path
+                            elif t.status == "RUNNING":
+                                start_node = t.to_node
+                                new_path = self.topology.get_path(start_node, t.stops[-1], blocked_edges=blocked_edges)
+                                if new_path:
+                                    stops = stops[:current_idx + 1] + new_path
+                            else: # DWELLING or DELAYED
+                                start_node = t.from_node
+                                new_path = self.topology.get_path(start_node, t.stops[-1], blocked_edges=blocked_edges)
+                                if new_path:
+                                    stops = stops[:current_idx] + new_path
+                                    
+                    elif strat == "short_turn":
                         # Check if route intersects the blocked segment
                         for idx in range(current_idx, len(stops) - 1):
                             u, v = stops[idx], stops[idx+1]

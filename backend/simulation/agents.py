@@ -235,21 +235,23 @@ class TrainAgent:
             self.to_node = v
             
             # Check if this edge is currently blocked by disruption
-            is_detoured_segment = False
-            if self.engine.is_track_blocked(u, v):
-                if self.engine.active_recovery_strategy == "detour":
-                    is_detoured_segment = True
-                    self.engine.log_negotiation(f"Train {self.train_id} detouring blocked segment {u}->{v} via parallel slow line.")
-                else:
-                    while self.engine.is_track_blocked(u, v):
-                        if self.engine.active_recovery_strategy == "detour":
-                            is_detoured_segment = True
-                            self.engine.log_negotiation(f"Train {self.train_id} detouring blocked segment {u}->{v} via parallel slow line.")
-                            break
-                        self.status = "DELAYED"
-                        self.speed_kmh = 0.0
-                        self.engine.log_negotiation(f"Train {self.train_id} held at {u} due to blocked track segment {u}->{v}")
-                        yield self.env.timeout(1.0)  # Wait for 1 min and check again
+            is_detoured_segment = edge_data.get("is_slow", False)
+            if self.engine.is_track_blocked(u, self.stops[self.current_stop_idx + 1]):
+                while self.engine.is_track_blocked(u, self.stops[self.current_stop_idx + 1]):
+                    self.status = "DELAYED"
+                    self.speed_kmh = 0.0
+                    self.engine.log_negotiation(f"Train {self.train_id} held at {u} due to blocked track segment {u}->{self.stops[self.current_stop_idx + 1]}")
+                    yield self.env.timeout(1.0)  # Wait for 1 min and check again
+                
+                # Update segment data in case stops were dynamically changed during wait
+                v = self.stops[self.current_stop_idx + 1]
+                edge_data = self.engine.topology.graph.get_edge_data(u, v)
+                if not edge_data:
+                    continue
+                travel_time = edge_data["travel_time_min"]
+                distance = edge_data["distance_km"]
+                is_detoured_segment = edge_data.get("is_slow", False)
+                edge_key = f"{u}->{v}"
 
             self.status = "RUNNING"
             base_speed = 150.0 if is_detoured_segment else 270.0
@@ -396,11 +398,14 @@ class TrainAgent:
             self.speed_kmh = 0.0
             
             # Calculate dwell time (base dwell + platform queue delay)
-            dwell_time = station_agent.base_dwell_time
-            if hasattr(self.engine, "strategy"):
-                import random
-                dwell_time += random.uniform(-0.5, 2.5)
-                dwell_time = max(0.5, dwell_time)
+            if v.endswith("_SLOW"):
+                dwell_time = 0.0
+            else:
+                dwell_time = station_agent.base_dwell_time
+                if hasattr(self.engine, "strategy"):
+                    import random
+                    dwell_time += random.uniform(-0.5, 2.5)
+                    dwell_time = max(0.5, dwell_time)
 
             self.segment_start_time = self.env.now
             self.segment_end_time = self.env.now + dwell_time
