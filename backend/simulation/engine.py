@@ -395,11 +395,44 @@ class SimulationEngine:
             crew_penalty = crew_violations * 30
             ors = max(5.0, min(100.0, 100.0 - delay_penalty - energy_penalty - crew_penalty))
 
-            # Explainers
+            # Identify trains affected by the blockage
+            blocked_train_ids = []
+            disruption_node = "Surat"
+            disruption_segment = "Surat->Bharuch"
+            short_turn_station = "Bilimora"
+            
+            if active_disp:
+                u_block = active_disp.get("node_id")
+                edge_block = active_disp.get("edge_id")
+                if edge_block:
+                    disruption_segment = edge_block
+                    u_node, v_node = edge_block.split("->")
+                    disruption_node = u_node
+                elif u_block:
+                    disruption_node = u_block
+                    disruption_segment = f"Station {u_block}"
+                
+                sequence = ["MUM", "TNA", "VIR", "BOI", "VAP", "BIL", "SUR", "BHA", "VAD", "ANA", "ADI", "SAB"]
+                if disruption_node in sequence:
+                    idx = sequence.index(disruption_node)
+                    short_turn_station = sequence[max(0, idx - 1)]
+                
+                for t in self.trains:
+                    for idx in range(t.current_stop_idx, len(t.stops) - 1):
+                        su, sv = t.stops[idx], t.stops[idx+1]
+                        if edge_block == f"{su}->{sv}" or su == u_block or sv == u_block:
+                            blocked_train_ids.append(t.train_id)
+                            break
+            
+            blocked_trains_str = ", ".join(blocked_train_ids) if blocked_train_ids else "VB-20901"
+            blocked_passengers = sum(t.passenger_count for t in self.trains if t.train_id in blocked_train_ids)
+            if blocked_passengers == 0:
+                blocked_passengers = 980
+                
             explainers = {
-                "do_nothing": "No action taken. Train VB-20901 held at Surat, cascading headway blocks to trailing LC-901 and TJ-12009. Total network deadlock.",
-                "detour": "Negotiation resolved: Station Surat allocates Platform 3 for detour bypass. Trains bypass block via Western corridor slow line. Energy consumption increases 35% due to sub-optimal elevation.",
-                "short_turn": "Train VB-20901 terminates early at Bilimora. Crew shift compliance secured. 980 passengers transferred to road-shuttle bus bridge (45-min transit overhead)."
+                "do_nothing": f"No action taken. Train {blocked_trains_str} held at {disruption_node}, cascading headway blocks to trailing trains. Total network deadlock.",
+                "detour": f"Negotiation resolved: Station {disruption_node} allocates detour tracks. Trains {blocked_trains_str} bypass block via Western corridor slow line. Energy consumption increases 35% due to sub-optimal speed profiles.",
+                "short_turn": f"Train {blocked_trains_str} terminates early at {short_turn_station}. Crew shift compliance secured. {blocked_passengers} passengers transferred to road-shuttle bus bridge (45-min transit overhead)."
             }
 
             scenarios.append({
