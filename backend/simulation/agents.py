@@ -42,24 +42,102 @@ class StationAgent:
         # Tracking lists
         self.occupied_platforms: List[str] = []  # Train IDs currently at platform
         self.queue: List[str] = []               # Train IDs waiting to enter station
+        self.waiting_trains: List[tuple] = []    # List of (TrainAgent, env.event)
 
-    def request_platform(self, train_id: str):
-        """Register train in queue and request platform."""
+    def request_platform(self, train: Any):
+        """Register train in queue and request platform, resolving via VCG auction if constrained."""
+        train_id = train if isinstance(train, str) else train.train_id
+        
+        # Check if platform is free and queue is empty
+        if len(self.occupied_platforms) < self.platforms_count and not self.waiting_trains:
+            self.occupied_platforms.append(train_id)
+            event = self.env.event()
+            event.succeed()
+            return event
+
+        # Otherwise queue up and participate in next VCG auction
+        event = self.env.event()
         self.queue.append(train_id)
-        request = self.resource.request()
-        return request
+        
+        train_agent = train
+        if isinstance(train, str):
+            # Try to lookup in engine trains if possible
+            train_agent = None
+            if hasattr(self.env, "trains"):
+                train_agent = next((t for t in self.env.trains if t.train_id == train), None)
+            if not train_agent:
+                # Mock a train agent for backward compatibility in tests
+                class MockTrain:
+                    def __init__(self, tid):
+                        self.train_id = tid
+                        self.priority_tokens = 100.0
+                        self.bids_paid = 0.0
+                        self.service_type = "Local"
+                        self.passenger_count = 500
+                        self.delay_minutes = 0.0
+                    def calculate_platform_bid(self):
+                        return 10.0
+                train_agent = MockTrain(train)
+                
+        self.waiting_trains.append((train_agent, event))
+        return event
 
-    def enter_platform(self, train_id: str):
+    def enter_platform(self, train: Any):
         """Train enters platform, remove from queue, add to occupied list."""
+        train_id = train if isinstance(train, str) else train.train_id
         if train_id in self.queue:
             self.queue.remove(train_id)
-        self.occupied_platforms.append(train_id)
+        if train_id not in self.occupied_platforms:
+            self.occupied_platforms.append(train_id)
 
-    def release_platform(self, train_id: str, request: simpy.Request):
-        """Train departs, free platform resource and update tracking."""
+    def release_platform(self, train: Any, request: Any):
+        """Train departs, free platform resource and run VCG auction to dispatch next train."""
+        train_id = train if isinstance(train, str) else train.train_id
         if train_id in self.occupied_platforms:
             self.occupied_platforms.remove(train_id)
-        self.resource.release(request)
+            
+        # Run VCG auction to allocate the freed platform
+        if self.waiting_trains:
+            bids = []
+            for t, ev in self.waiting_trains:
+                if isinstance(t, str):
+                    bid_val = 10.0
+                else:
+                    bid_val = t.calculate_platform_bid()
+                bids.append((t, ev, bid_val))
+                
+            # Sort descending by bid value
+            bids.sort(key=lambda x: x[2], reverse=True)
+            
+            # Winner is the highest bidder
+            winner_t, winner_event, winning_bid = bids[0]
+            
+            # VCG payment is second-price (opportunity cost) or 0 if only 1 bidder
+            payment = 0.0
+            if len(bids) > 1:
+                payment = bids[1][2]
+                
+            # Deduct tokens from winner
+            if not isinstance(winner_t, str):
+                winner_t.priority_tokens = max(0.0, winner_t.priority_tokens - payment)
+                winner_t.bids_paid += payment
+                
+                # Log auction result to the dispatcher log
+                if hasattr(winner_t, "engine") and winner_t.engine:
+                    bids_str = ", ".join([f"{x[0] if isinstance(x[0], str) else x[0].train_id}:{x[2]:.1f}" for x in bids])
+                    winner_t.engine.log_negotiation(
+                        f"🎫 VCG AUCTION at {self.name}: Train {winner_t.train_id} wins platform slot "
+                        f"with bid {winning_bid:.1f} tokens. Paid second-price: {payment:.1f} tokens. (Bids: [{bids_str}])"
+                    )
+            
+            # Remove winner from waiting lists
+            self.waiting_trains = [item for item in self.waiting_trains if item[1] != winner_event]
+            winner_id = winner_t if isinstance(winner_t, str) else winner_t.train_id
+            if winner_id in self.queue:
+                self.queue.remove(winner_id)
+                
+            self.occupied_platforms.append(winner_id)
+            winner_event.succeed()
 
 
 class TrainAgent:
@@ -92,6 +170,10 @@ class TrainAgent:
         self.energy_consumed_kwh = 0.0
         self.status = "WAITING"  # WAITING, RUNNING, DWELLING, TERMINATED, DELAYED
         
+        # Game-theory token bidding attributes
+        self.priority_tokens = 100.0
+        self.bids_paid = 0.0
+        
         # State tracking for coordinate calculation
         self.from_node = stops[0]
         self.to_node = stops[0]
@@ -104,6 +186,18 @@ class TrainAgent:
         
         # Crew agent associated with train
         self.crew = CrewAgent(f"CRW-{train_id}", train_id, shift_start_mins=max(0.0, departure_time_mins - 30.0))
+
+    def calculate_platform_bid(self) -> float:
+        """Calculate the virtual token bid for the platform based on priority, delay and passenger count."""
+        priority_weights = {
+            "Vande Bharat": 1.5,
+            "Tejas Express": 1.2,
+            "Local": 0.8
+        }
+        multiplier = priority_weights.get(self.service_type, 1.0)
+        # Bid scaled by passengers and delay, capped by remaining tokens
+        base_bid = (self.passenger_count / 100.0) * multiplier * (1.0 + self.delay_minutes)
+        return min(self.priority_tokens, base_bid)
 
     def run(self):
         """Main train traversal process loop in SimPy."""
@@ -290,13 +384,13 @@ class TrainAgent:
 
             # Request platform at destination station
             station_agent: StationAgent = self.engine.stations[v]
-            platform_req = station_agent.request_platform(self.train_id)
+            platform_req = station_agent.request_platform(self)
             
             # Wait until a platform is available
             yield platform_req
 
             # Dwell at station
-            station_agent.enter_platform(self.train_id)
+            station_agent.enter_platform(self)
             self.status = "DWELLING"
             self.is_dwelling = True
             self.speed_kmh = 0.0
@@ -314,7 +408,7 @@ class TrainAgent:
             yield self.env.timeout(dwell_time)
             
             # Release platform
-            station_agent.release_platform(self.train_id, platform_req)
+            station_agent.release_platform(self, platform_req)
             self.is_dwelling = False
             self.status = "RUNNING"
             

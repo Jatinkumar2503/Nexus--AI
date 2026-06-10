@@ -37,6 +37,8 @@ export interface TrainState {
   status: string; // "WAITING", "RUNNING", "DWELLING", "TERMINATED", "DELAYED"
   energy_consumed_kwh: number;
   crew_violated: boolean;
+  priority_tokens?: number;
+  bids_paid?: number;
 }
 
 export interface StationState {

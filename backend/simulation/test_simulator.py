@@ -309,6 +309,64 @@ def test_crew_depot_allocation_constraints():
     print(f"Verified crew-depot short-turn stops: {' -> '.join(new_stops)}")
     print("OK: Crew-Depot Allocation Constraints passed.\n")
 
+def test_game_theory_token_bidding():
+    print("Testing Game-Theory Token Bidding (VCG Platform Auction)...")
+    engine = SimulationEngine()
+    
+    # Let's set up a station with 1 platform capacity, e.g. SUR (Surat)
+    sur_station = engine.stations["SUR"]
+    sur_station.platforms_count = 1
+    
+    # Clear occupied platforms and waiting trains
+    sur_station.occupied_platforms = []
+    sur_station.waiting_trains = []
+    sur_station.queue = []
+    
+    # We will create three mock or actual train agents to request platforms
+    # Train 1 (high priority Vande Bharat, e.g., delay = 10 mins)
+    t1 = next(t for t in engine.trains if t.train_id == "VB-20901")
+    t1.delay_minutes = 10.0
+    t1.priority_tokens = 100.0
+    t1.bids_paid = 0.0
+    
+    # Train 2 (lower priority Local, e.g. delay = 5 mins)
+    t2 = next(t for t in engine.trains if t.train_id == "LC-901")
+    t2.delay_minutes = 5.0
+    t2.priority_tokens = 100.0
+    t2.bids_paid = 0.0
+    
+    # 1. Occupy the platform with a mock train first so it's fully occupied
+    sur_station.occupied_platforms.append("MOCK_OCCUPANT")
+    
+    # 2. Both trains request the platform and must queue
+    req1 = sur_station.request_platform(t1)
+    req2 = sur_station.request_platform(t2)
+    
+    assert len(sur_station.waiting_trains) == 2
+    assert t1.train_id in sur_station.queue
+    assert t2.train_id in sur_station.queue
+    
+    # Check bids:
+    bid1 = t1.calculate_platform_bid()
+    bid2 = t2.calculate_platform_bid()
+    assert bid1 > bid2, f"Expected T1 bid ({bid1}) to be higher than T2 bid ({bid2})"
+    
+    # 3. Release the occupant. This triggers the VCG auction!
+    sur_station.release_platform("MOCK_OCCUPANT", None)
+    
+    # Verify that T1 got the platform and paid second-price
+    assert t1.train_id in sur_station.occupied_platforms
+    assert t2.train_id not in sur_station.occupied_platforms
+    assert req1.triggered, "Winner's platform request should be triggered"
+    assert not req2.triggered, "Loser's platform request should not be triggered"
+    
+    expected_payment = bid2
+    assert abs(t1.priority_tokens - (100.0 - expected_payment)) < 1e-3, f"Expected T1 tokens to be {100.0 - expected_payment}, got {t1.priority_tokens}"
+    assert abs(t1.bids_paid - expected_payment) < 1e-3, f"Expected T1 bids_paid to be {expected_payment}, got {t1.bids_paid}"
+    
+    print(f"Verified: Winner {t1.train_id} paid second-price {t1.bids_paid:.1f} tokens. Remaining: {t1.priority_tokens:.1f} tokens.")
+    print("OK: Game-Theory Token Bidding passed.\n")
+
 def run_all_tests():
     test_simulation_initialization()
     test_detour_routing_mechanics()
@@ -320,6 +378,7 @@ def run_all_tests():
     test_non_linear_delay_cost()
     test_catenary_substation_solver()
     test_crew_depot_allocation_constraints()
+    test_game_theory_token_bidding()
     print("All unit tests passed successfully!")
 
 if __name__ == "__main__":

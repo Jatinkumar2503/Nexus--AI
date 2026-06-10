@@ -179,7 +179,9 @@ async def get_simulation_state():
             coordinates=t["coordinates"],
             status=t["status"],
             energy_consumed_kwh=t["energy_consumed_kwh"],
-            crew_violated=t["crew_violated"]
+            crew_violated=t["crew_violated"],
+            priority_tokens=t["priority_tokens"],
+            bids_paid=t["bids_paid"]
         ))
 
     # 2. Station states

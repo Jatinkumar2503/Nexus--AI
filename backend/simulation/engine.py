@@ -203,7 +203,9 @@ class SimulationEngine:
                 "coordinates": t.get_coordinates(),
                 "status": t.status,
                 "energy_consumed_kwh": t.energy_consumed_kwh,
-                "crew_violated": crew_violated
+                "crew_violated": crew_violated,
+                "priority_tokens": getattr(t, "priority_tokens", 100.0),
+                "bids_paid": getattr(t, "bids_paid", 0.0)
             })
         return active_trains
 
@@ -411,6 +413,8 @@ class SimulationEngine:
                     ff_train.is_dwelling = t.is_dwelling
                     ff_train.is_waiting = t.is_waiting
                     ff_train.traveled_distance_on_segment = getattr(t, "traveled_distance_on_segment", 0.0)
+                    ff_train.priority_tokens = getattr(t, "priority_tokens", 100.0)
+                    ff_train.bids_paid = getattr(t, "bids_paid", 0.0)
                     ff_trains.append(ff_train)
                     ff_env.process(ff_train.run())
 

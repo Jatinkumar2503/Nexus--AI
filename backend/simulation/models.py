@@ -23,6 +23,8 @@ class TrainState(BaseModel):
     status: str = Field("RUNNING", description="RUNNING, DWELLING, DELAYED, WAITING, TERMINATED")
     energy_consumed_kwh: float
     crew_violated: bool = Field(False, description="True if train crew shift limit is violated or predicted to be violated")
+    priority_tokens: float = Field(100.0, description="Virtual game-theoretic priority tokens balance")
+    bids_paid: float = Field(0.0, description="Total tokens spent during auctions")
 
 class StationState(BaseModel):
     station_id: str

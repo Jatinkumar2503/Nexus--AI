@@ -463,6 +463,9 @@ function App() {
                         <div className="text-[9px] text-zinc-500 font-mono mt-0.5 space-y-0.5">
                           <div>{train.speed_kmh.toFixed(0)} km/h</div>
                           <div>{train.energy_consumed_kwh.toFixed(0)} kWh</div>
+                          {train.priority_tokens !== undefined && (
+                            <div className="text-primary font-bold">🎫 {train.priority_tokens.toFixed(1)} tkn</div>
+                          )}
                         </div>
                       </div>
                     </div>
