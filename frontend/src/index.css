@@ -103,7 +103,79 @@ body {
   }
 }
 
-.animate-fade-in {
+@utility animate-fade-in {
   animation: fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Slide-up transition for active disruption drawer */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@utility animate-slide-up {
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Subtle alarm shake animation for warning alerts */
+@keyframes shake-subtle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+@utility animate-shake-subtle {
+  animation: shake-subtle 0.5s ease-in-out infinite;
+}
+
+/* Glow-pulse for the main resilience meter and active options */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
+    border-color: rgba(59, 130, 246, 0.7);
+  }
+}
+
+@utility animate-glow-pulse {
+  animation: glow-pulse 2s infinite ease-in-out;
+}
+
+/* Red alert warning pulse for critical systems */
+@keyframes danger-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.55);
+    border-color: rgba(239, 68, 68, 0.65);
+  }
+}
+
+@utility animate-danger-pulse {
+  animation: danger-pulse 1.5s infinite ease-in-out;
+}
+
+/* Shimmer gradient overlay */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@utility animate-shimmer {
+  background: linear-gradient(90deg, rgba(24, 24, 27, 0.1) 25%, rgba(63, 63, 70, 0.2) 50%, rgba(24, 24, 27, 0.1) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
 

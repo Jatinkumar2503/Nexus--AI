@@ -24,6 +24,16 @@ import {
 } from './services/api';
 import './App.css';
 
+const getTrainStops = (trainId: string, serviceType: string, direction: string) => {
+  let stops = ["MUM", "TNA", "VIR", "BOI", "VAP", "BIL", "SUR", "BHA", "VAD", "ANA", "ADI", "SAB"];
+  if (serviceType === "Vande Bharat") {
+    stops = ["MUM", "TNA", "SUR", "VAD", "ADI", "SAB"];
+  } else if (serviceType === "Tejas Express") {
+    stops = ["MUM", "TNA", "VAP", "SUR", "VAD", "ANA", "ADI", "SAB"];
+  }
+  return direction === "inbound" ? [...stops].reverse() : stops;
+};
+
 function App() {
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [simSpeed, setSimSpeed] = useState<number>(30.0);
@@ -370,49 +380,102 @@ function App() {
             {activeTab === "trains" && (
               <div className="space-y-2">
                 {trains.map((train) => (
-                  <div key={train.train_id} className="glass-panel p-3 rounded-xl flex items-center justify-between border border-border/60 hover:border-primary/50 transition-all">
-                    <div className="flex items-center space-x-2.5">
-                      <div className={`p-2 rounded-lg bg-zinc-900 border ${
-                        train.status === "RUNNING" ? "border-accent/30" : 
-                        train.status === "DELAYED" ? "border-danger/30 animate-pulse" : "border-zinc-700"
-                      }`}>
-                        <Train className={`w-4 h-4 ${
-                          train.status === "RUNNING" ? "text-accent animate-pulse" : 
+                  <div key={train.train_id} className="glass-panel p-3 rounded-xl flex flex-col space-y-3 border border-border/60 hover:border-primary/50 transition-all">
+                    {/* Top Row: Train ID & Core Info */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2.5">
+                        <div className={`p-2 rounded-lg bg-zinc-900 border ${
+                          train.status === "RUNNING" ? "border-accent/30" : 
+                          train.status === "DELAYED" ? "border-danger/30 animate-pulse" : "border-zinc-700"
+                        }`}>
+                          <Train className={`w-4 h-4 ${
+                            train.status === "RUNNING" ? "text-accent animate-pulse" : 
+                            train.status === "DELAYED" ? "text-danger" : "text-zinc-500"
+                          }`} />
+                        </div>
+                        <div>
+                          <div className="text-sm font-bold tracking-wide flex items-center space-x-1.5">
+                            <span>{train.train_id}</span>
+                            {train.delay_minutes > 0 && (
+                              <span className="text-[9px] bg-warning/10 border border-warning/35 text-warning px-1.5 py-0.5 rounded font-mono">
+                                +{train.delay_minutes.toFixed(0)}m
+                              </span>
+                            )}
+                            {train.crew_violated && (
+                              <span className="text-[9px] bg-danger/10 border border-danger/35 text-danger px-1.5 py-0.5 rounded font-bold animate-pulse" title="Crew Shift Limit Warning!">
+                                CREW LIMIT
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[10px] text-zinc-500 font-medium">
+                            {train.service_type} • {train.direction.toUpperCase()}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className={`text-xs font-bold uppercase tracking-wider ${
+                          train.status === "RUNNING" ? "text-accent" : 
+                          train.status === "DWELLING" ? "text-primary" : 
                           train.status === "DELAYED" ? "text-danger" : "text-zinc-500"
-                        }`} />
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold tracking-wide flex items-center space-x-1.5">
-                          <span>{train.train_id}</span>
-                          {train.delay_minutes > 0 && (
-                            <span className="text-[9px] bg-warning/10 border border-warning/35 text-warning px-1.5 py-0.5 rounded font-mono">
-                              +{train.delay_minutes.toFixed(0)}m
-                            </span>
-                          )}
-                          {train.crew_violated && (
-                            <span className="text-[9px] bg-danger/10 border border-danger/35 text-danger px-1.5 py-0.5 rounded font-bold animate-pulse" title="Crew Shift Limit Warning!">
-                              CREW LIMIT
-                            </span>
-                          )}
+                        }`}>
+                          {train.status}
                         </div>
-                        <div className="text-[10px] text-zinc-500 font-medium">
-                          {train.service_type} • {train.direction.toUpperCase()}
+                        <div className="text-[9px] text-zinc-500 font-mono mt-0.5 space-y-0.5">
+                          <div>{train.speed_kmh.toFixed(0)} km/h</div>
+                          <div>{train.energy_consumed_kwh.toFixed(0)} kWh</div>
                         </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className={`text-xs font-bold uppercase tracking-wider ${
-                        train.status === "RUNNING" ? "text-accent" : 
-                        train.status === "DWELLING" ? "text-primary" : 
-                        train.status === "DELAYED" ? "text-danger" : "text-zinc-500"
-                      }`}>
-                        {train.status}
-                      </div>
-                      <div className="text-[9px] text-zinc-500 font-mono mt-0.5 space-y-0.5">
-                        <div>{train.speed_kmh.toFixed(0)} km/h</div>
-                        <div>{train.energy_consumed_kwh.toFixed(0)} kWh</div>
-                      </div>
-                    </div>
+
+                    {/* Timeline row */}
+                    {(() => {
+                      const stops = getTrainStops(train.train_id, train.service_type, train.direction);
+                      let currentIdx = stops.indexOf(train.current_node);
+                      if (train.status === "TERMINATED") {
+                        currentIdx = stops.length - 1;
+                      } else if (currentIdx === -1) {
+                        currentIdx = 0;
+                      }
+
+                      return (
+                        <div className="flex items-center justify-between pt-1 px-1">
+                          {stops.map((stop, sIdx) => {
+                            const isPassed = sIdx < currentIdx;
+                            const isCurrent = sIdx === currentIdx;
+                            const isLast = sIdx === stops.length - 1;
+                            return (
+                              <div key={stop} className="flex items-center flex-1 last:flex-initial">
+                                {/* Stop Node Dot */}
+                                <div className="relative flex flex-col items-center">
+                                  {isCurrent && (
+                                    <div className="w-1.5 h-1.5 rounded-full bg-primary absolute animate-ping" />
+                                  )}
+                                  <div 
+                                    className={`w-1.5 h-1.5 rounded-full border transition-all relative z-10 ${
+                                      isPassed ? "bg-accent border-accent" :
+                                      isCurrent ? "bg-primary border-primary scale-125" :
+                                      "bg-zinc-800 border-zinc-700"
+                                    }`}
+                                    title={stop}
+                                  />
+                                  <span className="text-[7px] text-zinc-600 font-mono mt-1 scale-90 origin-top">
+                                    {stop}
+                                  </span>
+                                </div>
+                                {/* Connecting Line */}
+                                {!isLast && (
+                                  <div 
+                                    className={`h-[1px] flex-1 mx-0.5 ${
+                                      isPassed ? "bg-accent/60" : "bg-zinc-800"
+                                    }`}
+                                  />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
                   </div>
                 ))}
               </div>
