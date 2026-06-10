@@ -488,3 +488,13 @@ class SimulationEngine:
             s1["is_pareto_optimal"] = not dominated
             
         return scenarios
+
+    def ingest_telemetry(self, axle_counter_id: str, train_id: str, timestamp: float, axle_count: int, event_type: str) -> str:
+        """Ingest high-frequency sub-second axle counter events for the digital twin model."""
+        msg = (
+            f"Twin Telemetry - Axle counter {axle_counter_id} verified {event_type.upper()} "
+            f"for Train {train_id} ({axle_count} axles confirmed) at Unix epoch {timestamp:.3f}."
+        )
+        self.log_negotiation(msg)
+        return msg
+

@@ -174,6 +174,27 @@ def test_dynamic_spacing_headways():
         
     print("OK: Dynamic Spacing Headways passed.\n")
 
+def test_axle_telemetry_ingest():
+    print("Testing Sub-Second Axle Telemetry Ingest...")
+    engine = SimulationEngine()
+    
+    # Ingest a mock telemetry event
+    msg = engine.ingest_telemetry(
+        axle_counter_id="AX-SUR-BHA-ENTRY",
+        train_id="VB-20901",
+        timestamp=1420000000.123,
+        axle_count=64,
+        event_type="entry"
+    )
+    
+    # Verify log format and containment
+    assert "AX-SUR-BHA-ENTRY" in msg
+    assert "VB-20901" in msg
+    assert "64 axles confirmed" in msg
+    assert any(msg in log for log in engine.negotiation_logs)
+    print(f"OK: Telemetry parsed and logged successfully: {msg}")
+    print("OK: Sub-Second Axle Telemetry Ingest passed.\n")
+
 def run_all_tests():
     test_simulation_initialization()
     test_detour_routing_mechanics()
@@ -181,6 +202,7 @@ def run_all_tests():
     test_crew_roster_violation()
     test_monte_carlo_scenarios()
     test_dynamic_spacing_headways()
+    test_axle_telemetry_ingest()
     print("All unit tests passed successfully!")
 
 if __name__ == "__main__":

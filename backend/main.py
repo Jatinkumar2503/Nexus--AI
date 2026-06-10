@@ -112,6 +112,13 @@ class DisruptionPayload(BaseModel):
 class ResolvePayload(BaseModel):
     strategy: str  # "do_nothing", "detour", "short_turn"
 
+class AxleTelemetryPayload(BaseModel):
+    axle_counter_id: str
+    train_id: str
+    timestamp: float
+    axle_count: int
+    event_type: str  # "entry" or "exit"
+
 @app.get("/")
 async def root():
     """API health-check root endpoint."""
@@ -300,6 +307,22 @@ async def resolve_scenario(payload: ResolvePayload):
     """Commit a chosen recovery strategy to the running simulation."""
     engine.resolve_scenario(payload.strategy)
     return {"status": "success", "strategy": payload.strategy}
+
+@app.post("/api/simulation/telemetry")
+async def ingest_telemetry(payload: AxleTelemetryPayload):
+    """Ingest high-frequency sub-second axle counter events for the digital twin model."""
+    msg = engine.ingest_telemetry(
+        axle_counter_id=payload.axle_counter_id,
+        train_id=payload.train_id,
+        timestamp=payload.timestamp,
+        axle_count=payload.axle_count,
+        event_type=payload.event_type
+    )
+    logger.info(msg)
+    return {
+        "status": "success",
+        "message": msg
+    }
 
 if __name__ == "__main__":
     import uvicorn
