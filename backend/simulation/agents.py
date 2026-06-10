@@ -184,6 +184,11 @@ class TrainAgent:
         self.is_terminated = False
         self.traveled_distance_on_segment = 0.0
         
+        # Advanced physics and telemetry attributes
+        self.voltage = 25000.0
+        self.telemetry_packet_lost = False
+        self.short_turn_depot = None
+        
         # Crew agent associated with train
         self.crew = CrewAgent(f"CRW-{train_id}", train_id, shift_start_mins=max(0.0, departure_time_mins - 30.0))
 
@@ -216,6 +221,12 @@ class TrainAgent:
             v = self.stops[i+1]
             self.current_stop_idx = i
 
+            # If departing from a short-turn depot, lock the crossover for 2 minutes
+            if getattr(self, "short_turn_depot", None) == u:
+                self.engine.crossover_locks[u] = self.env.now + 2.0
+                self.engine.log_negotiation(f"🔒 CROSSOVER LOCK: Train {self.train_id} locking crossover at {u} for 2.0 minutes for reversing.")
+                self.short_turn_depot = None
+
             # Update direction representation for return run under short-turn
             if len(self.stops) > 2 and self.stops[0] == self.stops[-1]:
                 midpoint = len(self.stops) // 2
@@ -241,6 +252,13 @@ class TrainAgent:
                     self.status = "DELAYED"
                     self.speed_kmh = 0.0
                     self.engine.log_negotiation(f"Train {self.train_id} held at {u} due to blocked track segment {u}->{self.stops[self.current_stop_idx + 1]}")
+                    
+                    # Accumulate delay and replenish tokens
+                    scheduled_arrival = self.engine.get_scheduled_arrival(self.train_id, self.stops[self.current_stop_idx + 1])
+                    if scheduled_arrival is not None:
+                        self.delay_minutes = max(0.0, self.env.now - scheduled_arrival)
+                    self.priority_tokens += 10 * (0.05 * self.delay_minutes)  # 1.0 sim minute wait = 10 ticks worth
+                    
                     yield self.env.timeout(1.0)  # Wait for 1 min and check again
                 
                 # Update segment data in case stops were dynamically changed during wait
@@ -294,10 +312,37 @@ class TrainAgent:
                         )
                         max_speed_limit = 50.0
 
+                # 1a. Electrical Voltage Degradation
+                current_draw_amps = (mass_tons * 0.01 + 0.0005 * (self.speed_kmh ** 2)) * 3.5
+                line_resistance_ohms = 0.05 * self.traveled_distance_on_segment
+                self.voltage = max(0.0, 25000.0 - current_draw_amps * line_resistance_ohms)
+                if self.voltage < 22000.0:
+                    voltage_scale = self.voltage / 25000.0
+                    max_speed_limit *= voltage_scale
+
+                # 1b. Telemetry Packet Loss Jitter (2% chance per tick)
+                import random
+                self.telemetry_packet_lost = (random.random() < 0.02)
+                if self.telemetry_packet_lost:
+                    max_speed_limit = min(max_speed_limit, 50.0)
+
+                # 1c. Token Starvation Prevention Tax
+                scheduled_next_arrival = self.engine.get_scheduled_arrival(self.train_id, v)
+                if scheduled_next_arrival is not None:
+                    self.delay_minutes = max(0.0, self.env.now - scheduled_next_arrival)
+                self.priority_tokens += 0.05 * self.delay_minutes
+
                 # 2. Find leading train and distance on the same segment
                 leading_dist = float('inf')
                 leading_train_id = None
                 
+                # Check for active track crossover lock at destination station v
+                if self.engine.crossover_locks.get(v, 0.0) > self.env.now:
+                    dist = distance - self.traveled_distance_on_segment
+                    if dist < leading_dist:
+                        leading_dist = dist
+                        leading_train_id = f"CrossoverLock@{v}"
+
                 for other in self.engine.trains:
                     if other.train_id == self.train_id:
                         continue
@@ -336,10 +381,15 @@ class TrainAgent:
                     target_speed = 0.0
                     state = "STOPPED"
 
-                # Apply catenary power speed restriction if tripped
+                # Apply speed restriction based on catenary power, voltage degradation, or telemetry loss
                 if max_speed_limit < target_speed:
                     target_speed = max_speed_limit
-                    state = "SUBSTATION_THROTTLED"
+                    if self.telemetry_packet_lost:
+                        state = "TELEMETRY_LOST"
+                    elif self.voltage < 22000.0:
+                        state = "VOLTAGE_DEGRADED"
+                    else:
+                        state = "SUBSTATION_THROTTLED"
 
                 self.speed_kmh = target_speed
                 
@@ -353,6 +403,10 @@ class TrainAgent:
                         self.engine.log_negotiation(f"Train {self.train_id} stopped to avoid collision behind {leading_train_id}")
                     elif state == "SUBSTATION_THROTTLED":
                         self.engine.log_negotiation(f"Train {self.train_id} throttled to {self.speed_kmh:.1f} km/h due to catenary substation trip on segment {u}->{v}")
+                    elif state == "TELEMETRY_LOST":
+                        self.engine.log_negotiation(f"📡 TELEMETRY LOSS: Train {self.train_id} lost communication packet. Safe crawl speed of 50 km/h active.")
+                    elif state == "VOLTAGE_DEGRADED":
+                        self.engine.log_negotiation(f"⚡ VOLTAGE DEGRADATION: Train {self.train_id} catenary voltage dropped to {self.voltage:.1f}V. Speed scaled to {self.speed_kmh:.1f} km/h.")
                     last_log_state = state
 
                 # 3. Compute distance covered in this time step (in hours)

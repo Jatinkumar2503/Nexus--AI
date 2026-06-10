@@ -39,6 +39,8 @@ export interface TrainState {
   crew_violated: boolean;
   priority_tokens?: number;
   bids_paid?: number;
+  voltage?: number;
+  telemetry_packet_lost?: boolean;
 }
 
 export interface StationState {

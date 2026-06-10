@@ -32,6 +32,7 @@ class SimulationEngine:
         self.negotiation_logs: List[str] = []
         self.substation_tripped: Dict[str, Optional[float]] = {}
         self.substation_limit = 350.0
+        self.crossover_locks: Dict[str, float] = {}
 
         # Scheduled timetable baseline arrival times: (train_id, station_id) -> mins
         self.scheduled_arrivals: Dict[tuple, float] = {}
@@ -214,7 +215,9 @@ class SimulationEngine:
                 "energy_consumed_kwh": t.energy_consumed_kwh,
                 "crew_violated": crew_violated,
                 "priority_tokens": getattr(t, "priority_tokens", 100.0),
-                "bids_paid": getattr(t, "bids_paid", 0.0)
+                "bids_paid": getattr(t, "bids_paid", 0.0),
+                "voltage": getattr(t, "voltage", 25000.0),
+                "telemetry_packet_lost": getattr(t, "telemetry_packet_lost", False)
             })
         return active_trains
 
@@ -307,6 +310,7 @@ class SimulationEngine:
                                 traversed = t.stops[:short_turn_idx + 1]
                                 return_stops = list(reversed(traversed))[1:]
                                 t.stops = traversed + return_stops
+                                t.short_turn_depot = short_turn_station
                                 self.log_negotiation(f"Train {t.train_id} short-turned early at depot {short_turn_station} and returning to origin.")
                             break
 
@@ -363,6 +367,7 @@ class SimulationEngine:
                         self.negotiation_logs = []
                         self.substation_tripped = copy.deepcopy(parent_engine.substation_tripped)
                         self.substation_limit = parent_engine.substation_limit
+                        self.crossover_locks = copy.deepcopy(parent_engine.crossover_locks)
                         self.trains = []
 
                     def get_scheduled_arrival(self, train_id, station_id):
@@ -495,6 +500,7 @@ class SimulationEngine:
                     ff_train.traveled_distance_on_segment = getattr(t, "traveled_distance_on_segment", 0.0)
                     ff_train.priority_tokens = getattr(t, "priority_tokens", 100.0)
                     ff_train.bids_paid = getattr(t, "bids_paid", 0.0)
+                    ff_train.short_turn_depot = getattr(t, "short_turn_depot", None)
                     ff_trains.append(ff_train)
                     ff_env.process(ff_train.run())
 

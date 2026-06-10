@@ -367,6 +367,109 @@ def test_game_theory_token_bidding():
     print(f"Verified: Winner {t1.train_id} paid second-price {t1.bids_paid:.1f} tokens. Remaining: {t1.priority_tokens:.1f} tokens.")
     print("OK: Game-Theory Token Bidding passed.\n")
 
+def test_electrical_voltage_degradation():
+    print("Testing Electrical Voltage Degradation Physics...")
+    engine = SimulationEngine()
+    t = engine.trains[0]
+    
+    # Position train on MUM->TNA
+    t.from_node = "MUM"
+    t.to_node = "TNA"
+    
+    # Temporarily bypass substation limit trip
+    engine.substation_limit = 1000.0
+    
+    # Modify segment distance in graph to allow longer travel distance
+    edge_data = engine.topology.graph.get_edge_data("MUM", "TNA")
+    orig_distance = edge_data["distance_km"]
+    edge_data["distance_km"] = 500.0
+    
+    # Run a tiny bit to initialize the segment loop inside SimPy and enter the while loop
+    engine.env.run(until=0.01)
+    
+    try:
+        # Move train far down the track to induce high resistance
+        t.traveled_distance_on_segment = 450.0
+        t.speed_kmh = 270.0
+        
+        # Advance environment
+        engine.env.run(until=0.11)
+        
+        # Verify voltage dropped below 22kV
+        assert t.voltage < 22000.0, f"Expected voltage < 22kV, got {t.voltage:.1f}V"
+        assert t.speed_kmh < 270.0, f"Expected speed to be scaled down, got {t.speed_kmh:.1f} km/h"
+        print(f"OK: Voltage dropped to {t.voltage:.1f}V. Speed scaled down from 270 to {t.speed_kmh:.1f} km/h.")
+    finally:
+        # Restore distance
+        edge_data["distance_km"] = orig_distance
+        
+    print("OK: Electrical Voltage Degradation Physics passed.\n")
+
+def test_telemetry_packet_loss():
+    print("Testing Telemetry Packet Loss Jitter...")
+    engine = SimulationEngine()
+    t = engine.trains[0]
+    
+    # Mock random.random to return 0.0, which is < 0.02 (guaranteeing packet loss)
+    import random
+    orig_random = random.random
+    random.random = lambda: 0.0
+    
+    try:
+        # Run simulation slightly
+        engine.env.run(until=0.11)
+        
+        # Check that the train is throttled to 50 km/h or less due to telemetry loss
+        assert t.speed_kmh <= 50.0, f"Train speed should be restricted to <= 50 km/h due to telemetry loss, got {t.speed_kmh}"
+        print(f"OK: Telemetry loss throttle active: train speed restricted to {t.speed_kmh:.1f} km/h.")
+    finally:
+        random.random = orig_random
+        
+    print("OK: Telemetry Packet Loss Jitter passed.\n")
+
+def test_token_starvation_prevention():
+    print("Testing Token Starvation Prevention Tax...")
+    engine = SimulationEngine()
+    t = engine.trains[0]
+    
+    # Set the scheduled arrival at next station (TNA) in the past to simulate delay
+    engine.scheduled_arrivals[(t.train_id, "TNA")] = -10.0
+    initial_tokens = t.priority_tokens
+    
+    # Advance environment by 0.5 minutes (approx 5 ticks)
+    engine.env.run(until=0.51)
+    
+    # Verify tokens increased
+    assert t.priority_tokens > initial_tokens, f"Tokens should have increased, initial: {initial_tokens}, current: {t.priority_tokens}"
+    print(f"OK: Tokens replenished from {initial_tokens:.1f} to {t.priority_tokens:.1f} over delayed ticks.")
+    print("OK: Token Starvation Prevention Tax passed.\n")
+
+def test_crossover_interlock_conflicts():
+    print("Testing Catenary Track Crossover Interlock Conflicts...")
+    engine = SimulationEngine()
+    t = engine.trains[0]
+    
+    # Put train 0 on segment MUM->TNA, approaching TNA
+    t.from_node = "MUM"
+    t.to_node = "TNA"
+    
+    # Run a tiny bit to initialize the segment loop inside SimPy and enter the while loop
+    engine.env.run(until=0.01)
+    
+    t.traveled_distance_on_segment = 27.0  # 1 km from TNA (total segment length is 28.0 km)
+    
+    # Lock crossover at destination station TNA
+    engine.crossover_locks["TNA"] = engine.env.now + 5.0
+    
+    # Run environment a step to evaluate spacing headway
+    engine.env.run(until=0.11)
+    
+    # The train is 1 km away from a locked crossover.
+    # The ATC Braking Curve should restrict its speed.
+    assert t.speed_kmh < 270.0, f"Expected speed to be throttled below 270 km/h due to crossover lock, got {t.speed_kmh}"
+    print(f"OK: Crossover lock on TNA successfully throttled approaching train speed to {t.speed_kmh:.1f} km/h.")
+    print("OK: Catenary Track Crossover Interlock Conflicts passed.\n")
+
 def run_all_tests():
     test_simulation_initialization()
     test_detour_routing_mechanics()
@@ -379,6 +482,10 @@ def run_all_tests():
     test_catenary_substation_solver()
     test_crew_depot_allocation_constraints()
     test_game_theory_token_bidding()
+    test_electrical_voltage_degradation()
+    test_telemetry_packet_loss()
+    test_token_starvation_prevention()
+    test_crossover_interlock_conflicts()
     print("All unit tests passed successfully!")
 
 if __name__ == "__main__":
