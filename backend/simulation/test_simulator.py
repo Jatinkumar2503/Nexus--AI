@@ -272,6 +272,43 @@ def test_catenary_substation_solver():
         
     print("OK: Catenary Substation Power Flow Solver passed.\n")
 
+def test_crew_depot_allocation_constraints():
+    print("Testing Crew-Depot Allocation Constraints...")
+    engine = SimulationEngine()
+    
+    # Run the simulation for 20 minutes first so trains are active
+    engine.env.run(until=20.0)
+    
+    # Inject disruption on BIL->SUR segment
+    engine.inject_disruption(
+        node_id=None,
+        edge_id="BIL->SUR",
+        duration=120,
+        severity="HIGH",
+        description="Overhead catenary snapped between Bilimora and Surat"
+    )
+    
+    # Find a train heading towards the block, e.g. LC-901
+    target_train = next((t for t in engine.trains if t.train_id == "LC-901"), None)
+    assert target_train is not None
+    assert target_train.status in ["RUNNING", "DWELLING", "DELAYED"]
+    
+    # Resolve using short-turn strategy
+    engine.resolve_scenario("short_turn")
+    assert engine.active_recovery_strategy == "short_turn"
+    
+    # Verify stops are updated to return early at VAP (crew depot) instead of BIL (non-depot)
+    new_stops = target_train.stops
+    assert len(new_stops) > 0
+    # "BIL" is the station before "SUR", but not a depot. "VAP" is the closest depot before "BIL".
+    assert "SUR" not in new_stops
+    assert "BIL" not in new_stops, "Train should have short-turned at VAP (depot) instead of BIL (non-depot)"
+    assert "VAP" in new_stops, "Train should short-turn at VAP"
+    # The last stop should be origin "MUM"
+    assert new_stops[-1] == "MUM", "Train should return to MUM"
+    print(f"Verified crew-depot short-turn stops: {' -> '.join(new_stops)}")
+    print("OK: Crew-Depot Allocation Constraints passed.\n")
+
 def run_all_tests():
     test_simulation_initialization()
     test_detour_routing_mechanics()
@@ -282,6 +319,7 @@ def run_all_tests():
     test_axle_telemetry_ingest()
     test_non_linear_delay_cost()
     test_catenary_substation_solver()
+    test_crew_depot_allocation_constraints()
     print("All unit tests passed successfully!")
 
 if __name__ == "__main__":

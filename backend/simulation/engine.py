@@ -243,18 +243,27 @@ class SimulationEngine:
                             # We modify the TrainAgent to note it is bypassing, which runs slower
                             self.log_negotiation(f"Train {t.train_id} rerouted via Slow Line parallel tracks.")
         elif strategy == "short_turn":
-            # Find trains heading towards the block and short turn them
+            # Find trains heading towards the block and short turn them at closest crew depot
+            CREW_DEPOT_STATIONS = ["MUM", "TNA", "VAP", "SUR", "VAD", "ADI", "SAB"]
             for t in self.trains:
                 if t.status in ["RUNNING", "DWELLING", "DELAYED"]:
                     for i in range(t.current_stop_idx, len(t.stops) - 1):
                         u, v = t.stops[i], t.stops[i+1]
                         if self.is_track_blocked(u, v):
-                            # Short-turn at station u (preceding the block)
-                            short_turn_station = u
-                            traversed = t.stops[:i + 1]
-                            return_stops = list(reversed(traversed))[1:]
-                            t.stops = traversed + return_stops
-                            self.log_negotiation(f"Train {t.train_id} short-turned early at {short_turn_station} and returning to origin.")
+                            # Walk backwards to find closest crew depot
+                            short_turn_station = None
+                            short_turn_idx = -1
+                            for k in range(i, -1, -1):
+                                if t.stops[k] in CREW_DEPOT_STATIONS:
+                                    short_turn_station = t.stops[k]
+                                    short_turn_idx = k
+                                    break
+                            
+                            if short_turn_station:
+                                traversed = t.stops[:short_turn_idx + 1]
+                                return_stops = list(reversed(traversed))[1:]
+                                t.stops = traversed + return_stops
+                                self.log_negotiation(f"Train {t.train_id} short-turned early at depot {short_turn_station} and returning to origin.")
                             break
 
     def evaluate_scenarios(self) -> List[Dict[str, Any]]:
@@ -364,9 +373,20 @@ class SimulationEngine:
                         for idx in range(current_idx, len(stops) - 1):
                             u, v = stops[idx], stops[idx+1]
                             if self.is_track_blocked(u, v):
-                                traversed = stops[:idx + 1]
-                                return_stops = list(reversed(traversed))[1:]
-                                stops = traversed + return_stops
+                                # Walk backwards to find closest crew depot
+                                CREW_DEPOT_STATIONS = ["MUM", "TNA", "VAP", "SUR", "VAD", "ADI", "SAB"]
+                                short_turn_station = None
+                                short_turn_idx = -1
+                                for k in range(idx, -1, -1):
+                                    if stops[k] in CREW_DEPOT_STATIONS:
+                                        short_turn_station = stops[k]
+                                        short_turn_idx = k
+                                        break
+                                
+                                if short_turn_station:
+                                    traversed = stops[:short_turn_idx + 1]
+                                    return_stops = list(reversed(traversed))[1:]
+                                    stops = traversed + return_stops
                                 break
 
                     # Create fast-forward train agent
@@ -458,7 +478,12 @@ class SimulationEngine:
                 sequence = ["MUM", "TNA", "VIR", "BOI", "VAP", "BIL", "SUR", "BHA", "VAD", "ANA", "ADI", "SAB"]
                 if disruption_node in sequence:
                     idx = sequence.index(disruption_node)
-                    short_turn_station = sequence[max(0, idx - 1)]
+                    # Walk backwards to find closest crew depot
+                    CREW_DEPOT_STATIONS = ["MUM", "TNA", "VAP", "SUR", "VAD", "ADI", "SAB"]
+                    for k in range(idx, -1, -1):
+                        if sequence[k] in CREW_DEPOT_STATIONS:
+                            short_turn_station = sequence[k]
+                            break
                 
                 for t in self.trains:
                     for idx in range(t.current_stop_idx, len(t.stops) - 1):
