@@ -65,6 +65,9 @@ function App() {
   // UI Tabs for Sidebar
   const [activeTab, setActiveTab] = useState<"trains" | "stations" | "logs">("trains");
 
+  // Adaptive UI state
+  const [uiFocusMode, setUiFocusMode] = useState<"cockpit" | "crisis">("cockpit");
+
   // Fetch complete simulation state
   const fetchSimState = async () => {
     try {
@@ -262,6 +265,32 @@ function App() {
             </div>
           </div>
 
+          {/* Adaptive UI Focus Toggle */}
+          <div className="flex items-center space-x-1 bg-zinc-950 border border-zinc-800 p-0.5 rounded-full">
+            <button
+              onClick={() => { audioService.playClick(); setUiFocusMode("cockpit"); }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-bold tracking-wide transition-all duration-200 cursor-pointer ${
+                uiFocusMode === "cockpit" 
+                  ? "bg-primary/20 text-primary border border-primary/30" 
+                  : "text-zinc-500 hover:text-zinc-300 border border-transparent"
+              }`}
+              title="Cockpit Full View: Displays network map, real-time timetable, station platform load, and all charts."
+            >
+              COCKPIT VIEW
+            </button>
+            <button
+              onClick={() => { audioService.playClick(); setUiFocusMode("crisis"); }}
+              className={`px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-wide transition-all duration-200 cursor-pointer ${
+                uiFocusMode === "crisis" 
+                  ? "bg-danger/25 text-danger border border-danger/30 animate-pulse" 
+                  : "text-zinc-500 hover:text-zinc-300 border border-transparent"
+              }`}
+              title="Crisis Advisory Focus: Collapses secondary views to prioritize agent recommendations."
+            >
+              CRISIS FOCUS
+            </button>
+          </div>
+
           {/* Status Indicator */}
           <div className="flex items-center space-x-2">
             <span className={`relative flex h-2.5 w-2.5`}>
@@ -294,8 +323,11 @@ function App() {
           />
         </section>
 
-        {/* Right Side: Operational Metrics & Controller */}
-        <aside className="w-full lg:w-96 h-[45%] lg:h-full flex flex-col bg-zinc-950/45 backdrop-blur-lg border-t lg:border-t-0 lg:border-l border-zinc-900 overflow-hidden">
+        <aside className={`transition-all duration-300 ${
+          uiFocusMode === "crisis" 
+            ? "hidden" 
+            : "w-full lg:w-96 h-[45%] lg:h-full flex flex-col bg-zinc-950/45 backdrop-blur-lg border-t lg:border-t-0 lg:border-l border-zinc-900 overflow-hidden"
+        }`}>
           
           {/* KPI Dashboard section */}
           <div className="p-5 border-b border-border/40 space-y-4">
@@ -645,7 +677,9 @@ function App() {
 
       {/* Three-way Scenario Comparison Panel Overlay (Slides up when disruption active) */}
       {hasActiveDisruption && (
-        <div className="absolute bottom-0 left-0 right-0 p-5 bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-900 shadow-glass z-20 animate-slide-up flex flex-col space-y-4 max-h-[90vh] lg:max-h-[380px] overflow-y-auto">
+        <div className={`absolute bottom-0 left-0 right-0 p-5 bg-zinc-950/95 backdrop-blur-xl border-t shadow-glass z-20 animate-slide-up flex flex-col space-y-4 max-h-[90vh] overflow-y-auto transition-all duration-300 ${
+          uiFocusMode === "crisis" ? "lg:max-h-[420px] border-danger/40 ring-1 ring-danger/20" : "lg:max-h-[380px] border-zinc-900"
+        }`}>
           
           <div className="flex items-center justify-between border-b border-border/40 pb-2">
             <div>
