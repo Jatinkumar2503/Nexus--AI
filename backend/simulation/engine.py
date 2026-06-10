@@ -31,6 +31,19 @@ class SimulationEngine:
         self.current_scenario_choice: Optional[str] = None  # "do_nothing", "detour", "short_turn"
         self.active_recovery_strategy: Optional[str] = None
 
+        # Configure logging file handler
+        import logging
+        import os
+        SIM_DIR = os.path.dirname(os.path.abspath(__file__))
+        BACKEND_DIR = os.path.dirname(SIM_DIR)
+        logs_dir = os.path.join(BACKEND_DIR, "logs")
+        os.makedirs(logs_dir, exist_ok=True)
+        logger = logging.getLogger("nexus-simulation")
+        if not any(isinstance(h, logging.FileHandler) for h in logger.handlers):
+            fh = logging.FileHandler(os.path.join(logs_dir, "simulation.log"), encoding="utf-8")
+            fh.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+            logger.addHandler(fh)
+
         self._init_simulation()
 
     def _init_simulation(self):
@@ -116,6 +129,10 @@ class SimulationEngine:
         timestamp = self.get_sim_time_str()
         log_entry = f"[{timestamp}] {message}"
         self.negotiation_logs.append(log_entry)
+        
+        import logging
+        logging.getLogger("nexus-simulation").info(log_entry)
+
         # Keep logs at reasonable size
         if len(self.negotiation_logs) > 100:
             self.negotiation_logs.pop(0)

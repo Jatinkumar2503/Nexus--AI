@@ -1,8 +1,11 @@
 import logging
 import time
 from typing import Optional, List
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic import BaseModel
 
 from simulation.topology import RailTopology
@@ -10,7 +13,18 @@ from simulation.engine import SimulationEngine
 from simulation.models import SimulationStepResponse, Disruption, TrainState, StationState, SimulationMetrics, ScenarioOption
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+import os
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+logs_dir = os.path.join(BACKEND_DIR, "logs")
+os.makedirs(logs_dir, exist_ok=True)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(os.path.join(logs_dir, "simulation.log"), encoding="utf-8")
+    ]
+)
 logger = logging.getLogger("nexus-api")
 
 app = FastAPI(
@@ -36,6 +50,53 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    logger.error(f"HTTP exception at {request.url.path}: {exc.detail} (status: {exc.status_code})")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "type": f"https://nexus.ai/errors/{exc.status_code}",
+            "title": exc.detail,
+            "status": exc.status_code,
+            "detail": str(exc.detail),
+            "instance": request.url.path,
+        },
+        headers={"Content-Type": "application/problem+json"}
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"Validation error at {request.url.path}: {exc.errors()}")
+    return JSONResponse(
+        status_code=422,
+        content={
+            "type": "https://nexus.ai/errors/validation-error",
+            "title": "Unprocessable Entity",
+            "status": 422,
+            "detail": "Request body or parameters failed validation rules.",
+            "instance": request.url.path,
+            "invalid_params": exc.errors(),
+        },
+        headers={"Content-Type": "application/problem+json"}
+    )
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception):
+    logger.exception(f"Unhandled system exception at {request.url.path}: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={
+            "type": "https://nexus.ai/errors/internal-server-error",
+            "title": "Internal Server Error",
+            "status": 500,
+            "detail": "An unexpected error occurred during simulation execution.",
+            "instance": request.url.path,
+        },
+        headers={"Content-Type": "application/problem+json"}
+    )
+
 
 class ControlPayload(BaseModel):
     action: str  # "play", "pause", "reset", "step"
