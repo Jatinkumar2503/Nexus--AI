@@ -9,7 +9,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic import BaseModel
 
 from simulation.topology import RailTopology
-from simulation.engine import SimulationEngine
+from simulation.engine import SimulationEngine, get_non_linear_delay
 from simulation.models import SimulationStepResponse, Disruption, TrainState, StationState, SimulationMetrics, ScenarioOption
 
 # Configure logging
@@ -217,7 +217,7 @@ async def get_simulation_state():
         "Local": 0.8
     }
     total_delay = sum(
-        t.delay_minutes * t.passenger_count * PRIORITY_WEIGHTS.get(t.service_type, 1.0)
+        get_non_linear_delay(t.delay_minutes) * t.passenger_count * PRIORITY_WEIGHTS.get(t.service_type, 1.0)
         for t in trains_list
     ) / 500.0
     total_energy = sum(t.energy_consumed_kwh for t in trains_list)

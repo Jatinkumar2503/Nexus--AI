@@ -4,7 +4,7 @@ import os
 # Add parent directory to path so python can import simulation package
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from simulation.engine import SimulationEngine
+from simulation.engine import SimulationEngine, get_non_linear_delay
 from simulation.agents import CrewAgent, TrainAgent
 
 def test_simulation_initialization():
@@ -195,6 +195,22 @@ def test_axle_telemetry_ingest():
     print(f"OK: Telemetry parsed and logged successfully: {msg}")
     print("OK: Sub-Second Axle Telemetry Ingest passed.\n")
 
+def test_non_linear_delay_cost():
+    print("Testing Non-Linear Delay Cost Curve...")
+    
+    # 10 mins (<= 15 mins threshold): Should remain linear
+    assert get_non_linear_delay(10.0) == 10.0, "Expected linear cost for <= 15 minutes delay"
+    
+    # 15 mins (exact threshold boundary)
+    assert get_non_linear_delay(15.0) == 15.0, "Expected exact match at threshold boundary"
+    
+    # 25 mins (> 15 mins threshold): 15.0 + 10.0 + 0.1 * 100 = 35.0
+    cost_25 = get_non_linear_delay(25.0)
+    assert cost_25 == 35.0, f"Expected exponentially scaled cost of 35.0, got {cost_25}"
+    
+    print(f"OK: Non-linear delay cost verified: 10m -> {get_non_linear_delay(10.0)}m, 25m -> {cost_25}m")
+    print("OK: Non-Linear Delay Cost Curve passed.\n")
+
 def run_all_tests():
     test_simulation_initialization()
     test_detour_routing_mechanics()
@@ -203,6 +219,7 @@ def run_all_tests():
     test_monte_carlo_scenarios()
     test_dynamic_spacing_headways()
     test_axle_telemetry_ingest()
+    test_non_linear_delay_cost()
     print("All unit tests passed successfully!")
 
 if __name__ == "__main__":

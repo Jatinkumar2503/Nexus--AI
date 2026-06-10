@@ -6,6 +6,13 @@ from simulation.topology import STATIONS, RailTopology
 from simulation.schedule import MOCK_SCHEDULES
 from simulation.agents import TrainAgent, StationAgent
 
+def get_non_linear_delay(delay_mins: float) -> float:
+    """Apply exponential/quadratic scaling to delay minutes once a 15-minute threshold is exceeded."""
+    if delay_mins <= 15.0:
+        return delay_mins
+    excess = delay_mins - 15.0
+    return 15.0 + excess + 0.1 * (excess ** 2)
+
 class SimulationEngine:
     """SimPy-based Discrete Event Simulation Engine for NEXUS."""
     def __init__(self):
@@ -385,7 +392,7 @@ class SimulationEngine:
                     "Local": 0.8
                 }
                 run_delay = sum(
-                    train.delay_minutes * train.passenger_count * PRIORITY_WEIGHTS.get(train.service_type, 1.0)
+                    get_non_linear_delay(train.delay_minutes) * train.passenger_count * PRIORITY_WEIGHTS.get(train.service_type, 1.0)
                     for train in ff_trains
                 ) / 500.0
                 run_energy = sum(train.energy_consumed_kwh for train in ff_trains)
