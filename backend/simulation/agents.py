@@ -174,6 +174,11 @@ class TrainAgent:
                 self.engine.log_negotiation(f"Train {self.train_id} bypassing block segment {u}->{v} via detour track.")
 
             # Calculate start/end times for coordinates interpolation
+            if hasattr(self.engine, "strategy"):
+                import random
+                current_travel_time += random.uniform(-0.2, 0.8)
+                current_travel_time = max(1.0, current_travel_time)
+
             self.segment_start_time = self.env.now
             self.segment_end_time = self.env.now + current_travel_time
             
@@ -211,6 +216,11 @@ class TrainAgent:
             
             # Calculate dwell time (base dwell + platform queue delay)
             dwell_time = station_agent.base_dwell_time
+            if hasattr(self.engine, "strategy"):
+                import random
+                dwell_time += random.uniform(-0.5, 2.5)
+                dwell_time = max(0.5, dwell_time)
+
             self.segment_start_time = self.env.now
             self.segment_end_time = self.env.now + dwell_time
             

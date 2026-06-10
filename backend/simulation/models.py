@@ -22,6 +22,7 @@ class TrainState(BaseModel):
     coordinates: List[float] = Field(..., description="[Latitude, Longitude] representing spatial coordinates")
     status: str = Field("RUNNING", description="RUNNING, DWELLING, DELAYED, WAITING, TERMINATED")
     energy_consumed_kwh: float
+    crew_violated: bool = Field(False, description="True if train crew shift limit is violated or predicted to be violated")
 
 class StationState(BaseModel):
     station_id: str

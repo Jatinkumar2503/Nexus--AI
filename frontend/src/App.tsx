@@ -389,6 +389,11 @@ function App() {
                               +{train.delay_minutes.toFixed(0)}m
                             </span>
                           )}
+                          {train.crew_violated && (
+                            <span className="text-[9px] bg-danger/10 border border-danger/35 text-danger px-1.5 py-0.5 rounded font-bold animate-pulse" title="Crew Shift Limit Warning!">
+                              CREW LIMIT
+                            </span>
+                          )}
                         </div>
                         <div className="text-[10px] text-zinc-500 font-medium">
                           {train.service_type} • {train.direction.toUpperCase()}

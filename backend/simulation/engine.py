@@ -157,7 +157,14 @@ class SimulationEngine:
     def get_active_trains(self) -> List[Dict[str, Any]]:
         """Return the current spatial and operational status of all trains."""
         active_trains = []
+        sim_now = self.get_sim_time_minutes()
         for t in self.trains:
+            # Estimate remaining travel time in minutes based on remaining stops
+            remaining_stops_count = max(0, len(t.stops) - 1 - t.current_stop_idx)
+            # Standard estimate: 12 minutes per remaining segment + 2 mins dwell
+            estimated_remaining = remaining_stops_count * 14.0
+            crew_violated = t.crew.check_violation(sim_now, estimated_remaining)
+
             active_trains.append({
                 "train_id": t.train_id,
                 "service_type": t.service_type,
@@ -169,7 +176,8 @@ class SimulationEngine:
                 "passenger_count": t.passenger_count,
                 "coordinates": t.get_coordinates(),
                 "status": t.status,
-                "energy_consumed_kwh": t.energy_consumed_kwh
+                "energy_consumed_kwh": t.energy_consumed_kwh,
+                "crew_violated": crew_violated
             })
         return active_trains
 
@@ -232,158 +240,156 @@ class SimulationEngine:
         active_disp = self.disruptions[-1] if self.disruptions else None
         if not active_disp:
             return []
+        NUM_MC_RUNS = 10
 
         for strat in strategies:
-            # 1. Create fresh SimPy environment
-            ff_env = simpy.Environment()
-            ff_env.run(until=self.env.now) # Align time clock
+            sum_delay = 0.0
+            sum_energy = 0.0
+            sum_violations = 0.0
 
-            # 2. Recreate station and edge states
-            ff_stations = {}
-            for code, s_agent in self.stations.items():
-                ff_stations[code] = StationAgent(
-                    env=ff_env,
-                    station_id=code,
-                    name=s_agent.name,
-                    coords=s_agent.coords,
-                    platforms=s_agent.platforms_count,
-                    base_dwell_time=s_agent.base_dwell_time
-                )
+            for run in range(NUM_MC_RUNS):
+                # 1. Create fresh SimPy environment
+                ff_env = simpy.Environment()
+                ff_env.run(until=self.env.now) # Align time clock
 
-            ff_edge_resources = {}
-            for edge in self.topology.get_edges():
-                key = f"{edge['from_node']}->{edge['to_node']}"
-                ff_edge_resources[key] = simpy.Resource(ff_env, capacity=1)
+                # 2. Recreate station and edge states
+                ff_stations = {}
+                for code, s_agent in self.stations.items():
+                    ff_stations[code] = StationAgent(
+                        env=ff_env,
+                        station_id=code,
+                        name=s_agent.name,
+                        coords=s_agent.coords,
+                        platforms=s_agent.platforms_count,
+                        base_dwell_time=s_agent.base_dwell_time
+                    )
 
-            # 3. Create mock engine runner for the fast-forward environment
-            class FastForwardEngine:
-                def __init__(self, parent_engine, env, stations, edge_resources, strategy, disruption):
-                    self.topology = parent_engine.topology
-                    self.env = env
-                    self.stations = stations
-                    self.edge_resources = edge_resources
-                    self.strategy = strategy
-                    self.active_recovery_strategy = strategy
-                    self.disruptions = [disruption]
-                    self.scheduled_arrivals = parent_engine.scheduled_arrivals
-                    self.negotiation_logs = []
+                ff_edge_resources = {}
+                for edge in self.topology.get_edges():
+                    key = f"{edge['from_node']}->{edge['to_node']}"
+                    ff_edge_resources[key] = simpy.Resource(ff_env, capacity=1)
 
-                def get_scheduled_arrival(self, train_id, station_id):
-                    return self.scheduled_arrivals.get((train_id, station_id), None)
+                # 3. Create mock engine runner for the fast-forward environment
+                class FastForwardEngine:
+                    def __init__(self, parent_engine, env, stations, edge_resources, strategy, disruption):
+                        self.topology = parent_engine.topology
+                        self.env = env
+                        self.stations = stations
+                        self.edge_resources = edge_resources
+                        self.strategy = strategy
+                        self.active_recovery_strategy = strategy
+                        self.disruptions = [disruption]
+                        self.scheduled_arrivals = parent_engine.scheduled_arrivals
+                        self.negotiation_logs = []
 
-                def get_edge_resource(self, u, v):
-                    key = f"{u}->{v}"
-                    return self.edge_resources[key]
+                    def get_scheduled_arrival(self, train_id, station_id):
+                        return self.scheduled_arrivals.get((train_id, station_id), None)
 
-                def is_track_blocked(self, u, v):
-                    disp = self.disruptions[0]
-                    if disp.get("edge_id") == f"{u}->{v}" or disp.get("node_id") == u or disp.get("node_id") == v:
-                        start = disp.get("start_time", 0.0)
-                        end = start + disp.get("duration", 0.0)
-                        if start <= self.env.now < end:
-                            return True
-                    return False
+                    def get_edge_resource(self, u, v):
+                        key = f"{u}->{v}"
+                        return self.edge_resources[key]
 
-                def log_negotiation(self, msg):
-                    self.negotiation_logs.append(msg)
+                    def is_track_blocked(self, u, v):
+                        disp = self.disruptions[0]
+                        if disp.get("edge_id") == f"{u}->{v}" or disp.get("node_id") == u or disp.get("node_id") == v:
+                            start = disp.get("start_time", 0.0)
+                            end = start + disp.get("duration", 0.0)
+                            if start <= self.env.now < end:
+                                return True
+                        return False
 
-            ff_engine = FastForwardEngine(self, ff_env, ff_stations, ff_edge_resources, strat, active_disp)
+                    def log_negotiation(self, msg):
+                        self.negotiation_logs.append(msg)
 
-            # 4. Clone all Train agents at their exact current state
-            ff_trains = []
-            for t in self.trains:
-                if t.status == "TERMINATED":
-                    # Keep terminated as is
-                    ff_train = TrainAgent(ff_env, t.train_id, t.service_type, t.stops, t.departure_time_mins, t.passenger_count, t.direction, ff_engine)
-                    ff_train.status = "TERMINATED"
-                    ff_train.is_terminated = True
+                ff_engine = FastForwardEngine(self, ff_env, ff_stations, ff_edge_resources, strat, active_disp)
+
+                # 4. Clone all Train agents at their exact current state
+                ff_trains = []
+                for t in self.trains:
+                    if t.status == "TERMINATED":
+                        # Keep terminated as is
+                        ff_train = TrainAgent(ff_env, t.train_id, t.service_type, t.stops, t.departure_time_mins, t.passenger_count, t.direction, ff_engine)
+                        ff_train.status = "TERMINATED"
+                        ff_train.is_terminated = True
+                        ff_train.delay_minutes = t.delay_minutes
+                        ff_train.energy_consumed_kwh = t.energy_consumed_kwh
+                        ff_trains.append(ff_train)
+                        continue
+
+                    stops = copy.deepcopy(t.stops)
+                    current_idx = t.current_stop_idx
+                    
+                    if strat == "short_turn":
+                        # Check if route intersects the blocked segment
+                        for idx in range(current_idx, len(stops) - 1):
+                            u, v = stops[idx], stops[idx+1]
+                            if self.is_track_blocked(u, v):
+                                traversed = stops[:idx + 1]
+                                return_stops = list(reversed(traversed))[1:]
+                                stops = traversed + return_stops
+                                break
+
+                    # Create fast-forward train agent
+                    ff_train = TrainAgent(
+                        env=ff_env,
+                        train_id=t.train_id,
+                        service_type=t.service_type,
+                        stops=stops,
+                        departure_time_mins=t.departure_time_mins,
+                        passenger_count=t.passenger_count,
+                        direction=t.direction,
+                        engine=ff_engine
+                    )
+                    ff_train.current_stop_idx = current_idx
+                    ff_train.status = t.status
                     ff_train.delay_minutes = t.delay_minutes
                     ff_train.energy_consumed_kwh = t.energy_consumed_kwh
+                    ff_train.from_node = t.from_node
+                    ff_train.to_node = t.to_node
+                    ff_train.segment_start_time = t.segment_start_time
+                    ff_train.segment_end_time = t.segment_end_time
+                    ff_train.is_dwelling = t.is_dwelling
+                    ff_train.is_waiting = t.is_waiting
                     ff_trains.append(ff_train)
-                    continue
+                    ff_env.process(ff_train.run())
 
-                # Adjust stops list based on strategy
-                stops = copy.deepcopy(t.stops)
-                current_idx = t.current_stop_idx
-                
+                # 5. Run the fast-forward simulation to completion
+                try:
+                    ff_env.run(until=self.env.now + 180.0)
+                except Exception:
+                    pass
+
+                # 6. Aggregate outcomes
+                PRIORITY_WEIGHTS = {
+                    "Vande Bharat": 1.5,
+                    "Tejas Express": 1.2,
+                    "Local": 0.8
+                }
+                run_delay = sum(
+                    train.delay_minutes * train.passenger_count * PRIORITY_WEIGHTS.get(train.service_type, 1.0)
+                    for train in ff_trains
+                ) / 500.0
+                run_energy = sum(train.energy_consumed_kwh for train in ff_trains)
+                run_violations = sum(1 for train in ff_trains if train.crew.check_violation(ff_env.now, 0.0))
+
+                if strat == "detour":
+                    run_energy *= 1.35
+                    run_delay *= 0.45
+
                 if strat == "short_turn":
-                    # Check if route intersects the blocked segment
-                    for idx in range(current_idx, len(stops) - 1):
-                        u, v = stops[idx], stops[idx+1]
-                        if self.is_track_blocked(u, v):
-                            # Short-turn at station u (preceding the block)
-                            traversed = stops[:idx + 1]
-                            return_stops = list(reversed(traversed))[1:]
-                            stops = traversed + return_stops
-                            break
+                    run_energy *= 0.8
+                    run_delay = run_delay * 0.2 + (len(ff_trains) * 15)
 
-                # Create fast-forward train agent
-                ff_train = TrainAgent(
-                    env=ff_env,
-                    train_id=t.train_id,
-                    service_type=t.service_type,
-                    stops=stops,
-                    departure_time_mins=t.departure_time_mins,
-                    passenger_count=t.passenger_count,
-                    direction=t.direction,
-                    engine=ff_engine
-                )
-                ff_train.current_stop_idx = current_idx
-                ff_train.status = t.status
-                ff_train.delay_minutes = t.delay_minutes
-                ff_train.energy_consumed_kwh = t.energy_consumed_kwh
-                ff_train.from_node = t.from_node
-                ff_train.to_node = t.to_node
-                ff_train.segment_start_time = t.segment_start_time
-                ff_train.segment_end_time = t.segment_end_time
-                ff_train.is_dwelling = t.is_dwelling
-                ff_train.is_waiting = t.is_waiting
-                
-                # Override travel speeds and profiles for detour strategy
-                if strat == "detour" and t.status in ["RUNNING", "DWELLING", "DELAYED"]:
-                    # Verify if this train encounters the block
-                    has_block = False
-                    for idx in range(current_idx, len(t.stops) - 1):
-                        if self.is_track_blocked(t.stops[idx], t.stops[idx+1]):
-                            has_block = True
-                    if has_block:
-                        # Reroute travel time is longer (x1.8 due to slow line speed limits)
-                        # Let's adjust traversal behavior in fast-forward run
-                        pass
+                sum_delay += run_delay
+                sum_energy += run_energy
+                sum_violations += run_violations
 
-                ff_trains.append(ff_train)
-                ff_env.process(ff_train.run())
-
-            # 5. Run the fast-forward simulation to completion (e.g. 180 simulated minutes)
-            try:
-                ff_env.run(until=self.env.now + 180.0)
-            except Exception:
-                pass
-
-            # 6. Aggregate outcomes
-            PRIORITY_WEIGHTS = {
-                "Vande Bharat": 1.5,
-                "Tejas Express": 1.2,
-                "Local": 0.8
-            }
-            total_delay = sum(
-                train.delay_minutes * train.passenger_count * PRIORITY_WEIGHTS.get(train.service_type, 1.0)
-                for train in ff_trains
-            ) / 500.0
-            total_energy = sum(train.energy_consumed_kwh for train in ff_trains)
-            crew_violations = sum(1 for train in ff_trains if train.crew.check_violation(ff_env.now, 0.0))
-
-            # Detour strategy causes slightly higher energy traction draw
-            if strat == "detour":
-                total_energy *= 1.35
-                total_delay = total_delay * 0.45  # Detour bypasses block delay, but slower line adds some minor delay
-
-            if strat == "short_turn":
-                total_energy *= 0.8  # Short run consumes less energy
-                total_delay = total_delay * 0.2 + (len(ff_trains) * 15) # Small delays for bus bridging transfer
+            # Calculate means
+            total_delay = sum_delay / NUM_MC_RUNS
+            total_energy = sum_energy / NUM_MC_RUNS
+            crew_violations = int(round(sum_violations / NUM_MC_RUNS))
 
             # Operational Resilience Score (ORS) formula
-            # Normal range is 0 - 100
             delay_penalty = (total_delay / 240.0) * 20
             energy_penalty = (max(0.0, total_energy - 5000.0) / 2000.0) * 15
             crew_penalty = crew_violations * 30
