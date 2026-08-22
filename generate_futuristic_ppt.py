@@ -512,16 +512,18 @@ def create_futuristic_10_slide_ppt():
     p.font.color.rgb = COLOR_NEON_CYAN
 
     points = [
-        "1. 🤖 AI-Native Architecture: Purpose-built multi-agent swarm intelligence for critical infrastructure.",
-        "2. ⚖️ Fair VCG Auctions: Zero starvation, truthful slot allocation for competing train priorities.",
-        "3. 🛡️ Deterministic Safety Safeguards: Local fallback engine guarantees 100% operational compliance.",
-        "4. ⚡ Sub-Second Simulation Speed: SimPy digital twin processes 10,000+ complex nodes instantaneously."
+        "1. 🧠 Attention & Focus Engine: Real-time Cognitive Review Load Index (CRLI) prevents notification fatigue.",
+        "2. ⚡ Context-Aware Sensible Defaults: Auto-prefills hold times, detour paths & platforms based on operational state.",
+        "3. 🎛️ 100% Editable Control: Dispatchers maintain complete override control over thresholds & safety bounds.",
+        "4. ⚖️ Fair VCG Auctions: Zero starvation, truthful slot allocation for competing train priorities.",
+        "5. 🛡️ Hard Safety Safeguards: Deterministic validator guarantees 100% operational compliance."
     ]
     for pt in points:
         p_pt = tf_h.add_paragraph()
         p_pt.text = f"\n{pt}"
-        p_pt.font.size = Pt(12)
+        p_pt.font.size = Pt(11)
         p_pt.font.color.rgb = COLOR_TEXT_MUTED
+
 
     # Contact Card
     contact_box = add_card(s10, 1.2, 4.9, 10.933, 1.4, COLOR_NEON_GREEN, COLOR_CARD_ALT)
