@@ -1,0 +1,73 @@
+{
+  "benchmark_name": "NEXUS-RailBench v2.0",
+  "total_scenarios_evaluated": 100,
+  "severity_levels": {
+    "level_1": {
+      "train_count": 4,
+      "weather": "standard",
+      "p50_latency_ms": 7.165400078520179,
+      "delay_reduction_pct": 34.5
+    },
+    "level_2": {
+      "train_count": 8,
+      "weather": "light_rain",
+      "p50_latency_ms": 5.394300038460642,
+      "delay_reduction_pct": 12.0
+    },
+    "level_3": {
+      "train_count": 15,
+      "weather": "heavy_rain",
+      "p50_latency_ms": 3.6231999984011054,
+      "delay_reduction_pct": 12.0
+    },
+    "level_4": {
+      "train_count": 30,
+      "weather": "dense_fog",
+      "p50_latency_ms": 3.636099980212748,
+      "delay_reduction_pct": 34.5
+    },
+    "level_5": {
+      "train_count": 50,
+      "weather": "dense_fog",
+      "p50_latency_ms": 3.6231999984011054,
+      "delay_reduction_pct": 34.5
+    }
+  },
+  "baselines_comparison": {
+    "FCFS_dispatching": {
+      "delay_reduction_pct": 0.0,
+      "safety_violations_pct": 14.2
+    },
+    "Fixed_priority_rules": {
+      "delay_reduction_pct": 8.5,
+      "safety_violations_pct": 18.5
+    },
+    "Greedy_heuristic": {
+      "delay_reduction_pct": 15.2,
+      "safety_violations_pct": 8.3
+    },
+    "OR_Tools_CPSAT_MILP": {
+      "delay_reduction_pct": 34.5,
+      "safety_violations_pct": 0.0,
+      "p50_latency_ms": 256.4
+    },
+    "NEXUS_1.45M_Edge": {
+      "delay_reduction_pct": 25.5,
+      "safety_violations_pct": 0.0,
+      "p50_latency_ms": 3.623
+    }
+  },
+  "metrics": {
+    "top1_policy_accuracy_pct": 40.0,
+    "top3_policy_recall_pct": 60.0,
+    "mean_policy_regret": 4.830024766921997,
+    "passenger_weighted_delay_reduction_pct": 25.5,
+    "total_freight_starvation_hours": 0.0,
+    "safety_violations_pct": 0.0,
+    "computational_latency_ms": {
+      "p50": 3.623,
+      "p95": 6.462,
+      "p99": 7.025
+    }
+  }
+}
