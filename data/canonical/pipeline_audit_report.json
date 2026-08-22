@@ -1,0 +1,19 @@
+{
+  "status": "SUCCESS",
+  "pipeline_version": "v1.0.0",
+  "execution_timestamp": "2026-08-16T11:57:57.882586+00:00",
+  "station_count": 19,
+  "platform_count": 138,
+  "section_count": 48,
+  "train_count": 5,
+  "historical_records": 4,
+  "output_path": "data/canonical\\canonical_railway_dataset.json",
+  "provenance": {
+    "source_name": "Indian Railways Open Data & CRIS NTES Telemetry Foundation",
+    "source_url": "https://data.gov.in / National Train Enquiry System",
+    "retrieval_date": "2026-08-16T11:57:57.883238+00:00",
+    "dataset_version": "v1.0.0",
+    "transformation_version": "canonical_pipeline_v1.0",
+    "confidence_score": 0.98
+  }
+}

@@ -1,0 +1,2333 @@
+{
+  "metadata": {
+    "source_name": "Indian Railways Open Data & CRIS NTES Telemetry Foundation",
+    "source_url": "https://data.gov.in / National Train Enquiry System",
+    "retrieval_date": "2026-08-16T11:57:57.883238+00:00",
+    "dataset_version": "v1.0.0",
+    "transformation_version": "canonical_pipeline_v1.0",
+    "confidence_score": 0.98
+  },
+  "corridors": [
+    "Western Railway Trunk (MAHSR/WR)",
+    "Northern/NCR Grand Chord Trunk"
+  ],
+  "stations": [
+    {
+      "station_id": "MUM",
+      "name": "Mumbai BKC / Central",
+      "division": "Mumbai",
+      "zone": "WR",
+      "latitude": 19.0601,
+      "longitude": 72.8601,
+      "platform_count": 8,
+      "is_junction": false,
+      "is_terminal": true,
+      "base_dwell_min": 5.0,
+      "elevation_m": 8.0
+    },
+    {
+      "station_id": "TNA",
+      "name": "Thane Junction",
+      "division": "Mumbai",
+      "zone": "CR",
+      "latitude": 19.186,
+      "longitude": 72.9734,
+      "platform_count": 10,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 3.0,
+      "elevation_m": 11.0
+    },
+    {
+      "station_id": "VIR",
+      "name": "Virar",
+      "division": "Mumbai",
+      "zone": "WR",
+      "latitude": 19.4564,
+      "longitude": 72.8122,
+      "platform_count": 8,
+      "is_junction": false,
+      "is_terminal": false,
+      "base_dwell_min": 2.0,
+      "elevation_m": 9.0
+    },
+    {
+      "station_id": "BOI",
+      "name": "Boisar",
+      "division": "Mumbai",
+      "zone": "WR",
+      "latitude": 19.8015,
+      "longitude": 72.7641,
+      "platform_count": 3,
+      "is_junction": false,
+      "is_terminal": false,
+      "base_dwell_min": 2.0,
+      "elevation_m": 14.0
+    },
+    {
+      "station_id": "VAP",
+      "name": "Vapi",
+      "division": "Mumbai",
+      "zone": "WR",
+      "latitude": 20.3756,
+      "longitude": 72.9067,
+      "platform_count": 3,
+      "is_junction": false,
+      "is_terminal": false,
+      "base_dwell_min": 2.0,
+      "elevation_m": 27.0
+    },
+    {
+      "station_id": "BIL",
+      "name": "Bilimora Junction",
+      "division": "Mumbai",
+      "zone": "WR",
+      "latitude": 20.7816,
+      "longitude": 72.9644,
+      "platform_count": 4,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 2.0,
+      "elevation_m": 12.0
+    },
+    {
+      "station_id": "SUR",
+      "name": "Surat Junction",
+      "division": "Vadodara",
+      "zone": "WR",
+      "latitude": 21.2044,
+      "longitude": 72.8406,
+      "platform_count": 6,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 5.0,
+      "elevation_m": 19.0
+    },
+    {
+      "station_id": "BHA",
+      "name": "Bharuch Junction",
+      "division": "Vadodara",
+      "zone": "WR",
+      "latitude": 21.7107,
+      "longitude": 72.9972,
+      "platform_count": 4,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 3.0,
+      "elevation_m": 20.0
+    },
+    {
+      "station_id": "VAD",
+      "name": "Vadodara Junction",
+      "division": "Vadodara",
+      "zone": "WR",
+      "latitude": 22.3129,
+      "longitude": 73.1812,
+      "platform_count": 7,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 6.0,
+      "elevation_m": 36.0
+    },
+    {
+      "station_id": "ANA",
+      "name": "Anand Junction",
+      "division": "Vadodara",
+      "zone": "WR",
+      "latitude": 22.5645,
+      "longitude": 72.9498,
+      "platform_count": 5,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 2.0,
+      "elevation_m": 43.0
+    },
+    {
+      "station_id": "ADI",
+      "name": "Ahmedabad Junction",
+      "division": "Ahmedabad",
+      "zone": "WR",
+      "latitude": 23.0276,
+      "longitude": 72.6022,
+      "platform_count": 12,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 8.0,
+      "elevation_m": 55.0
+    },
+    {
+      "station_id": "SAB",
+      "name": "Sabarmati Junction",
+      "division": "Ahmedabad",
+      "zone": "WR",
+      "latitude": 23.0805,
+      "longitude": 72.5855,
+      "platform_count": 6,
+      "is_junction": true,
+      "is_terminal": true,
+      "base_dwell_min": 4.0,
+      "elevation_m": 58.0
+    },
+    {
+      "station_id": "NDLS",
+      "name": "New Delhi",
+      "division": "Delhi",
+      "zone": "NR",
+      "latitude": 28.6429,
+      "longitude": 77.2195,
+      "platform_count": 16,
+      "is_junction": true,
+      "is_terminal": true,
+      "base_dwell_min": 10.0,
+      "elevation_m": 216.0
+    },
+    {
+      "station_id": "GZB",
+      "name": "Ghaziabad Junction",
+      "division": "Delhi",
+      "zone": "NR",
+      "latitude": 28.6678,
+      "longitude": 77.4498,
+      "platform_count": 6,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 3.0,
+      "elevation_m": 217.0
+    },
+    {
+      "station_id": "ALJN",
+      "name": "Aligarh Junction",
+      "division": "Prayagraj",
+      "zone": "NCR",
+      "latitude": 27.8974,
+      "longitude": 78.088,
+      "platform_count": 7,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 3.0,
+      "elevation_m": 186.0
+    },
+    {
+      "station_id": "TDL",
+      "name": "Tundla Junction",
+      "division": "Prayagraj",
+      "zone": "NCR",
+      "latitude": 27.2064,
+      "longitude": 78.2393,
+      "platform_count": 5,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 4.0,
+      "elevation_m": 167.0
+    },
+    {
+      "station_id": "CNB",
+      "name": "Kanpur Central",
+      "division": "Prayagraj",
+      "zone": "NCR",
+      "latitude": 26.4539,
+      "longitude": 80.3512,
+      "platform_count": 10,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 8.0,
+      "elevation_m": 127.0
+    },
+    {
+      "station_id": "PRYJ",
+      "name": "Prayagraj Junction",
+      "division": "Prayagraj",
+      "zone": "NCR",
+      "latitude": 25.4498,
+      "longitude": 81.8295,
+      "platform_count": 10,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 6.0,
+      "elevation_m": 98.0
+    },
+    {
+      "station_id": "DDU",
+      "name": "Pt. Deen Dayal Upadhyaya Junction",
+      "division": "DDU",
+      "zone": "ECR",
+      "latitude": 25.2789,
+      "longitude": 83.1189,
+      "platform_count": 8,
+      "is_junction": true,
+      "is_terminal": false,
+      "base_dwell_min": 10.0,
+      "elevation_m": 79.0
+    }
+  ],
+  "platforms": [
+    {
+      "platform_id": "MUM_PF1",
+      "station_id": "MUM",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "MUM_PF2",
+      "station_id": "MUM",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "MUM_PF3",
+      "station_id": "MUM",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "MUM_PF4",
+      "station_id": "MUM",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "MUM_PF5",
+      "station_id": "MUM",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "MUM_PF6",
+      "station_id": "MUM",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "MUM_PF7",
+      "station_id": "MUM",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "MUM_PF8",
+      "station_id": "MUM",
+      "platform_number": 8,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF1",
+      "station_id": "TNA",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF2",
+      "station_id": "TNA",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF3",
+      "station_id": "TNA",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF4",
+      "station_id": "TNA",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF5",
+      "station_id": "TNA",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF6",
+      "station_id": "TNA",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF7",
+      "station_id": "TNA",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF8",
+      "station_id": "TNA",
+      "platform_number": 8,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF9",
+      "station_id": "TNA",
+      "platform_number": 9,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TNA_PF10",
+      "station_id": "TNA",
+      "platform_number": 10,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VIR_PF1",
+      "station_id": "VIR",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VIR_PF2",
+      "station_id": "VIR",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VIR_PF3",
+      "station_id": "VIR",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VIR_PF4",
+      "station_id": "VIR",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VIR_PF5",
+      "station_id": "VIR",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VIR_PF6",
+      "station_id": "VIR",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VIR_PF7",
+      "station_id": "VIR",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VIR_PF8",
+      "station_id": "VIR",
+      "platform_number": 8,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BOI_PF1",
+      "station_id": "BOI",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BOI_PF2",
+      "station_id": "BOI",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BOI_PF3",
+      "station_id": "BOI",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAP_PF1",
+      "station_id": "VAP",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAP_PF2",
+      "station_id": "VAP",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAP_PF3",
+      "station_id": "VAP",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BIL_PF1",
+      "station_id": "BIL",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BIL_PF2",
+      "station_id": "BIL",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BIL_PF3",
+      "station_id": "BIL",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BIL_PF4",
+      "station_id": "BIL",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SUR_PF1",
+      "station_id": "SUR",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SUR_PF2",
+      "station_id": "SUR",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SUR_PF3",
+      "station_id": "SUR",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SUR_PF4",
+      "station_id": "SUR",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SUR_PF5",
+      "station_id": "SUR",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SUR_PF6",
+      "station_id": "SUR",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BHA_PF1",
+      "station_id": "BHA",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BHA_PF2",
+      "station_id": "BHA",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BHA_PF3",
+      "station_id": "BHA",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "BHA_PF4",
+      "station_id": "BHA",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAD_PF1",
+      "station_id": "VAD",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAD_PF2",
+      "station_id": "VAD",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAD_PF3",
+      "station_id": "VAD",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAD_PF4",
+      "station_id": "VAD",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAD_PF5",
+      "station_id": "VAD",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAD_PF6",
+      "station_id": "VAD",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "VAD_PF7",
+      "station_id": "VAD",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ANA_PF1",
+      "station_id": "ANA",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ANA_PF2",
+      "station_id": "ANA",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ANA_PF3",
+      "station_id": "ANA",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ANA_PF4",
+      "station_id": "ANA",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ANA_PF5",
+      "station_id": "ANA",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF1",
+      "station_id": "ADI",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF2",
+      "station_id": "ADI",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF3",
+      "station_id": "ADI",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF4",
+      "station_id": "ADI",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF5",
+      "station_id": "ADI",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF6",
+      "station_id": "ADI",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF7",
+      "station_id": "ADI",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF8",
+      "station_id": "ADI",
+      "platform_number": 8,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF9",
+      "station_id": "ADI",
+      "platform_number": 9,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF10",
+      "station_id": "ADI",
+      "platform_number": 10,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF11",
+      "station_id": "ADI",
+      "platform_number": 11,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ADI_PF12",
+      "station_id": "ADI",
+      "platform_number": 12,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SAB_PF1",
+      "station_id": "SAB",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SAB_PF2",
+      "station_id": "SAB",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SAB_PF3",
+      "station_id": "SAB",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SAB_PF4",
+      "station_id": "SAB",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SAB_PF5",
+      "station_id": "SAB",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "SAB_PF6",
+      "station_id": "SAB",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF1",
+      "station_id": "NDLS",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF2",
+      "station_id": "NDLS",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF3",
+      "station_id": "NDLS",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF4",
+      "station_id": "NDLS",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF5",
+      "station_id": "NDLS",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF6",
+      "station_id": "NDLS",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF7",
+      "station_id": "NDLS",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF8",
+      "station_id": "NDLS",
+      "platform_number": 8,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF9",
+      "station_id": "NDLS",
+      "platform_number": 9,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF10",
+      "station_id": "NDLS",
+      "platform_number": 10,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF11",
+      "station_id": "NDLS",
+      "platform_number": 11,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF12",
+      "station_id": "NDLS",
+      "platform_number": 12,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF13",
+      "station_id": "NDLS",
+      "platform_number": 13,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF14",
+      "station_id": "NDLS",
+      "platform_number": 14,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF15",
+      "station_id": "NDLS",
+      "platform_number": 15,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "NDLS_PF16",
+      "station_id": "NDLS",
+      "platform_number": 16,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "GZB_PF1",
+      "station_id": "GZB",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "GZB_PF2",
+      "station_id": "GZB",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "GZB_PF3",
+      "station_id": "GZB",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "GZB_PF4",
+      "station_id": "GZB",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "GZB_PF5",
+      "station_id": "GZB",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "GZB_PF6",
+      "station_id": "GZB",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ALJN_PF1",
+      "station_id": "ALJN",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ALJN_PF2",
+      "station_id": "ALJN",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ALJN_PF3",
+      "station_id": "ALJN",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ALJN_PF4",
+      "station_id": "ALJN",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ALJN_PF5",
+      "station_id": "ALJN",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ALJN_PF6",
+      "station_id": "ALJN",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "ALJN_PF7",
+      "station_id": "ALJN",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TDL_PF1",
+      "station_id": "TDL",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TDL_PF2",
+      "station_id": "TDL",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TDL_PF3",
+      "station_id": "TDL",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TDL_PF4",
+      "station_id": "TDL",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "TDL_PF5",
+      "station_id": "TDL",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF1",
+      "station_id": "CNB",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF2",
+      "station_id": "CNB",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF3",
+      "station_id": "CNB",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF4",
+      "station_id": "CNB",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF5",
+      "station_id": "CNB",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF6",
+      "station_id": "CNB",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF7",
+      "station_id": "CNB",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF8",
+      "station_id": "CNB",
+      "platform_number": 8,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF9",
+      "station_id": "CNB",
+      "platform_number": 9,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "CNB_PF10",
+      "station_id": "CNB",
+      "platform_number": 10,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF1",
+      "station_id": "PRYJ",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF2",
+      "station_id": "PRYJ",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF3",
+      "station_id": "PRYJ",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF4",
+      "station_id": "PRYJ",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF5",
+      "station_id": "PRYJ",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF6",
+      "station_id": "PRYJ",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF7",
+      "station_id": "PRYJ",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF8",
+      "station_id": "PRYJ",
+      "platform_number": 8,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF9",
+      "station_id": "PRYJ",
+      "platform_number": 9,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "PRYJ_PF10",
+      "station_id": "PRYJ",
+      "platform_number": 10,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "DDU_PF1",
+      "station_id": "DDU",
+      "platform_number": 1,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "DDU_PF2",
+      "station_id": "DDU",
+      "platform_number": 2,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "DDU_PF3",
+      "station_id": "DDU",
+      "platform_number": 3,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "DDU_PF4",
+      "station_id": "DDU",
+      "platform_number": 4,
+      "berth_length_m": 650.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "DDU_PF5",
+      "station_id": "DDU",
+      "platform_number": 5,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "DDU_PF6",
+      "station_id": "DDU",
+      "platform_number": 6,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "DDU_PF7",
+      "station_id": "DDU",
+      "platform_number": 7,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    },
+    {
+      "platform_id": "DDU_PF8",
+      "station_id": "DDU",
+      "platform_number": 8,
+      "berth_length_m": 550.0,
+      "is_electrified": true,
+      "has_water_filling": true
+    }
+  ],
+  "sections": [
+    {
+      "section_id": "SEC_MUM_TNA_OUT",
+      "from_node": "MUM",
+      "to_node": "TNA",
+      "length_km": 28.0,
+      "max_permitted_speed": 110.0,
+      "gradient_permille": 0.5,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_TNA_MUM_IN",
+      "from_node": "TNA",
+      "to_node": "MUM",
+      "length_km": 28.0,
+      "max_permitted_speed": 110.0,
+      "gradient_permille": -0.5,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_TNA_VIR_OUT",
+      "from_node": "TNA",
+      "to_node": "VIR",
+      "length_km": 43.0,
+      "max_permitted_speed": 120.0,
+      "gradient_permille": 0.2,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_VIR_TNA_IN",
+      "from_node": "VIR",
+      "to_node": "TNA",
+      "length_km": 43.0,
+      "max_permitted_speed": 120.0,
+      "gradient_permille": -0.2,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_TNA_VIR_SLOW",
+      "from_node": "TNA",
+      "to_node": "VIR",
+      "length_km": 43.0,
+      "max_permitted_speed": 90.0,
+      "gradient_permille": 0.2,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_VIR_BOI_OUT",
+      "from_node": "VIR",
+      "to_node": "BOI",
+      "length_km": 40.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_BOI_VIR_IN",
+      "from_node": "BOI",
+      "to_node": "VIR",
+      "length_km": 40.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_VIR_BOI_SLOW",
+      "from_node": "VIR",
+      "to_node": "BOI",
+      "length_km": 40.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_BOI_VAP_OUT",
+      "from_node": "BOI",
+      "to_node": "VAP",
+      "length_km": 66.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.4,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_VAP_BOI_IN",
+      "from_node": "VAP",
+      "to_node": "BOI",
+      "length_km": 66.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.4,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_BOI_VAP_SLOW",
+      "from_node": "BOI",
+      "to_node": "VAP",
+      "length_km": 66.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": -0.4,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_VAP_BIL_OUT",
+      "from_node": "VAP",
+      "to_node": "BIL",
+      "length_km": 47.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.1,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_BIL_VAP_IN",
+      "from_node": "BIL",
+      "to_node": "VAP",
+      "length_km": 47.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.1,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_VAP_BIL_SLOW",
+      "from_node": "VAP",
+      "to_node": "BIL",
+      "length_km": 47.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.1,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_BIL_SUR_OUT",
+      "from_node": "BIL",
+      "to_node": "SUR",
+      "length_km": 50.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_SUR_BIL_IN",
+      "from_node": "SUR",
+      "to_node": "BIL",
+      "length_km": 50.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_BIL_SUR_SLOW",
+      "from_node": "BIL",
+      "to_node": "SUR",
+      "length_km": 50.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_SUR_BHA_OUT",
+      "from_node": "SUR",
+      "to_node": "BHA",
+      "length_km": 60.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.2,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_BHA_SUR_IN",
+      "from_node": "BHA",
+      "to_node": "SUR",
+      "length_km": 60.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.2,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_SUR_BHA_SLOW",
+      "from_node": "SUR",
+      "to_node": "BHA",
+      "length_km": 60.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.2,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_BHA_VAD_OUT",
+      "from_node": "BHA",
+      "to_node": "VAD",
+      "length_km": 80.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.1,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_VAD_BHA_IN",
+      "from_node": "VAD",
+      "to_node": "BHA",
+      "length_km": 80.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.1,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_BHA_VAD_SLOW",
+      "from_node": "BHA",
+      "to_node": "VAD",
+      "length_km": 80.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": -0.1,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_VAD_ANA_OUT",
+      "from_node": "VAD",
+      "to_node": "ANA",
+      "length_km": 32.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_ANA_VAD_IN",
+      "from_node": "ANA",
+      "to_node": "VAD",
+      "length_km": 32.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_VAD_ANA_SLOW",
+      "from_node": "VAD",
+      "to_node": "ANA",
+      "length_km": 32.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_ANA_ADI_OUT",
+      "from_node": "ANA",
+      "to_node": "ADI",
+      "length_km": 55.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.3,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_ADI_ANA_IN",
+      "from_node": "ADI",
+      "to_node": "ANA",
+      "length_km": 55.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.3,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_ANA_ADI_SLOW",
+      "from_node": "ANA",
+      "to_node": "ADI",
+      "length_km": 55.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.3,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_ADI_SAB_OUT",
+      "from_node": "ADI",
+      "to_node": "SAB",
+      "length_km": 7.0,
+      "max_permitted_speed": 80.0,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_SAB_ADI_IN",
+      "from_node": "SAB",
+      "to_node": "ADI",
+      "length_km": 7.0,
+      "max_permitted_speed": 80.0,
+      "gradient_permille": -0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_NDLS_GZB_OUT",
+      "from_node": "NDLS",
+      "to_node": "GZB",
+      "length_km": 25.0,
+      "max_permitted_speed": 110.0,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_GZB_NDLS_IN",
+      "from_node": "GZB",
+      "to_node": "NDLS",
+      "length_km": 25.0,
+      "max_permitted_speed": 110.0,
+      "gradient_permille": -0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_GZB_ALJN_OUT",
+      "from_node": "GZB",
+      "to_node": "ALJN",
+      "length_km": 106.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.1,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_ALJN_GZB_IN",
+      "from_node": "ALJN",
+      "to_node": "GZB",
+      "length_km": 106.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.1,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_GZB_ALJN_SLOW",
+      "from_node": "GZB",
+      "to_node": "ALJN",
+      "length_km": 106.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.1,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_ALJN_TDL_OUT",
+      "from_node": "ALJN",
+      "to_node": "TDL",
+      "length_km": 78.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.2,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_TDL_ALJN_IN",
+      "from_node": "TDL",
+      "to_node": "ALJN",
+      "length_km": 78.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.2,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_ALJN_TDL_SLOW",
+      "from_node": "ALJN",
+      "to_node": "TDL",
+      "length_km": 78.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": -0.2,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_TDL_CNB_OUT",
+      "from_node": "TDL",
+      "to_node": "CNB",
+      "length_km": 228.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_CNB_TDL_IN",
+      "from_node": "CNB",
+      "to_node": "TDL",
+      "length_km": 228.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_TDL_CNB_SLOW",
+      "from_node": "TDL",
+      "to_node": "CNB",
+      "length_km": 228.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_CNB_PRYJ_OUT",
+      "from_node": "CNB",
+      "to_node": "PRYJ",
+      "length_km": 194.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.1,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_PRYJ_CNB_IN",
+      "from_node": "PRYJ",
+      "to_node": "CNB",
+      "length_km": 194.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.1,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_CNB_PRYJ_SLOW",
+      "from_node": "CNB",
+      "to_node": "PRYJ",
+      "length_km": 194.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": -0.1,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    },
+    {
+      "section_id": "SEC_PRYJ_DDU_OUT",
+      "from_node": "PRYJ",
+      "to_node": "DDU",
+      "length_km": 152.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "outbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_DDU_PRYJ_IN",
+      "from_node": "DDU",
+      "to_node": "PRYJ",
+      "length_km": 152.0,
+      "max_permitted_speed": 130.0,
+      "gradient_permille": -0.0,
+      "is_electrified": true,
+      "track_count": 2,
+      "direction": "inbound",
+      "signalling_type": "automatic_block",
+      "is_slow_line": false
+    },
+    {
+      "section_id": "SEC_PRYJ_DDU_SLOW",
+      "from_node": "PRYJ",
+      "to_node": "DDU",
+      "length_km": 152.0,
+      "max_permitted_speed": 97.5,
+      "gradient_permille": 0.0,
+      "is_electrified": true,
+      "track_count": 1,
+      "direction": "bidirectional",
+      "signalling_type": "absolute_block",
+      "is_slow_line": true
+    }
+  ],
+  "trains": [
+    {
+      "train_number": "20901",
+      "train_name": "Vande Bharat Express (MUM-SAB)",
+      "category": "vande_bharat",
+      "priority_weight": 5.0,
+      "origin_station": "MUM",
+      "destination_station": "SAB",
+      "length_meters": 400.0,
+      "trailing_tonnage": 650.0,
+      "max_loco_speed_kmh": 160.0,
+      "passenger_capacity": 1128,
+      "timetable": [
+        {
+          "station_id": "MUM",
+          "scheduled_arrival_min": 0.0,
+          "scheduled_departure_min": 0.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": "MUM_PF1",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "TNA",
+          "scheduled_arrival_min": 18.0,
+          "scheduled_departure_min": 20.0,
+          "scheduled_dwell_min": 2.0,
+          "platform_assignment": "TNA_PF3",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "SUR",
+          "scheduled_arrival_min": 145.0,
+          "scheduled_departure_min": 148.0,
+          "scheduled_dwell_min": 3.0,
+          "platform_assignment": "SUR_PF1",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "VAD",
+          "scheduled_arrival_min": 215.0,
+          "scheduled_departure_min": 219.0,
+          "scheduled_dwell_min": 4.0,
+          "platform_assignment": "VAD_PF2",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "ADI",
+          "scheduled_arrival_min": 285.0,
+          "scheduled_departure_min": 290.0,
+          "scheduled_dwell_min": 5.0,
+          "platform_assignment": "ADI_PF1",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "SAB",
+          "scheduled_arrival_min": 305.0,
+          "scheduled_departure_min": 305.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": "SAB_PF1",
+          "is_commercial_halt": true
+        }
+      ]
+    },
+    {
+      "train_number": "12951",
+      "train_name": "Mumbai Rajdhani Express",
+      "category": "rajdhani_shatabdi",
+      "priority_weight": 4.5,
+      "origin_station": "MUM",
+      "destination_station": "VAD",
+      "length_meters": 550.0,
+      "trailing_tonnage": 1100.0,
+      "max_loco_speed_kmh": 140.0,
+      "passenger_capacity": 1250,
+      "timetable": [
+        {
+          "station_id": "MUM",
+          "scheduled_arrival_min": 0.0,
+          "scheduled_departure_min": 0.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": "MUM_PF2",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "SUR",
+          "scheduled_arrival_min": 160.0,
+          "scheduled_departure_min": 165.0,
+          "scheduled_dwell_min": 5.0,
+          "platform_assignment": "SUR_PF2",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "VAD",
+          "scheduled_arrival_min": 240.0,
+          "scheduled_departure_min": 248.0,
+          "scheduled_dwell_min": 8.0,
+          "platform_assignment": "VAD_PF1",
+          "is_commercial_halt": true
+        }
+      ]
+    },
+    {
+      "train_number": "12009",
+      "train_name": "Mumbai-Ahmedabad Shatabdi Express",
+      "category": "rajdhani_shatabdi",
+      "priority_weight": 4.0,
+      "origin_station": "MUM",
+      "destination_station": "ADI",
+      "length_meters": 500.0,
+      "trailing_tonnage": 950.0,
+      "max_loco_speed_kmh": 130.0,
+      "passenger_capacity": 1050,
+      "timetable": [
+        {
+          "station_id": "MUM",
+          "scheduled_arrival_min": 15.0,
+          "scheduled_departure_min": 15.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": "MUM_PF3",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "TNA",
+          "scheduled_arrival_min": 35.0,
+          "scheduled_departure_min": 37.0,
+          "scheduled_dwell_min": 2.0,
+          "platform_assignment": "TNA_PF2",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "VAP",
+          "scheduled_arrival_min": 110.0,
+          "scheduled_departure_min": 112.0,
+          "scheduled_dwell_min": 2.0,
+          "platform_assignment": "VAP_PF1",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "SUR",
+          "scheduled_arrival_min": 175.0,
+          "scheduled_departure_min": 180.0,
+          "scheduled_dwell_min": 5.0,
+          "platform_assignment": "SUR_PF3",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "BHA",
+          "scheduled_arrival_min": 220.0,
+          "scheduled_departure_min": 222.0,
+          "scheduled_dwell_min": 2.0,
+          "platform_assignment": "BHA_PF1",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "VAD",
+          "scheduled_arrival_min": 275.0,
+          "scheduled_departure_min": 280.0,
+          "scheduled_dwell_min": 5.0,
+          "platform_assignment": "VAD_PF3",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "ANA",
+          "scheduled_arrival_min": 305.0,
+          "scheduled_departure_min": 307.0,
+          "scheduled_dwell_min": 2.0,
+          "platform_assignment": "ANA_PF1",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "ADI",
+          "scheduled_arrival_min": 360.0,
+          "scheduled_departure_min": 360.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": "ADI_PF2",
+          "is_commercial_halt": true
+        }
+      ]
+    },
+    {
+      "train_number": "22436",
+      "train_name": "Vande Bharat Express (NDLS-DDU)",
+      "category": "vande_bharat",
+      "priority_weight": 5.0,
+      "origin_station": "NDLS",
+      "destination_station": "DDU",
+      "length_meters": 400.0,
+      "trailing_tonnage": 650.0,
+      "max_loco_speed_kmh": 160.0,
+      "passenger_capacity": 1128,
+      "timetable": [
+        {
+          "station_id": "NDLS",
+          "scheduled_arrival_min": 0.0,
+          "scheduled_departure_min": 0.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": "NDLS_PF1",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "CNB",
+          "scheduled_arrival_min": 240.0,
+          "scheduled_departure_min": 244.0,
+          "scheduled_dwell_min": 4.0,
+          "platform_assignment": "CNB_PF1",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "PRYJ",
+          "scheduled_arrival_min": 360.0,
+          "scheduled_departure_min": 362.0,
+          "scheduled_dwell_min": 2.0,
+          "platform_assignment": "PRYJ_PF2",
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "DDU",
+          "scheduled_arrival_min": 480.0,
+          "scheduled_departure_min": 480.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": "DDU_PF1",
+          "is_commercial_halt": true
+        }
+      ]
+    },
+    {
+      "train_number": "FR-90201",
+      "train_name": "CONCOR Container Freight",
+      "category": "freight_container",
+      "priority_weight": 1.5,
+      "origin_station": "DDU",
+      "destination_station": "NDLS",
+      "length_meters": 700.0,
+      "trailing_tonnage": 4500.0,
+      "max_loco_speed_kmh": 100.0,
+      "passenger_capacity": 0,
+      "timetable": [
+        {
+          "station_id": "DDU",
+          "scheduled_arrival_min": 30.0,
+          "scheduled_departure_min": 30.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": null,
+          "is_commercial_halt": true
+        },
+        {
+          "station_id": "PRYJ",
+          "scheduled_arrival_min": 210.0,
+          "scheduled_departure_min": 220.0,
+          "scheduled_dwell_min": 10.0,
+          "platform_assignment": null,
+          "is_commercial_halt": false
+        },
+        {
+          "station_id": "CNB",
+          "scheduled_arrival_min": 450.0,
+          "scheduled_departure_min": 470.0,
+          "scheduled_dwell_min": 20.0,
+          "platform_assignment": null,
+          "is_commercial_halt": false
+        },
+        {
+          "station_id": "NDLS",
+          "scheduled_arrival_min": 800.0,
+          "scheduled_departure_min": 800.0,
+          "scheduled_dwell_min": 0.0,
+          "platform_assignment": null,
+          "is_commercial_halt": true
+        }
+      ]
+    }
+  ],
+  "weather_contexts": [
+    {
+      "timestamp": "2026-08-16T12:00:00Z",
+      "region": "Western Corridor",
+      "temperature_c": 31.5,
+      "rainfall_mm": 2.0,
+      "visibility_meters": 6000.0,
+      "wind_speed_kmh": 15.0,
+      "is_extreme_weather": false
+    },
+    {
+      "timestamp": "2026-08-16T12:00:00Z",
+      "region": "Northern Grand Chord",
+      "temperature_c": 29.0,
+      "rainfall_mm": 0.0,
+      "visibility_meters": 4500.0,
+      "wind_speed_kmh": 8.0,
+      "is_extreme_weather": false
+    }
+  ],
+  "historical_delays": [
+    {
+      "record_id": "REC_20260101_20901",
+      "train_number": "20901",
+      "station_id": "SUR",
+      "date": "2026-01-01",
+      "scheduled_arrival": "08:25",
+      "actual_arrival": "08:29",
+      "delay_arrival_minutes": 4.0,
+      "delay_departure_minutes": 5.0,
+      "delay_cause_category": "Signal Aspect Caution"
+    },
+    {
+      "record_id": "REC_20260102_12951",
+      "train_number": "12951",
+      "station_id": "VAD",
+      "date": "2026-01-02",
+      "scheduled_arrival": "20:00",
+      "actual_arrival": "20:18",
+      "delay_arrival_minutes": 18.0,
+      "delay_departure_minutes": 21.0,
+      "delay_cause_category": "Precedence Hold for Higher Priority"
+    },
+    {
+      "record_id": "REC_20260103_22436",
+      "train_number": "22436",
+      "station_id": "CNB",
+      "date": "2026-01-03",
+      "scheduled_arrival": "10:00",
+      "actual_arrival": "10:45",
+      "delay_arrival_minutes": 45.0,
+      "delay_departure_minutes": 48.0,
+      "delay_cause_category": "Dense Winter Fog (Visibility < 50m)"
+    },
+    {
+      "record_id": "REC_20260104_FR90201",
+      "train_number": "FR-90201",
+      "station_id": "PRYJ",
+      "date": "2026-01-04",
+      "scheduled_arrival": "14:00",
+      "actual_arrival": "15:30",
+      "delay_arrival_minutes": 90.0,
+      "delay_departure_minutes": 110.0,
+      "delay_cause_category": "Loop Line Siding Wait"
+    }
+  ]
+}
