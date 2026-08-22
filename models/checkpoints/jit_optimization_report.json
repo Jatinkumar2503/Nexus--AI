@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-08-18T14:35:56Z",
+  "fp32_baseline": {
+    "p50_latency_ms": 2.4,
+    "p95_latency_ms": 3.79,
+    "model_size_kb": 5732.3
+  },
+  "int8_quantized": {
+    "p50_latency_ms": 5.44,
+    "p95_latency_ms": 6.67,
+    "speedup_ratio": 0.44
+  },
+  "torchscript_jit": {
+    "p50_latency_ms": 1.39,
+    "p95_latency_ms": 2.84,
+    "model_size_kb": 5732.0,
+    "speedup_ratio": 1.73
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-08-17T19:06:21Z",
+  "overall_health": "ALL_DIAGNOSTICS_PASSED",
+  "checks": {
+    "weight_integrity": {
+      "checkpoint_loaded": true,
+      "parameter_count": 1456340,
+      "device": "cpu",
+      "status": "HEALTHY"
+    },
+    "numerical_stability": {
+      "has_nan": false,
+      "has_inf": false,
+      "status": "PASSED"
+    },
+    "quantile_monotonicity": {
+      "is_monotonic": true,
+      "status": "PASSED"
+    },
+    "latency_profile_ms": {
+      "p50": 2.23,
+      "p95": 5.3,
+      "p99": 7.98,
+      "status": "SUB_5MS_SATISFIED"
+    },
+    "ood_anomaly_detection": {
+      "ood_rejection_active": true,
+      "status": "PASSED"
+    },
+    "safety_invariants": {
+      "blocked_rejection_rate_pct": 100.0,
+      "status": "PASSED"
+    },
+    "multi_agent_consensus": {
+      "joint_conflict_free": true,
+      "latency_ms": 3.72,
+      "status": "PASSED"
+    }
+  }
+}

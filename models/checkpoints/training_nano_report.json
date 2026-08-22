@@ -1,0 +1,26 @@
+{
+  "status": "COMPLETED",
+  "model_scale": "nano",
+  "total_parameters": 1456340,
+  "training_time_seconds": 56.53231906890869,
+  "device": "cpu",
+  "final_train_loss": 4.758570553304197,
+  "best_val_loss": 1.561196991952799,
+  "final_val_mae_minutes": 4.252475213196318,
+  "final_action_accuracy_pct": 93.97999999999999,
+  "checkpoint_path": "C:\\Users\\Asus\\Documents\\far away\\models\\checkpoints\\nexus_nano_best.pt",
+  "history": {
+    "train_loss": [
+      4.758570553304197
+    ],
+    "val_loss": [
+      1.561196991952799
+    ],
+    "val_mae": [
+      4.252475213196318
+    ],
+    "val_action_acc": [
+      93.97999999999999
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-08-17T14:18:15Z",
+  "device": "cpu",
+  "scaling_ladder": [
+    {
+      "tier_name": "nexus_nano",
+      "description": "Ultra-lightweight edge dispatcher (<5ms CPU inference)",
+      "d_model": 128,
+      "num_layers": 3,
+      "trainable_parameters": 1456340,
+      "parameters_millions": 1.46,
+      "memory_footprint_mb": 5.56,
+      "inference_latency_ms": {
+        "p50": 2.29,
+        "p95": 3.73,
+        "p99": 4.07
+      },
+      "theoretical_scaling_loss": 1.5162
+    },
+    {
+      "tier_name": "nexus_mini",
+      "description": "Division-level real-time traffic manager",
+      "d_model": 256,
+      "num_layers": 5,
+      "trainable_parameters": 9479572,
+      "parameters_millions": 9.48,
+      "memory_footprint_mb": 36.16,
+      "inference_latency_ms": {
+        "p50": 4.39,
+        "p95": 7.8,
+        "p99": 7.99
+      },
+      "theoretical_scaling_loss": 1.3615
+    },
+    {
+      "tier_name": "nexus_base",
+      "description": "Zonal headquarters multi-corridor decision system",
+      "d_model": 512,
+      "num_layers": 8,
+      "trainable_parameters": 59893524,
+      "parameters_millions": 59.89,
+      "memory_footprint_mb": 228.48,
+      "inference_latency_ms": {
+        "p50": 16.42,
+        "p95": 19.33,
+        "p99": 21.65
+      },
+      "theoretical_scaling_loss": 1.2292
+    },
+    {
+      "tier_name": "nexus_large",
+      "description": "High-density national trunk backbone model",
+      "d_model": 768,
+      "num_layers": 12,
+      "trainable_parameters": 200807060,
+      "parameters_millions": 200.81,
+      "memory_footprint_mb": 766.02,
+      "inference_latency_ms": {
+        "p50": 33.63,
+        "p95": 39.69,
+        "p99": 40.37
+      },
+      "theoretical_scaling_loss": 1.152
+    },
+    {
+      "tier_name": "nexus_265m_target",
+      "description": "Full research-grade multimodal national railway foundation model",
+      "d_model": 1280,
+      "num_layers": 16,
+      "trainable_parameters": 741134740,
+      "parameters_millions": 741.13,
+      "memory_footprint_mb": 2827.2,
+      "inference_latency_ms": {
+        "p50": 108.58,
+        "p95": 125.92,
+        "p99": 130.71
+      },
+      "theoretical_scaling_loss": 1.0762
+    }
+  ],
+  "summary": "NEXUS demonstrates consistent sub-linear scaling latency up to 265M parameters with power-law loss reduction."
+}

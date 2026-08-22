@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-08-17T14:21:06Z",
+  "telemetry_packet_loss": {
+    "test_name": "Telemetry Packet Loss Robustness",
+    "results": {
+      "packet_loss_10pct": {
+        "packet_drop_rate": 0.1,
+        "mean_policy_confidence_pct": 89.67,
+        "policy_entropy": 0.267,
+        "degradation_status": "STABLE"
+      },
+      "packet_loss_25pct": {
+        "packet_drop_rate": 0.25,
+        "mean_policy_confidence_pct": 89.92,
+        "policy_entropy": 0.26,
+        "degradation_status": "STABLE"
+      },
+      "packet_loss_50pct": {
+        "packet_drop_rate": 0.5,
+        "mean_policy_confidence_pct": 88.74,
+        "policy_entropy": 0.294,
+        "degradation_status": "STABLE"
+      }
+    }
+  },
+  "sensor_noise_jitter": {
+    "test_name": "Sensor Gaussian Noise Jitter",
+    "results": {
+      "noise_sigma_5pct": {
+        "noise_sigma": 0.05,
+        "mean_policy_confidence_pct": 89.28,
+        "robustness_status": "HIGHLY_ROBUST"
+      },
+      "noise_sigma_15pct": {
+        "noise_sigma": 0.15,
+        "mean_policy_confidence_pct": 88.6,
+        "robustness_status": "HIGHLY_ROBUST"
+      },
+      "noise_sigma_30pct": {
+        "noise_sigma": 0.3,
+        "mean_policy_confidence_pct": 85.53,
+        "robustness_status": "HIGHLY_ROBUST"
+      }
+    }
+  },
+  "adversarial_safety_gate": {
+    "test_name": "Adversarial Invariant Safety Gate Rejection",
+    "trials": 100,
+    "blocked_unsafe_actions": 100,
+    "safety_rejection_rate_pct": 100.0,
+    "safety_invariant_violation_rate_pct": 0.0,
+    "status": "PASSED_ZERO_TOLERANCE_GUARANTEE"
+  },
+  "overall_assessment": "NEXUS demonstrated resilience to 50% packet drops, 30% noise jitter, and achieved 100.0% adversarial safety violation rejection."
+}
