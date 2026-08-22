@@ -471,6 +471,10 @@ def test_crossover_interlock_conflicts():
     print("OK: Catenary Track Crossover Interlock Conflicts passed.\n")
 
 def run_all_tests():
+    import random
+    import numpy as np
+    random.seed(42)
+    np.random.seed(42)
     test_simulation_initialization()
     test_detour_routing_mechanics()
     test_short_turn_mechanics()
