@@ -4,3 +4,6 @@ networkx
 simpy
 pydantic
 websockets
+python-dotenv
+openai>=1.0.0
+
