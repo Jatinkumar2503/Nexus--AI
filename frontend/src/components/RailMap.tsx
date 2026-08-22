@@ -20,6 +20,7 @@ export const RailMap: React.FC<RailMapProps> = ({
   const mapInstance = useRef<maplibregl.Map | null>(null);
   const popupInstance = useRef<maplibregl.Popup | null>(null);
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
+  const [mapError, setMapError] = useState<string | null>(null);
   const [topology, setTopology] = useState<TopologyResponse | null>(null);
 
   // Initialize Map
@@ -111,6 +112,7 @@ export const RailMap: React.FC<RailMapProps> = ({
         setMapLoaded(true);
       } catch (err) {
         console.error("Failed to load map topology data:", err);
+        setMapError("Map data is unavailable. Operational controls remain available.");
         setMapLoaded(true);
       }
     });
@@ -118,6 +120,8 @@ export const RailMap: React.FC<RailMapProps> = ({
     return () => {
       map.remove();
     };
+  // MapLibre layers and event listeners are intentionally created once; live data updates use separate effects.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update track blocking visual states dynamically
@@ -457,7 +461,7 @@ export const RailMap: React.FC<RailMapProps> = ({
     });
 
     // Hover popups for tracks
-    const handleTrackMouseEnter = (e: any, layerId: string) => {
+    const handleTrackMouseEnter = (e: any) => {
       map.getCanvas().style.cursor = 'pointer';
       const props = e.features?.[0]?.properties;
       if (!props) return;
@@ -485,13 +489,13 @@ export const RailMap: React.FC<RailMapProps> = ({
         .addTo(map);
     };
 
-    map.on('mouseenter', 'outbound-tracks-layer', (e) => handleTrackMouseEnter(e, 'outbound-tracks-layer'));
+    map.on('mouseenter', 'outbound-tracks-layer', (e) => handleTrackMouseEnter(e));
     map.on('mouseleave', 'outbound-tracks-layer', () => {
       map.getCanvas().style.cursor = '';
       popupInstance.current?.remove();
     });
 
-    map.on('mouseenter', 'inbound-tracks-layer', (e) => handleTrackMouseEnter(e, 'inbound-tracks-layer'));
+    map.on('mouseenter', 'inbound-tracks-layer', (e) => handleTrackMouseEnter(e));
     map.on('mouseleave', 'inbound-tracks-layer', () => {
       map.getCanvas().style.cursor = '';
       popupInstance.current?.remove();
@@ -510,6 +514,7 @@ export const RailMap: React.FC<RailMapProps> = ({
           </div>
         </div>
       )}
+      {mapError && <div role="alert" className="absolute inset-x-3 bottom-3 z-30 rounded border border-warning/40 bg-zinc-950/90 p-2 text-xs text-warning">{mapError}</div>}
     </div>
   );
 };
