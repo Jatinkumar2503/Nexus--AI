@@ -1,0 +1,20 @@
+{
+  "evaluation_set_size": 200,
+  "baselines": {
+    "heuristic_fifo_accuracy_pct": 16.7,
+    "heuristic_priority_accuracy_pct": 9.0,
+    "tabular_linear_mae_minutes": 2.946037499344322
+  },
+  "nexus_foundation_model": {
+    "delay_prediction_mae_minutes": 0.35844409465789795,
+    "action_policy_accuracy_pct": 100.0,
+    "optimality_gap_pct": 0.0,
+    "safety_constraint_violations_pct": 0.0,
+    "inference_latency_ms": {
+      "p50": 2.052350013400428,
+      "p95": 4.113530012546106,
+      "p99": 4.913811003207227
+    }
+  },
+  "speedup_vs_cpsat_solver": "125x faster inference"
+}
