@@ -381,13 +381,19 @@ class TrainAgent:
                     target_speed = 0.0
                     state = "STOPPED"
 
-                # Apply speed restriction based on catenary power, voltage degradation, or telemetry loss
+                incident_speed_limit = self.engine.get_incident_speed_limit(u, v)
+                if incident_speed_limit is not None:
+                    max_speed_limit = min(max_speed_limit, incident_speed_limit)
+
+                # Apply speed restriction based on incidents, catenary power, voltage degradation, or telemetry loss
                 if max_speed_limit < target_speed:
                     target_speed = max_speed_limit
                     if self.telemetry_packet_lost:
                         state = "TELEMETRY_LOST"
                     elif self.voltage < 22000.0:
                         state = "VOLTAGE_DEGRADED"
+                    elif incident_speed_limit is not None:
+                        state = "INCIDENT_RESTRICTED"
                     else:
                         state = "SUBSTATION_THROTTLED"
 
@@ -407,6 +413,8 @@ class TrainAgent:
                         self.engine.log_negotiation(f"📡 TELEMETRY LOSS: Train {self.train_id} lost communication packet. Safe crawl speed of 50 km/h active.")
                     elif state == "VOLTAGE_DEGRADED":
                         self.engine.log_negotiation(f"⚡ VOLTAGE DEGRADATION: Train {self.train_id} catenary voltage dropped to {self.voltage:.1f}V. Speed scaled to {self.speed_kmh:.1f} km/h.")
+                    elif state == "INCIDENT_RESTRICTED":
+                        self.engine.log_negotiation(f"Train {self.train_id} reduced to {self.speed_kmh:.1f} km/h for an active corridor safety restriction.")
                     last_log_state = state
 
                 # 3. Compute distance covered in this time step (in hours)

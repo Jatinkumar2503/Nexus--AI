@@ -56,6 +56,24 @@ class SimulationEngine:
 
         self._init_simulation()
 
+    def recovery_snapshot(self) -> Dict[str, Any]:
+        """Capture mutable train state before a committed recovery action."""
+        return {"strategy": self.active_recovery_strategy, "trains": {
+            train.train_id: {"stops": list(train.stops), "status": train.status,
+            "delay_minutes": train.delay_minutes, "speed_kmh": train.speed_kmh}
+            for train in self.trains
+        }}
+
+    def restore_recovery_snapshot(self, snapshot: Dict[str, Any]) -> None:
+        """Restore mutable recovery state for a dispatcher-approved rollback."""
+        states = snapshot.get("trains", {})
+        for train in self.trains:
+            state = states.get(train.train_id)
+            if state:
+                train.stops, train.status = list(state["stops"]), state["status"]
+                train.delay_minutes, train.speed_kmh = state["delay_minutes"], state["speed_kmh"]
+        self.active_recovery_strategy = snapshot.get("strategy")
+
     def _init_simulation(self):
         """Populate the stations, edges, timetable, and spawn train processes."""
         # 1. Initialize station agents
@@ -140,8 +158,28 @@ class SimulationEngine:
                 start = disp.get("start_time", 0.0)
                 end = start + disp.get("duration", 0.0)
                 if start <= self.env.now < end:
+                    description = disp.get("description", "").lower()
+                    if "weather" in description or "speed restriction" in description:
+                        continue
                     return True
         return False
+
+    def get_incident_speed_limit(self, u: str, v: str) -> Optional[float]:
+        """Return a safety speed cap for active non-blocking corridor incidents."""
+        for disp in self.disruptions:
+            if disp.get("edge_id") not in {f"{u}->{v}", f"{v}->{u}"}:
+                continue
+            start = disp.get("start_time", 0.0)
+            if not start <= self.env.now < start + disp.get("duration", 0.0):
+                continue
+            description = disp.get("description", "").lower()
+            if "weather" in description or "visibility" in description:
+                return 80.0
+            if "traction" in description or "substation" in description:
+                return 50.0
+            if "signal" in description:
+                return 100.0
+        return None
 
     def log_negotiation(self, message: str):
         """Append operational events log."""
@@ -222,8 +260,9 @@ class SimulationEngine:
         return active_trains
 
     def inject_disruption(self, node_id: Optional[str], edge_id: Optional[str], duration: int, severity: str, description: str):
-        """Inject a track blockage disruption."""
+        """Inject a disruption and apply deterministic incident-specific safety effects."""
         disp_id = f"DIS-{int(time.time())}"
+        incident_kind = self._incident_kind(description)
         disruption = {
             "id": disp_id,
             "node_id": node_id,
@@ -231,11 +270,46 @@ class SimulationEngine:
             "duration": duration,
             "severity": severity,
             "description": description,
-            "start_time": self.env.now
+            "start_time": self.env.now,
+            "incident_kind": incident_kind,
         }
         self.disruptions.append(disruption)
+        self._apply_incident_effects(disruption)
         self.log_negotiation(f"⚠️ DISRUPTION INJECTED: {description} for {duration} mins.")
         return disruption
+
+    @staticmethod
+    def _incident_kind(description: str) -> str:
+        normalized = description.lower()
+        if "rolling-stock" in normalized or "rolling stock" in normalized:
+            return "rolling_stock_failure"
+        if "network partition" in normalized:
+            return "network_partition"
+        if "cascading" in normalized:
+            return "cascading_incident"
+        if "maintenance" in normalized:
+            return "maintenance_window"
+        if "weather" in normalized or "visibility" in normalized:
+            return "weather_restriction"
+        return "track_disruption"
+
+    def _apply_incident_effects(self, disruption: Dict[str, Any]) -> None:
+        """Apply bounded effects that make incident classes visibly distinct."""
+        kind = disruption["incident_kind"]
+        node_id = disruption.get("node_id")
+        if kind == "rolling_stock_failure":
+            affected = next((train for train in self.trains if node_id in {train.from_node, train.to_node} or node_id in train.stops), None)
+            if affected:
+                affected.status, affected.speed_kmh = "DELAYED", 0.0
+                affected.delay_minutes += 20.0
+        elif kind == "network_partition":
+            for train in self.trains:
+                if node_id in train.stops:
+                    train.telemetry_packet_lost = True
+        elif kind == "cascading_incident":
+            for train in self.trains:
+                train.delay_minutes += 5.0
+                train.voltage = min(getattr(train, "voltage", 25000.0), 23500.0)
 
     def resolve_scenario(self, strategy: str):
         """Commit the active recovery strategy onto the active running simulation."""
@@ -314,7 +388,10 @@ class SimulationEngine:
                                 self.log_negotiation(f"Train {t.train_id} short-turned early at depot {short_turn_station} and returning to origin.")
                             break
 
-    def evaluate_scenarios(self) -> List[Dict[str, Any]]:
+        # Clear resolved active disruption
+        self.disruptions = []
+
+    def evaluate_scenarios(self, num_mc_runs: int = 10) -> List[Dict[str, Any]]:
         """Fast-forward duplicate simulations to compare Do Nothing, Detour, and Short-Turn policies."""
         scenarios = []
         strategies = ["do_nothing", "detour", "short_turn"]
@@ -323,7 +400,7 @@ class SimulationEngine:
         active_disp = self.disruptions[-1] if self.disruptions else None
         if not active_disp:
             return []
-        NUM_MC_RUNS = 10
+        NUM_MC_RUNS = num_mc_runs
 
         for strat in strategies:
             sum_delay = 0.0
@@ -542,11 +619,17 @@ class SimulationEngine:
             total_energy = sum_energy / NUM_MC_RUNS
             crew_violations = int(round(sum_violations / NUM_MC_RUNS))
 
-            # Operational Resilience Score (ORS) formula
-            delay_penalty = (total_delay / 240.0) * 20
-            energy_penalty = (max(0.0, total_energy - 5000.0) / 2000.0) * 15
-            crew_penalty = crew_violations * 30
-            ors = max(5.0, min(100.0, 100.0 - delay_penalty - energy_penalty - crew_penalty))
+            # Operational Resilience Score (ORS) formula under Weighted Tchebycheff Distance
+            w_delay = 20.0 / 65.0
+            w_energy = 15.0 / 65.0
+            w_crew = 30.0 / 65.0
+            
+            norm_delay = total_delay / 240.0
+            norm_energy = max(0.0, total_energy - 5000.0) / 2000.0
+            norm_crew = crew_violations / 1.0
+            
+            weighted_distance = max(w_delay * norm_delay, w_energy * norm_energy, w_crew * norm_crew)
+            ors = max(5.0, min(100.0, 100.0 - weighted_distance * 65.0))
 
             # Identify trains affected by the blockage
             blocked_train_ids = []
