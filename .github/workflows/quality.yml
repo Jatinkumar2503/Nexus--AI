@@ -1,0 +1,38 @@
+name: Quality gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r backend/requirements.txt
+      - run: python -m unittest mcp_registry.test_registry mcp_registry.test_intelligence_tools agents.test_validator agents.test_events services.test_planner_engine services.test_planner_service services.test_strategy_mapping services.test_database services.test_plan_store services.test_recovery_memory scenarios.test_presets test_api_contract test_planner_api simulation.test_schemas simulation.test_incident_effects
+        env:
+          PYTHONPATH: backend
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+      - run: npm run test:e2e

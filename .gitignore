@@ -3,9 +3,6 @@ venv/
 .venv/
 env/
 .env
-bin/
-lib/
-include/
 
 # Python compiled files
 __pycache__/
@@ -23,6 +20,9 @@ build/
 *.log
 *.db
 *.sqlite3
+backend/data/
+frontend/test-results/
+frontend/playwright-report/
 
 # IDE / System files
 .vscode/
@@ -30,6 +30,23 @@ build/
 .DS_Store
 Thumbs.db
 
-# Office / Presentation files
+# Office / Presentation / Media files (excluded from GitHub due to size >100MB)
 *.pptx
+*.mp4
 
+# Exclude individual model files exceeding GitHub 100MB single file limit
+models/checkpoints/nexus_300m_best.pt
+data/scenarios/100k/nexus_100k_dataset.npz
+
+# Research and presentation files (excluded from GitHub)
+research_papers/
+nexus_flow_demo.webp
+nexus_pitch_script.md
+presentation_script.md
+nexus_hackathon_proposal_and_defense.md
+nexus_presentation.pptx
+frontend/src/assets/disruption_state.png
+frontend/src/assets/hero.png
+frontend/src/assets/normal_state.png
+frontend/src/assets/popup_state.png
+backend/simulation/generate_ppt.py

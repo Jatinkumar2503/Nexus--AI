@@ -1,0 +1,973 @@
+Number of slides: 10
+
+=========================================
+SLIDE 1
+=========================================
+Shape ID: 2 | Name: 'Shape 0'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 3 | Name: 'Shape 1'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Shape 3'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 6 | Name: 'Text 4'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026'
+    Run 1: 'BUILD WITH BHARAT 2026' (Bold=True, Size=165100, Color=5B1A44)
+Shape ID: 7 | Name: 'Text 5'
+  Paragraph 1 [Runs=1]: 'NATIONAL LEVEL HACKATHON'
+    Run 1: 'NATIONAL LEVEL HACKATHON' (Bold=None, Size=139700, Color=4A4A52)
+Shape ID: 8 | Name: 'Text 6'
+  Paragraph 1 [Runs=1]: 'NEXUS AI'
+    Run 1: 'NEXUS AI' (Bold=True, Size=838200, Color=1A1A1A)
+Shape ID: 9 | Name: 'Text 7'
+  Paragraph 1 [Runs=1]: 'Multi-Agent AI Decision Intelligence Platform for Smart Railway Operations'
+    Run 1: 'Multi-Agent AI Decision Intelligence Platform for Smart Railway Operations' (Bold=True, Size=228600, Color=D9491F)
+Shape ID: 10 | Name: 'Text 8'
+  Paragraph 1 [Runs=1]: 'India's railways carry ~19 million passengers daily — yet still run on reactive, manual decision-making.'
+    Run 1: 'India's railways carry ~19 million passengers daily — yet still run on reactive, manual decision-making.' (Bold=None, Size=165100, Color=4A4A52)
+Shape ID: 11 | Name: 'Shape 9'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 12 | Name: 'Text 10'
+  Paragraph 1 [Runs=1]: 'TEAM'
+    Run 1: 'TEAM' (Bold=True, Size=127000, Color=FF6B35)
+Shape ID: 13 | Name: 'Text 11'
+  Paragraph 1 [Runs=1]: 'Code Titans'
+    Run 1: 'Code Titans' (Bold=True, Size=203200, Color=1A1A1A)
+Shape ID: 14 | Name: 'Text 12'
+  Paragraph 1 [Runs=1]: 'MEMBERS'
+    Run 1: 'MEMBERS' (Bold=True, Size=127000, Color=FF6B35)
+Shape ID: 15 | Name: 'Text 13'
+  Paragraph 1 [Runs=1]: 'Jatin Kumar  •  Nikhil  •  Shubham  •  Jatin Pannu'
+    Run 1: 'Jatin Kumar  •  Nikhil  •  Shubham  •  Jatin Pannu' (Bold=None, Size=171450, Color=1A1A1A)
+Shape ID: 16 | Name: 'Text 14'
+  Paragraph 1 [Runs=1]: 'COLLEGE'
+    Run 1: 'COLLEGE' (Bold=True, Size=127000, Color=FF6B35)
+Shape ID: 17 | Name: 'Text 15'
+  Paragraph 1 [Runs=1]: 'Deenbandhu Chhotu Ram University of Science & Technology (DCRUST), Murthal'
+    Run 1: 'Deenbandhu Chhotu Ram University of Science & Technology (DCRUST), Murthal' (Bold=None, Size=158750, Color=1A1A1A)
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 19 | Name: 'Text 17'
+  Paragraph 1 [Runs=1]: '01'
+    Run 1: '01' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 2
+=========================================
+Shape ID: 2 | Name: 'Text 0'
+  Paragraph 1 [Runs=1]: 'THE CHALLENGE'
+    Run 1: 'THE CHALLENGE' (Bold=True, Size=152400, Color=FF6B35)
+Shape ID: 3 | Name: 'Text 1'
+  Paragraph 1 [Runs=1]: 'Indian Railways Is Running Reactive, Not Predictive'
+    Run 1: 'Indian Railways Is Running Reactive, Not Predictive' (Bold=True, Size=381000, Color=1A1A1A)
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Shape 3'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 6 | Name: 'Text 4'
+  Paragraph 1 [Runs=1]: '77–78%'
+    Run 1: '77–78%' (Bold=True, Size=355600, Color=D9491F)
+Shape ID: 7 | Name: 'Text 5'
+  Paragraph 1 [Runs=1]: 'Overall punctuality in 2024–25 — down from 90.5% in 2021–22 (Parliament / PAC data)'
+    Run 1: 'Overall punctuality in 2024–25 — down from 90.5% in 2021–22 (Parliament / PAC data)' (Bold=None, Size=133350, Color=4A4A52)
+Shape ID: 8 | Name: 'Shape 6'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 9 | Name: 'Text 7'
+  Paragraph 1 [Runs=1]: '6.9 Bn'
+    Run 1: '6.9 Bn' (Bold=True, Size=355600, Color=D9491F)
+Shape ID: 10 | Name: 'Text 8'
+  Paragraph 1 [Runs=1]: 'Passengers carried annually across ~69,000 km of track'
+    Run 1: 'Passengers carried annually across ~69,000 km of track' (Bold=None, Size=133350, Color=4A4A52)
+Shape ID: 11 | Name: 'Shape 9'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 12 | Name: 'Text 10'
+  Paragraph 1 [Runs=1]: '±15 min'
+    Run 1: '±15 min' (Bold=True, Size=355600, Color=D9491F)
+Shape ID: 13 | Name: 'Text 11'
+  Paragraph 1 [Runs=1]: '"On-time" is counted within a 15-minute window — masking real en-route delays'
+    Run 1: '"On-time" is counted within a 15-minute window — masking real en-route delays' (Bold=None, Size=133350, Color=4A4A52)
+Shape ID: 14 | Name: 'Shape 12'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 15 | Name: 'Text 13'
+  Paragraph 1 [Runs=1]: 'Congestion cascades — a single delay ripples across interconnected schedules network-wide, worsened during high-demand events like the Kumbh Mela.'
+    Run 1: 'Congestion cascades — a single delay ripples across interconnected schedules network-wide, worsened during high-demand events like the Kumbh Mela.' (Bold=None, Size=158750, Color=1A1A1A)
+Shape ID: 16 | Name: 'Shape 14'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 17 | Name: 'Text 15'
+  Paragraph 1 [Runs=1]: 'Manual, control-room-driven monitoring — decisions are made after disruption occurs, not before.'
+    Run 1: 'Manual, control-room-driven monitoring — decisions are made after disruption occurs, not before.' (Bold=None, Size=158750, Color=1A1A1A)
+Shape ID: 18 | Name: 'Shape 16'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 19 | Name: 'Text 17'
+  Paragraph 1 [Runs=1]: 'Slow, siloed decision-making across divisions with limited real-time cross-visibility.'
+    Run 1: 'Slow, siloed decision-making across divisions with limited real-time cross-visibility.' (Bold=None, Size=158750, Color=1A1A1A)
+Shape ID: 20 | Name: 'Shape 18'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 21 | Name: 'Text 19'
+  Paragraph 1 [Runs=1]: 'Safety and resource strain — aging infrastructure, maintenance backlogs, and diesel dependency drive avoidable punctuality loss.'
+    Run 1: 'Safety and resource strain — aging infrastructure, maintenance backlogs, and diesel dependency drive avoidable punctuality loss.' (Bold=None, Size=158750, Color=1A1A1A)
+Shape ID: 22 | Name: 'Shape 20'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 23 | Name: 'Text 21'
+  Paragraph 1 [Runs=1]: 'Poor operator visibility into network-wide state during fast-moving disruptions.'
+    Run 1: 'Poor operator visibility into network-wide state during fast-moving disruptions.' (Bold=None, Size=158750, Color=1A1A1A)
+Shape ID: 24 | Name: 'Shape 22'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 25 | Name: 'Text 23'
+  Paragraph 1 [Runs=1]: '“Current systems are reactive rather than predictive.”'
+    Run 1: '“Current systems are reactive rather than predictive.”' (Bold=True, Size=190500, Color=FFFFFF)
+Shape ID: 26 | Name: 'Text 24'
+  Paragraph 1 [Runs=1]: 'Sources: Public Accounts Committee / Rajya Sabha replies; Ministry of Railways; RailYatri H1-2025 punctuality report'
+    Run 1: 'Sources: Public Accounts Committee / Rajya Sabha replies; Ministry of Railways; RailYatri H1-2025 punctuality report' (Bold=None, Size=101600, Color=AEAEB4)
+Shape ID: 27 | Name: 'Text 25'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 28 | Name: 'Text 26'
+  Paragraph 1 [Runs=1]: '02'
+    Run 1: '02' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 3
+=========================================
+Shape ID: 2 | Name: 'Text 0'
+  Paragraph 1 [Runs=1]: 'OUR SOLUTION'
+    Run 1: 'OUR SOLUTION' (Bold=True, Size=152400, Color=FF6B35)
+Shape ID: 3 | Name: 'Text 1'
+  Paragraph 1 [Runs=1]: 'NEXUS AI — See Problems Before They Happen'
+    Run 1: 'NEXUS AI — See Problems Before They Happen' (Bold=True, Size=381000, Color=1A1A1A)
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Shape 3'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 6 | Name: 'Shape 4'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 7 | Name: 'Text 5'
+  Paragraph 1 [Runs=1]: '1'
+    Run 1: '1' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 8 | Name: 'Text 6'
+  Paragraph 1 [Runs=1]: 'Digital Twin'
+    Run 1: 'Digital Twin' (Bold=True, Size=171450, Color=1A1A1A)
+Shape ID: 9 | Name: 'Text 7'
+  Paragraph 1 [Runs=1]: 'A live virtual replica of the rail network — track, signals, rolling stock, weather — updated in real time.'
+    Run 1: 'A live virtual replica of the rail network — track, signals, rolling stock, weather — updated in real time.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 10 | Name: 'Shape 8'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 11 | Name: 'Shape 9'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 12 | Name: 'Text 10'
+  Paragraph 1 [Runs=1]: '2'
+    Run 1: '2' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 13 | Name: 'Text 11'
+  Paragraph 1 [Runs=1]: 'Multi-Agent AI'
+    Run 1: 'Multi-Agent AI' (Bold=True, Size=171450, Color=1A1A1A)
+Shape ID: 14 | Name: 'Text 12'
+  Paragraph 1 [Runs=1]: 'Specialized agents for scheduling, congestion, safety, and maintenance negotiate jointly optimal decisions.'
+    Run 1: 'Specialized agents for scheduling, congestion, safety, and maintenance negotiate jointly optimal decisions.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 15 | Name: 'Shape 13'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 16 | Name: 'Shape 14'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 17 | Name: 'Text 15'
+  Paragraph 1 [Runs=1]: '3'
+    Run 1: '3' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: 'Predictive Analytics'
+    Run 1: 'Predictive Analytics' (Bold=True, Size=171450, Color=1A1A1A)
+Shape ID: 19 | Name: 'Text 17'
+  Paragraph 1 [Runs=1]: 'Forecasts congestion, delays, and cascading disruption minutes to hours before impact.'
+    Run 1: 'Forecasts congestion, delays, and cascading disruption minutes to hours before impact.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 20 | Name: 'Shape 18'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 21 | Name: 'Shape 19'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 22 | Name: 'Text 20'
+  Paragraph 1 [Runs=1]: '4'
+    Run 1: '4' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 23 | Name: 'Text 21'
+  Paragraph 1 [Runs=1]: 'AI Copilot'
+    Run 1: 'AI Copilot' (Bold=True, Size=171450, Color=1A1A1A)
+Shape ID: 24 | Name: 'Text 22'
+  Paragraph 1 [Runs=1]: 'A conversational assistant that lets operators query, simulate "what-ifs", and act in natural language.'
+    Run 1: 'A conversational assistant that lets operators query, simulate "what-ifs", and act in natural language.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 25 | Name: 'Shape 23'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 26 | Name: 'Shape 24'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 27 | Name: 'Text 25'
+  Paragraph 1 [Runs=1]: '5'
+    Run 1: '5' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 28 | Name: 'Text 26'
+  Paragraph 1 [Runs=1]: 'Decision Engine'
+    Run 1: 'Decision Engine' (Bold=True, Size=171450, Color=1A1A1A)
+Shape ID: 29 | Name: 'Text 27'
+  Paragraph 1 [Runs=1]: 'Converts predictions into ranked, explainable operator recommendations.'
+    Run 1: 'Converts predictions into ranked, explainable operator recommendations.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 30 | Name: 'Shape 28'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 31 | Name: 'Shape 29'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 32 | Name: 'Text 30'
+  Paragraph 1 [Runs=1]: '6'
+    Run 1: '6' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 33 | Name: 'Text 31'
+  Paragraph 1 [Runs=1]: 'Simulation Core'
+    Run 1: 'Simulation Core' (Bold=True, Size=171450, Color=1A1A1A)
+Shape ID: 34 | Name: 'Text 32'
+  Paragraph 1 [Runs=1]: 'Stress-tests reroutes and schedule changes against the digital twin before real-world rollout.'
+    Run 1: 'Stress-tests reroutes and schedule changes against the digital twin before real-world rollout.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 35 | Name: 'Text 33'
+  Paragraph 1 [Runs=1]: 'HOW NEXUS AI THINKS'
+    Run 1: 'HOW NEXUS AI THINKS' (Bold=True, Size=139700, Color=5B1A44)
+Shape ID: 36 | Name: 'Shape 34'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 37 | Name: 'Text 35'
+  Paragraph 1 [Runs=1]: 'Sense'
+    Run 1: 'Sense' (Bold=True, Size=165100, Color=FFFFFF)
+Shape ID: 38 | Name: 'Text 36'
+  Paragraph 1 [Runs=1]: '→'
+    Run 1: '→' (Bold=True, Size=177800, Color=4A4A52)
+Shape ID: 39 | Name: 'Shape 37'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 40 | Name: 'Text 38'
+  Paragraph 1 [Runs=1]: 'Simulate'
+    Run 1: 'Simulate' (Bold=True, Size=165100, Color=FFFFFF)
+Shape ID: 41 | Name: 'Text 39'
+  Paragraph 1 [Runs=1]: '→'
+    Run 1: '→' (Bold=True, Size=177800, Color=4A4A52)
+Shape ID: 42 | Name: 'Shape 40'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 43 | Name: 'Text 41'
+  Paragraph 1 [Runs=1]: 'Predict'
+    Run 1: 'Predict' (Bold=True, Size=165100, Color=FFFFFF)
+Shape ID: 44 | Name: 'Text 42'
+  Paragraph 1 [Runs=1]: '→'
+    Run 1: '→' (Bold=True, Size=177800, Color=4A4A52)
+Shape ID: 45 | Name: 'Shape 43'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 46 | Name: 'Text 44'
+  Paragraph 1 [Runs=1]: 'Decide'
+    Run 1: 'Decide' (Bold=True, Size=165100, Color=FFFFFF)
+Shape ID: 47 | Name: 'Text 45'
+  Paragraph 1 [Runs=1]: '→'
+    Run 1: '→' (Bold=True, Size=177800, Color=4A4A52)
+Shape ID: 48 | Name: 'Shape 46'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 49 | Name: 'Text 47'
+  Paragraph 1 [Runs=1]: 'Act'
+    Run 1: 'Act' (Bold=True, Size=165100, Color=FFFFFF)
+Shape ID: 50 | Name: 'Text 48'
+  Paragraph 1 [Runs=1]: 'Disruptions are simulated and predicted before they cascade — not detected after passengers feel them.'
+    Run 1: 'Disruptions are simulated and predicted before they cascade — not detected after passengers feel them.' (Bold=None, Size=139700, Color=4A4A52)
+Shape ID: 51 | Name: 'Text 49'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 52 | Name: 'Text 50'
+  Paragraph 1 [Runs=1]: '03'
+    Run 1: '03' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 4
+=========================================
+Shape ID: 2 | Name: 'Text 0'
+  Paragraph 1 [Runs=1]: 'ARCHITECTURE'
+    Run 1: 'ARCHITECTURE' (Bold=True, Size=152400, Color=FF6B35)
+Shape ID: 3 | Name: 'Text 1'
+  Paragraph 1 [Runs=1]: 'End-to-End Solution Architecture'
+    Run 1: 'End-to-End Solution Architecture' (Bold=True, Size=381000, Color=1A1A1A)
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Shape 3'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 6 | Name: 'Shape 4'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 7 | Name: 'Text 5'
+  Paragraph 1 [Runs=1]: '1.  Railway Sensors'
+    Run 1: '1.  Railway Sensors' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 8 | Name: 'Text 6'
+  Paragraph 1 [Runs=1]: 'Track circuits, axle counters, signal states, rolling-stock telemetry'
+    Run 1: 'Track circuits, axle counters, signal states, rolling-stock telemetry' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 9 | Name: 'Text 7'
+  Paragraph 1 [Runs=1]: '↓'
+    Run 1: '↓' (Bold=True, Size=139700, Color=D9491F)
+Shape ID: 10 | Name: 'Shape 8'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 11 | Name: 'Shape 9'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 12 | Name: 'Text 10'
+  Paragraph 1 [Runs=1]: '2.  IoT Gateway'
+    Run 1: '2.  IoT Gateway' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 13 | Name: 'Text 11'
+  Paragraph 1 [Runs=1]: 'Edge aggregation & protocol normalization from trackside devices'
+    Run 1: 'Edge aggregation & protocol normalization from trackside devices' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 14 | Name: 'Text 12'
+  Paragraph 1 [Runs=1]: '↓'
+    Run 1: '↓' (Bold=True, Size=139700, Color=D9491F)
+Shape ID: 15 | Name: 'Shape 13'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 16 | Name: 'Shape 14'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 17 | Name: 'Text 15'
+  Paragraph 1 [Runs=1]: '3.  Real-Time Data Stream'
+    Run 1: '3.  Real-Time Data Stream' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: 'Low-latency ingestion pipeline (WebSockets) feeding all downstream layers'
+    Run 1: 'Low-latency ingestion pipeline (WebSockets) feeding all downstream layers' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 19 | Name: 'Text 17'
+  Paragraph 1 [Runs=1]: '↓'
+    Run 1: '↓' (Bold=True, Size=139700, Color=D9491F)
+Shape ID: 20 | Name: 'Shape 18'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 21 | Name: 'Shape 19'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 22 | Name: 'Text 20'
+  Paragraph 1 [Runs=1]: '4.  Digital Twin'
+    Run 1: '4.  Digital Twin' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 23 | Name: 'Text 21'
+  Paragraph 1 [Runs=1]: 'Live simulated model of network state — stations, trains, weather, constraints'
+    Run 1: 'Live simulated model of network state — stations, trains, weather, constraints' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 24 | Name: 'Shape 22'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 25 | Name: 'Shape 23'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 26 | Name: 'Text 24'
+  Paragraph 1 [Runs=1]: '5.  Multi-Agent AI Layer'
+    Run 1: '5.  Multi-Agent AI Layer' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 27 | Name: 'Text 25'
+  Paragraph 1 [Runs=1]: 'Scheduling, congestion, safety & maintenance agents reason jointly'
+    Run 1: 'Scheduling, congestion, safety & maintenance agents reason jointly' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 28 | Name: 'Text 26'
+  Paragraph 1 [Runs=1]: '↓'
+    Run 1: '↓' (Bold=True, Size=139700, Color=D9491F)
+Shape ID: 29 | Name: 'Shape 27'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 30 | Name: 'Shape 28'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 31 | Name: 'Text 29'
+  Paragraph 1 [Runs=1]: '6.  Decision Engine'
+    Run 1: '6.  Decision Engine' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 32 | Name: 'Text 30'
+  Paragraph 1 [Runs=1]: 'Ranks and explains recommended actions with confidence scores'
+    Run 1: 'Ranks and explains recommended actions with confidence scores' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 33 | Name: 'Text 31'
+  Paragraph 1 [Runs=1]: '↓'
+    Run 1: '↓' (Bold=True, Size=139700, Color=D9491F)
+Shape ID: 34 | Name: 'Shape 32'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 35 | Name: 'Shape 33'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 36 | Name: 'Text 34'
+  Paragraph 1 [Runs=1]: '7.  Operator Dashboard'
+    Run 1: '7.  Operator Dashboard' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 37 | Name: 'Text 35'
+  Paragraph 1 [Runs=1]: 'Human-in-the-loop control surface with AI Copilot for natural-language queries'
+    Run 1: 'Human-in-the-loop control surface with AI Copilot for natural-language queries' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 38 | Name: 'Text 36'
+  Paragraph 1 [Runs=1]: '↓'
+    Run 1: '↓' (Bold=True, Size=139700, Color=D9491F)
+Shape ID: 39 | Name: 'Shape 37'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 40 | Name: 'Shape 38'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 41 | Name: 'Text 39'
+  Paragraph 1 [Runs=1]: '8.  Recommendations & Alerts'
+    Run 1: '8.  Recommendations & Alerts' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 42 | Name: 'Text 40'
+  Paragraph 1 [Runs=1]: 'Actionable outputs: reroutes, holds, schedule adjustments, incident flags'
+    Run 1: 'Actionable outputs: reroutes, holds, schedule adjustments, incident flags' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 43 | Name: 'Text 41'
+  Paragraph 1 [Runs=1]: '→'
+    Run 1: '→' (Bold=True, Size=254000, Color=D9491F)
+Shape ID: 44 | Name: 'Text 42'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 45 | Name: 'Text 43'
+  Paragraph 1 [Runs=1]: '04'
+    Run 1: '04' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 5
+=========================================
+Shape ID: 2 | Name: 'Text 0'
+  Paragraph 1 [Runs=1]: 'TECHNOLOGY STACK'
+    Run 1: 'TECHNOLOGY STACK' (Bold=True, Size=152400, Color=FF6B35)
+Shape ID: 3 | Name: 'Text 1'
+  Paragraph 1 [Runs=1]: 'Built for Real-Time Scale & Explainability'
+    Run 1: 'Built for Real-Time Scale & Explainability' (Bold=True, Size=381000, Color=1A1A1A)
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Shape 3'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 6 | Name: 'Shape 4'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 7 | Name: 'Text 5'
+  Paragraph 1 [Runs=1]: 'FRONTEND'
+    Run 1: 'FRONTEND' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 8 | Name: 'Text 6'
+  Paragraph 1 [Runs=1]: 'React · TypeScript · TailwindCSS · Three.js'
+    Run 1: 'React · TypeScript · TailwindCSS · Three.js' (Bold=True, Size=139700, Color=1A1A1A)
+Shape ID: 9 | Name: 'Shape 7'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 10 | Name: 'Text 8'
+  Paragraph 1 [Runs=1]: 'WHY'
+    Run 1: 'WHY' (Bold=True, Size=107950, Color=FF6B35)
+Shape ID: 11 | Name: 'Text 9'
+  Paragraph 1 [Runs=1]: 'Type-safe UI with real-time 3D digital-twin visualization.'
+    Run 1: 'Type-safe UI with real-time 3D digital-twin visualization.' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 12 | Name: 'Shape 10'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 13 | Name: 'Shape 11'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 14 | Name: 'Text 12'
+  Paragraph 1 [Runs=1]: 'BACKEND'
+    Run 1: 'BACKEND' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 15 | Name: 'Text 13'
+  Paragraph 1 [Runs=1]: 'FastAPI · Python · WebSockets'
+    Run 1: 'FastAPI · Python · WebSockets' (Bold=True, Size=139700, Color=1A1A1A)
+Shape ID: 16 | Name: 'Shape 14'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 17 | Name: 'Text 15'
+  Paragraph 1 [Runs=1]: 'WHY'
+    Run 1: 'WHY' (Bold=True, Size=107950, Color=5B1A44)
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: 'Async, low-latency APIs built for streaming sensor data.'
+    Run 1: 'Async, low-latency APIs built for streaming sensor data.' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 19 | Name: 'Shape 17'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 20 | Name: 'Shape 18'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 21 | Name: 'Text 19'
+  Paragraph 1 [Runs=1]: 'AI / ML'
+    Run 1: 'AI / ML' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 22 | Name: 'Text 20'
+  Paragraph 1 [Runs=1]: 'PyTorch · NetworkX · LangGraph · RL · GNNs · LLMs'
+    Run 1: 'PyTorch · NetworkX · LangGraph · RL · GNNs · LLMs' (Bold=True, Size=139700, Color=1A1A1A)
+Shape ID: 23 | Name: 'Shape 21'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 24 | Name: 'Text 22'
+  Paragraph 1 [Runs=1]: 'WHY'
+    Run 1: 'WHY' (Bold=True, Size=107950, Color=1E7145)
+Shape ID: 25 | Name: 'Text 23'
+  Paragraph 1 [Runs=1]: 'Graph-native reasoning over rail topology plus agent orchestration.'
+    Run 1: 'Graph-native reasoning over rail topology plus agent orchestration.' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 26 | Name: 'Shape 24'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 27 | Name: 'Shape 25'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 28 | Name: 'Text 26'
+  Paragraph 1 [Runs=1]: 'DATABASE'
+    Run 1: 'DATABASE' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 29 | Name: 'Text 27'
+  Paragraph 1 [Runs=1]: 'MongoDB'
+    Run 1: 'MongoDB' (Bold=True, Size=139700, Color=1A1A1A)
+Shape ID: 30 | Name: 'Shape 28'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 31 | Name: 'Text 29'
+  Paragraph 1 [Runs=1]: 'WHY'
+    Run 1: 'WHY' (Bold=True, Size=107950, Color=D9491F)
+Shape ID: 32 | Name: 'Text 30'
+  Paragraph 1 [Runs=1]: 'Flexible schema for heterogeneous sensor & operational event data.'
+    Run 1: 'Flexible schema for heterogeneous sensor & operational event data.' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 33 | Name: 'Shape 31'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 34 | Name: 'Shape 32'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 35 | Name: 'Text 33'
+  Paragraph 1 [Runs=1]: 'DEPLOYMENT'
+    Run 1: 'DEPLOYMENT' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 36 | Name: 'Text 34'
+  Paragraph 1 [Runs=1]: 'Azure · Docker · GitHub Actions'
+    Run 1: 'Azure · Docker · GitHub Actions' (Bold=True, Size=139700, Color=1A1A1A)
+Shape ID: 37 | Name: 'Shape 35'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 38 | Name: 'Text 36'
+  Paragraph 1 [Runs=1]: 'WHY'
+    Run 1: 'WHY' (Bold=True, Size=107950, Color=7A2A5C)
+Shape ID: 39 | Name: 'Text 37'
+  Paragraph 1 [Runs=1]: 'Enterprise-grade scalability with CI/CD suited to Microsoft's ecosystem.'
+    Run 1: 'Enterprise-grade scalability with CI/CD suited to Microsoft's ecosystem.' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 40 | Name: 'Text 38'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 41 | Name: 'Text 39'
+  Paragraph 1 [Runs=1]: '05'
+    Run 1: '05' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 6
+=========================================
+Shape ID: 2 | Name: 'Text 0'
+  Paragraph 1 [Runs=1]: 'WHY NEXUS AI WINS'
+    Run 1: 'WHY NEXUS AI WINS' (Bold=True, Size=152400, Color=FF6B35)
+Shape ID: 3 | Name: 'Text 1'
+  Paragraph 1 [Runs=1]: 'Unique Selling Proposition'
+    Run 1: 'Unique Selling Proposition' (Bold=True, Size=381000, Color=1A1A1A)
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Shape 3'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 6 | Name: 'Text 4'
+  Paragraph 1 [Runs=1]: 'Capability'
+    Run 1: 'Capability' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 7 | Name: 'Shape 5'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 8 | Name: 'Text 6'
+  Paragraph 1 [Runs=1]: 'Traditional Systems'
+    Run 1: 'Traditional Systems' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 9 | Name: 'Shape 7'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 10 | Name: 'Text 8'
+  Paragraph 1 [Runs=1]: 'NEXUS AI'
+    Run 1: 'NEXUS AI' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 11 | Name: 'Shape 9'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 12 | Name: 'Text 10'
+  Paragraph 1 [Runs=1]: 'Prediction'
+    Run 1: 'Prediction' (Bold=True, Size=133350, Color=1A1A1A)
+Shape ID: 13 | Name: 'Shape 11'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 14 | Name: 'Text 12'
+  Paragraph 1 [Runs=1]: 'Reactive alerts after delay occurs'
+    Run 1: 'Reactive alerts after delay occurs' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 15 | Name: 'Shape 13'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 16 | Name: 'Text 14'
+  Paragraph 1 [Runs=1]: 'Predicts disruption before it cascades'
+    Run 1: 'Predicts disruption before it cascades' (Bold=None, Size=133350, Color=D9491F)
+Shape ID: 17 | Name: 'Shape 15'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: 'Decision-Making'
+    Run 1: 'Decision-Making' (Bold=True, Size=133350, Color=1A1A1A)
+Shape ID: 19 | Name: 'Shape 17'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 20 | Name: 'Text 18'
+  Paragraph 1 [Runs=1]: 'Manual, control-room judgment calls'
+    Run 1: 'Manual, control-room judgment calls' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 21 | Name: 'Shape 19'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 22 | Name: 'Text 20'
+  Paragraph 1 [Runs=1]: 'AI-ranked, explainable recommendations'
+    Run 1: 'AI-ranked, explainable recommendations' (Bold=None, Size=133350, Color=D9491F)
+Shape ID: 23 | Name: 'Shape 21'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 24 | Name: 'Text 22'
+  Paragraph 1 [Runs=1]: 'Scalability'
+    Run 1: 'Scalability' (Bold=True, Size=133350, Color=1A1A1A)
+Shape ID: 25 | Name: 'Shape 23'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 26 | Name: 'Text 24'
+  Paragraph 1 [Runs=1]: 'Division-siloed tools'
+    Run 1: 'Division-siloed tools' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 27 | Name: 'Shape 25'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 28 | Name: 'Text 26'
+  Paragraph 1 [Runs=1]: 'Cloud-native, network-wide by design'
+    Run 1: 'Cloud-native, network-wide by design' (Bold=None, Size=133350, Color=D9491F)
+Shape ID: 29 | Name: 'Shape 27'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 30 | Name: 'Text 28'
+  Paragraph 1 [Runs=1]: 'Automation'
+    Run 1: 'Automation' (Bold=True, Size=133350, Color=1A1A1A)
+Shape ID: 31 | Name: 'Shape 29'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 32 | Name: 'Text 30'
+  Paragraph 1 [Runs=1]: 'Manual data entry & monitoring'
+    Run 1: 'Manual data entry & monitoring' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 33 | Name: 'Shape 31'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 34 | Name: 'Text 32'
+  Paragraph 1 [Runs=1]: 'Continuous autonomous agent monitoring'
+    Run 1: 'Continuous autonomous agent monitoring' (Bold=None, Size=133350, Color=D9491F)
+Shape ID: 35 | Name: 'Shape 33'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 36 | Name: 'Text 34'
+  Paragraph 1 [Runs=1]: 'Real-Time Analytics'
+    Run 1: 'Real-Time Analytics' (Bold=True, Size=133350, Color=1A1A1A)
+Shape ID: 37 | Name: 'Shape 35'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 38 | Name: 'Text 36'
+  Paragraph 1 [Runs=1]: 'Periodic / batch reporting'
+    Run 1: 'Periodic / batch reporting' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 39 | Name: 'Shape 37'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 40 | Name: 'Text 38'
+  Paragraph 1 [Runs=1]: 'Live streaming insights, second-by-second'
+    Run 1: 'Live streaming insights, second-by-second' (Bold=None, Size=133350, Color=D9491F)
+Shape ID: 41 | Name: 'Shape 39'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 42 | Name: 'Text 40'
+  Paragraph 1 [Runs=1]: 'Digital Twin'
+    Run 1: 'Digital Twin' (Bold=True, Size=133350, Color=1A1A1A)
+Shape ID: 43 | Name: 'Shape 41'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 44 | Name: 'Text 42'
+  Paragraph 1 [Runs=1]: 'Not available'
+    Run 1: 'Not available' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 45 | Name: 'Shape 43'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 46 | Name: 'Text 44'
+  Paragraph 1 [Runs=1]: 'Full live simulation of the rail network'
+    Run 1: 'Full live simulation of the rail network' (Bold=None, Size=133350, Color=D9491F)
+Shape ID: 47 | Name: 'Shape 45'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 48 | Name: 'Text 46'
+  Paragraph 1 [Runs=1]: 'AI Copilot'
+    Run 1: 'AI Copilot' (Bold=True, Size=133350, Color=1A1A1A)
+Shape ID: 49 | Name: 'Shape 47'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 50 | Name: 'Text 48'
+  Paragraph 1 [Runs=1]: 'Not available'
+    Run 1: 'Not available' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 51 | Name: 'Shape 49'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 52 | Name: 'Text 50'
+  Paragraph 1 [Runs=1]: 'Natural-language operator assistant'
+    Run 1: 'Natural-language operator assistant' (Bold=None, Size=133350, Color=D9491F)
+Shape ID: 53 | Name: 'Text 51'
+  Paragraph 1 [Runs=1]: 'NEXUS AI is the only approach that unifies agents, a digital twin, and simulation in one integrated platform — not a point solution.'
+    Run 1: 'NEXUS AI is the only approach that unifies agents, a digital twin, and simulation in one integrated platform — not a point solution.' (Bold=None, Size=146050, Color=4A4A52)
+Shape ID: 54 | Name: 'Text 52'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 55 | Name: 'Text 53'
+  Paragraph 1 [Runs=1]: '06'
+    Run 1: '06' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 7
+=========================================
+Shape ID: 2 | Name: 'Text 0'
+  Paragraph 1 [Runs=1]: 'FEASIBILITY & ROADMAP'
+    Run 1: 'FEASIBILITY & ROADMAP' (Bold=True, Size=152400, Color=FF6B35)
+Shape ID: 3 | Name: 'Text 1'
+  Paragraph 1 [Runs=1]: 'Grounded, Phased, and Azure-Ready'
+    Run 1: 'Grounded, Phased, and Azure-Ready' (Bold=True, Size=381000, Color=1A1A1A)
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Text 3'
+  Paragraph 1 [Runs=1]: 'COMPETITIVE LANDSCAPE'
+    Run 1: 'COMPETITIVE LANDSCAPE' (Bold=True, Size=146050, Color=5B1A44)
+Shape ID: 6 | Name: 'Shape 4'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 7 | Name: 'Text 5'
+  Paragraph 1 [Runs=1]: 'Traditional Railway Control Systems'
+    Run 1: 'Traditional Railway Control Systems' (Bold=True, Size=146050, Color=1A1A1A)
+Shape ID: 8 | Name: 'Text 6'
+  Paragraph 1 [Runs=1]: 'Rule-based, manual override — no predictive layer'
+    Run 1: 'Rule-based, manual override — no predictive layer' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 9 | Name: 'Shape 7'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 10 | Name: 'Text 8'
+  Paragraph 1 [Runs=1]: 'Conventional Scheduling Software'
+    Run 1: 'Conventional Scheduling Software' (Bold=True, Size=146050, Color=1A1A1A)
+Shape ID: 11 | Name: 'Text 9'
+  Paragraph 1 [Runs=1]: 'Static timetables; cannot re-optimize in real time'
+    Run 1: 'Static timetables; cannot re-optimize in real time' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 12 | Name: 'Shape 10'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 13 | Name: 'Text 11'
+  Paragraph 1 [Runs=1]: 'General Monitoring Dashboards'
+    Run 1: 'General Monitoring Dashboards' (Bold=True, Size=146050, Color=1A1A1A)
+Shape ID: 14 | Name: 'Text 12'
+  Paragraph 1 [Runs=1]: 'Visibility only — no agentic decision-making'
+    Run 1: 'Visibility only — no agentic decision-making' (Bold=None, Size=120650, Color=4A4A52)
+Shape ID: 15 | Name: 'Text 13'
+  Paragraph 1 [Runs=1]: 'NEXUS AI is the only platform combining multi-agent AI, a digital twin, predictive analytics, and simulation in one integrated system.'
+    Run 1: 'NEXUS AI is the only platform combining multi-agent AI, a digital twin, predictive analytics, and simulation in one integrated system.' (Bold=True, Size=133350, Color=D9491F)
+Shape ID: 16 | Name: 'Text 14'
+  Paragraph 1 [Runs=1]: 'IMPLEMENTATION ROADMAP'
+    Run 1: 'IMPLEMENTATION ROADMAP' (Bold=True, Size=146050, Color=5B1A44)
+Shape ID: 17 | Name: 'Shape 15'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: '1'
+    Run 1: '1' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 19 | Name: 'Text 17'
+  Paragraph 1 [Runs=1]: 'Phase 1 — Foundation'
+    Run 1: 'Phase 1 — Foundation' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 20 | Name: 'Text 18'
+  Paragraph 1 [Runs=1]: 'Digital twin + simulation core for a single division; historical data validation.'
+    Run 1: 'Digital twin + simulation core for a single division; historical data validation.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 21 | Name: 'Shape 19'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 22 | Name: 'Shape 20'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 23 | Name: 'Text 21'
+  Paragraph 1 [Runs=1]: '2'
+    Run 1: '2' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 24 | Name: 'Text 22'
+  Paragraph 1 [Runs=1]: 'Phase 2 — Intelligence'
+    Run 1: 'Phase 2 — Intelligence' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 25 | Name: 'Text 23'
+  Paragraph 1 [Runs=1]: 'Multi-agent decision engine and AI Copilot piloted with live operator feedback.'
+    Run 1: 'Multi-agent decision engine and AI Copilot piloted with live operator feedback.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 26 | Name: 'Shape 24'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 27 | Name: 'Shape 25'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 28 | Name: 'Text 26'
+  Paragraph 1 [Runs=1]: '3'
+    Run 1: '3' (Bold=True, Size=177800, Color=FFFFFF)
+Shape ID: 29 | Name: 'Text 27'
+  Paragraph 1 [Runs=1]: 'Phase 3 — Scale'
+    Run 1: 'Phase 3 — Scale' (Bold=True, Size=158750, Color=1A1A1A)
+Shape ID: 30 | Name: 'Text 28'
+  Paragraph 1 [Runs=1]: 'Network-wide rollout with Microsoft Azure AI ecosystem integration for national scale.'
+    Run 1: 'Network-wide rollout with Microsoft Azure AI ecosystem integration for national scale.' (Bold=None, Size=127000, Color=4A4A52)
+Shape ID: 31 | Name: 'Text 29'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 32 | Name: 'Text 30'
+  Paragraph 1 [Runs=1]: '07'
+    Run 1: '07' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 8
+=========================================
+Shape ID: 2 | Name: 'Text 0'
+  Paragraph 1 [Runs=1]: 'RESEARCH & REFERENCES'
+    Run 1: 'RESEARCH & REFERENCES' (Bold=True, Size=152400, Color=FF6B35)
+Shape ID: 3 | Name: 'Text 1'
+  Paragraph 1 [Runs=1]: 'Grounded in Real Data & Open Standards'
+    Run 1: 'Grounded in Real Data & Open Standards' (Bold=True, Size=381000, Color=1A1A1A)
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Shape 3'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 6 | Name: 'Text 4'
+  Paragraph 1 [Runs=1]: 'Indian Railways / Ministry of Railways — punctuality & network data'
+    Run 1: 'Indian Railways / Ministry of Railways — punctuality & network data' (Bold=None, Size=146050, Color=1A1A1A)
+Shape ID: 7 | Name: 'Shape 5'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 8 | Name: 'Text 6'
+  Paragraph 1 [Runs=1]: 'Microsoft Azure AI Documentation — deployment & AI services reference'
+    Run 1: 'Microsoft Azure AI Documentation — deployment & AI services reference' (Bold=None, Size=146050, Color=1A1A1A)
+Shape ID: 9 | Name: 'Shape 7'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 10 | Name: 'Text 8'
+  Paragraph 1 [Runs=1]: 'LangGraph — multi-agent orchestration framework'
+    Run 1: 'LangGraph — multi-agent orchestration framework' (Bold=None, Size=146050, Color=1A1A1A)
+Shape ID: 11 | Name: 'Shape 9'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 12 | Name: 'Text 10'
+  Paragraph 1 [Runs=1]: 'PyTorch — deep learning framework for predictive models'
+    Run 1: 'PyTorch — deep learning framework for predictive models' (Bold=None, Size=146050, Color=1A1A1A)
+Shape ID: 13 | Name: 'Shape 11'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 14 | Name: 'Text 12'
+  Paragraph 1 [Runs=1]: 'FastAPI — high-performance backend framework'
+    Run 1: 'FastAPI — high-performance backend framework' (Bold=None, Size=146050, Color=1A1A1A)
+Shape ID: 15 | Name: 'Shape 13'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 16 | Name: 'Text 14'
+  Paragraph 1 [Runs=1]: 'NetworkX — graph analysis for rail-network topology'
+    Run 1: 'NetworkX — graph analysis for rail-network topology' (Bold=None, Size=146050, Color=1A1A1A)
+Shape ID: 17 | Name: 'Shape 15'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: 'OpenStreetMap — geospatial track & station data'
+    Run 1: 'OpenStreetMap — geospatial track & station data' (Bold=None, Size=146050, Color=1A1A1A)
+Shape ID: 19 | Name: 'Shape 17'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 20 | Name: 'Text 18'
+  Paragraph 1 [Runs=1]: 'PROJECT STATUS'
+    Run 1: 'PROJECT STATUS' (Bold=True, Size=139700, Color=FFD8C2)
+Shape ID: 21 | Name: 'Text 19'
+  Paragraph 1 [Runs=1]: 'Prototype under active development'
+    Run 1: 'Prototype under active development' (Bold=True, Size=190500, Color=FFFFFF)
+Shape ID: 22 | Name: 'Text 20'
+  Paragraph 1 [Runs=1]: 'GITHUB REPOSITORY'
+    Run 1: 'GITHUB REPOSITORY' (Bold=True, Size=127000, Color=FFD8C2)
+Shape ID: 23 | Name: 'Text 21'
+  Paragraph 1 [Runs=1]: 'github.com/jatinkumar2503/Nexus-AI'
+    Run 1: 'github.com/jatinkumar2503/Nexus-AI' (Bold=None, Size=158750, Color=FFFFFF)
+Shape ID: 24 | Name: 'Text 22'
+  Paragraph 1 [Runs=1]: 'LIVE DEMO'
+    Run 1: 'LIVE DEMO' (Bold=True, Size=127000, Color=FFD8C2)
+Shape ID: 25 | Name: 'Text 23'
+  Paragraph 1 [Runs=1]: 'Coming Soon'
+    Run 1: 'Coming Soon' (Bold=None, Size=158750, Color=FFFFFF)
+Shape ID: 26 | Name: 'Text 24'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 27 | Name: 'Text 25'
+  Paragraph 1 [Runs=1]: '08'
+    Run 1: '08' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 9
+=========================================
+Shape ID: 2 | Name: 'Text 0'
+  Paragraph 1 [Runs=1]: 'IMPACT & VALUE'
+    Run 1: 'IMPACT & VALUE' (Bold=True, Size=152400, Color=FF6B35)
+Shape ID: 3 | Name: 'Text 1'
+  Paragraph 1 [Runs=1]: 'Social Impact Meets Business Value'
+    Run 1: 'Social Impact Meets Business Value' (Bold=True, Size=381000, Color=1A1A1A)
+Shape ID: 4 | Name: 'Shape 2'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 5 | Name: 'Shape 3'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 6 | Name: 'Shape 4'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 7 | Name: 'Text 5'
+  Paragraph 1 [Runs=1]: 'SOCIAL IMPACT'
+    Run 1: 'SOCIAL IMPACT' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 8 | Name: 'Shape 6'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 9 | Name: 'Text 7'
+  Paragraph 1 [Runs=1]: 'Fewer cascading delays → millions of predictable daily journeys'
+    Run 1: 'Fewer cascading delays → millions of predictable daily journeys' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 10 | Name: 'Shape 8'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 11 | Name: 'Text 9'
+  Paragraph 1 [Runs=1]: 'Earlier hazard detection supports safer operations'
+    Run 1: 'Earlier hazard detection supports safer operations' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 12 | Name: 'Shape 10'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 13 | Name: 'Text 11'
+  Paragraph 1 [Runs=1]: 'Better-informed operators reduce human-error risk'
+    Run 1: 'Better-informed operators reduce human-error risk' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 14 | Name: 'Shape 12'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 15 | Name: 'Shape 13'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 16 | Name: 'Text 14'
+  Paragraph 1 [Runs=1]: 'BUSINESS VALUE'
+    Run 1: 'BUSINESS VALUE' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 17 | Name: 'Shape 15'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: 'B2G SaaS model for Ministry of Railways / zonal divisions'
+    Run 1: 'B2G SaaS model for Ministry of Railways / zonal divisions' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 19 | Name: 'Shape 17'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 20 | Name: 'Text 18'
+  Paragraph 1 [Runs=1]: 'Reduced cascading-delay costs across the network'
+    Run 1: 'Reduced cascading-delay costs across the network' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 21 | Name: 'Shape 19'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 22 | Name: 'Text 20'
+  Paragraph 1 [Runs=1]: 'Optimized routing lowers energy & fuel wastage'
+    Run 1: 'Optimized routing lowers energy & fuel wastage' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 23 | Name: 'Shape 21'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 24 | Name: 'Shape 22'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 25 | Name: 'Text 23'
+  Paragraph 1 [Runs=1]: 'SCALABILITY'
+    Run 1: 'SCALABILITY' (Bold=True, Size=158750, Color=FFFFFF)
+Shape ID: 26 | Name: 'Shape 24'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 27 | Name: 'Text 25'
+  Paragraph 1 [Runs=1]: 'Cloud-native design extends to metro & freight corridors'
+    Run 1: 'Cloud-native design extends to metro & freight corridors' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 28 | Name: 'Shape 26'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 29 | Name: 'Text 27'
+  Paragraph 1 [Runs=1]: 'Digital-twin approach generalizes to other national rail networks'
+    Run 1: 'Digital-twin approach generalizes to other national rail networks' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 30 | Name: 'Shape 28'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 31 | Name: 'Text 29'
+  Paragraph 1 [Runs=1]: 'Azure-native deployment ready for enterprise scale-out'
+    Run 1: 'Azure-native deployment ready for enterprise scale-out' (Bold=None, Size=133350, Color=1A1A1A)
+Shape ID: 32 | Name: 'Text 30'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 33 | Name: 'Text 31'
+  Paragraph 1 [Runs=1]: '09'
+    Run 1: '09' (Bold=None, Size=114300, Color=9A9AA2)
+
+=========================================
+SLIDE 10
+=========================================
+Shape ID: 2 | Name: 'Shape 0'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 3 | Name: 'Shape 1'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 4 | Name: 'Text 2'
+  Paragraph 1 [Runs=1]: 'THANK YOU'
+    Run 1: 'THANK YOU' (Bold=True, Size=508000, Color=1A1A1A)
+Shape ID: 5 | Name: 'Text 3'
+  Paragraph 1 [Runs=1]: 'Team Code Titans  •  NEXUS AI'
+    Run 1: 'Team Code Titans  •  NEXUS AI' (Bold=True, Size=190500, Color=D9491F)
+Shape ID: 6 | Name: 'Shape 4'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 7 | Name: 'Shape 5'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 8 | Name: 'Text 6'
+  Paragraph 1 [Runs=1]: 'JK'
+    Run 1: 'JK' (Bold=True, Size=190500, Color=FFFFFF)
+Shape ID: 9 | Name: 'Text 7'
+  Paragraph 1 [Runs=1]: 'Jatin Kumar'
+    Run 1: 'Jatin Kumar' (Bold=True, Size=152400, Color=1A1A1A)
+Shape ID: 10 | Name: 'Text 8'
+  Paragraph 1 [Runs=1]: 'AI/ML & Systems Architecture'
+    Run 1: 'AI/ML & Systems Architecture' (Bold=None, Size=114300, Color=4A4A52)
+Shape ID: 11 | Name: 'Shape 9'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 12 | Name: 'Shape 10'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 13 | Name: 'Text 11'
+  Paragraph 1 [Runs=1]: 'N'
+    Run 1: 'N' (Bold=True, Size=190500, Color=FFFFFF)
+Shape ID: 14 | Name: 'Text 12'
+  Paragraph 1 [Runs=1]: 'Nikhil'
+    Run 1: 'Nikhil' (Bold=True, Size=152400, Color=1A1A1A)
+Shape ID: 15 | Name: 'Text 13'
+  Paragraph 1 [Runs=1]: 'Backend Engineering'
+    Run 1: 'Backend Engineering' (Bold=None, Size=114300, Color=4A4A52)
+Shape ID: 16 | Name: 'Shape 14'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 17 | Name: 'Shape 15'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 18 | Name: 'Text 16'
+  Paragraph 1 [Runs=1]: 'S'
+    Run 1: 'S' (Bold=True, Size=190500, Color=FFFFFF)
+Shape ID: 19 | Name: 'Text 17'
+  Paragraph 1 [Runs=1]: 'Shubham'
+    Run 1: 'Shubham' (Bold=True, Size=152400, Color=1A1A1A)
+Shape ID: 20 | Name: 'Text 18'
+  Paragraph 1 [Runs=1]: 'Frontend & Visualization'
+    Run 1: 'Frontend & Visualization' (Bold=None, Size=114300, Color=4A4A52)
+Shape ID: 21 | Name: 'Shape 19'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 22 | Name: 'Shape 20'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 23 | Name: 'Text 21'
+  Paragraph 1 [Runs=1]: 'JP'
+    Run 1: 'JP' (Bold=True, Size=190500, Color=FFFFFF)
+Shape ID: 24 | Name: 'Text 22'
+  Paragraph 1 [Runs=1]: 'Jatin Pannu'
+    Run 1: 'Jatin Pannu' (Bold=True, Size=152400, Color=1A1A1A)
+Shape ID: 25 | Name: 'Text 23'
+  Paragraph 1 [Runs=1]: 'Research & Data'
+    Run 1: 'Research & Data' (Bold=None, Size=114300, Color=4A4A52)
+Shape ID: 26 | Name: 'Shape 24'
+  Paragraph 1 [Runs=0]: ''
+Shape ID: 27 | Name: 'Text 25'
+  Paragraph 1 [Runs=1]: 'LET'S BUILD SMARTER RAILWAYS, TOGETHER'
+    Run 1: 'LET'S BUILD SMARTER RAILWAYS, TOGETHER' (Bold=True, Size=165100, Color=FFD8C2)
+Shape ID: 28 | Name: 'Text 26'
+  Paragraph 1 [Runs=1]: 'GitHub'
+    Run 1: 'GitHub' (Bold=True, Size=127000, Color=FFD8C2)
+Shape ID: 29 | Name: 'Text 27'
+  Paragraph 1 [Runs=1]: 'github.com/jatinkumar2503/Nexus-AI'
+    Run 1: 'github.com/jatinkumar2503/Nexus-AI' (Bold=None, Size=152400, Color=FFFFFF)
+Shape ID: 30 | Name: 'Text 28'
+  Paragraph 1 [Runs=1]: 'LinkedIn'
+    Run 1: 'LinkedIn' (Bold=True, Size=127000, Color=FFD8C2)
+Shape ID: 31 | Name: 'Text 29'
+  Paragraph 1 [Runs=1]: 'linkedin.com/in/jatin-kumar-50b50525a'
+    Run 1: 'linkedin.com/in/jatin-kumar-50b50525a' (Bold=None, Size=152400, Color=FFFFFF)
+Shape ID: 32 | Name: 'Text 30'
+  Paragraph 1 [Runs=1]: 'Event: Build with Bharat 2026 — National Level Hackathon'
+    Run 1: 'Event: Build with Bharat 2026 — National Level Hackathon' (Bold=None, Size=127000, Color=E6D6E0)
+Shape ID: 33 | Name: 'Text 31'
+  Paragraph 1 [Runs=1]: 'BUILD WITH BHARAT 2026  •  NEXUS AI'
+    Run 1: 'BUILD WITH BHARAT 2026  •  NEXUS AI' (Bold=None, Size=114300, Color=9A9AA2)
+Shape ID: 34 | Name: 'Text 32'
+  Paragraph 1 [Runs=1]: '10'
+    Run 1: '10' (Bold=None, Size=114300, Color=9A9AA2)
