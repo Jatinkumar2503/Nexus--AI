@@ -1,8 +1,16 @@
-"""NEXUS AI — Ultimate McKinsey/Apple/MIT-Style Visual Presentation Deck Generator.
+"""NEXUS AI — Pure White Research Lab Style Visual Presentation Deck Generator.
 
-Generates a 10-slide PowerPoint deck where 60%+ of every slide is visual diagramming, native charts,
-flowcharts, vector shapes, KPI cards, and architectural blocks.
+Design Specification:
+- Background: PURE WHITE (#FFFFFF) on EVERY slide
+- Primary Text: DARK CHARCOAL (#202020)
+- Secondary Text: DARK GRAY (#555555)
+- Cards: VERY LIGHT GRAY (#F5F5F5)
+- Borders: LIGHT GRAY (#D9D9D9)
+- Primary Accent: SUBTLE DARK BROWN / GOLD (#8B6B23)
+- Safe / Validated: MUTED GREEN (#2E7D32)
+- Warning / Rejected: MUTED TERRACOTTA (#C62828)
 
+Visual Structure:
 Slide 1: Title & Railway Network Infographic (3 KPI cards, corridor visual)
 Slide 2: Cascading Disruption vs NEXUS Recovery Flowcharts
 Slide 3: End-to-End System Architecture (6 Layers, Data Flow Loop)
@@ -25,18 +33,18 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx.chart.data import CategoryChartData
 from pptx.enum.chart import XL_CHART_TYPE, XL_LEGEND_POSITION
 
-# COLOR PALETTE
-COLOR_BG = RGBColor(10, 15, 29)          # Dark Midnight Navy #0A0F1D
-COLOR_CARD = RGBColor(18, 26, 47)        # Dark Card #121A2F
-COLOR_CARD_ALT = RGBColor(25, 36, 64)    # Lighter Card #192440
-COLOR_TEXT_WHITE = RGBColor(240, 246, 252)
-COLOR_TEXT_MUTED = RGBColor(140, 160, 190)
-COLOR_CYAN = RGBColor(0, 242, 254)       # Neon Cyan
-COLOR_GREEN = RGBColor(0, 255, 135)      # Neon Green
-COLOR_PURPLE = RGBColor(157, 78, 221)    # Neon Purple
-COLOR_AMBER = RGBColor(255, 183, 3)      # Amber Gold
-COLOR_RED = RGBColor(255, 0, 85)         # Neon Red / Crimson
-COLOR_BLUE = RGBColor(56, 189, 248)      # Light Blue
+# COLOR PALETTE (PURE WHITE RESEARCH LAB THEME)
+COLOR_BG = RGBColor(255, 255, 255)         # PURE WHITE #FFFFFF
+COLOR_CARD = RGBColor(245, 245, 245)       # VERY LIGHT GRAY #F5F5F5
+COLOR_CARD_ALT = RGBColor(238, 238, 238)   # LIGHT GRAY CARD
+COLOR_BORDER = RGBColor(217, 217, 217)     # LIGHT GRAY BORDER #D9D9D9
+COLOR_TEXT_PRIMARY = RGBColor(32, 32, 32)  # DARK CHARCOAL #202020
+COLOR_TEXT_MUTED = RGBColor(85, 85, 85)    # DARK GRAY #555555
+COLOR_ACCENT = RGBColor(139, 107, 35)      # SUBTLE DARK BROWN / GOLD #8B6B23
+COLOR_GREEN = RGBColor(46, 125, 50)        # MUTED GREEN #2E7D32
+COLOR_RED = RGBColor(198, 40, 40)          # MUTED TERRACOTTA #C62828
+COLOR_BLUE = RGBColor(21, 101, 192)        # DEEP CONTROL BLUE #1565C0
+COLOR_PURPLE = RGBColor(106, 27, 154)      # DEEP PURPLE #6A1B9A
 
 def set_slide_background(slide):
     background = slide.background
@@ -54,15 +62,15 @@ def add_header(slide, title_text, category_text):
     p0.text = category_text.upper()
     p0.font.size = Pt(10)
     p0.font.bold = True
-    p0.font.color.rgb = COLOR_CYAN
+    p0.font.color.rgb = COLOR_ACCENT
 
     p1 = tf.add_paragraph()
     p1.text = title_text
     p1.font.size = Pt(22)
     p1.font.bold = True
-    p1.font.color.rgb = COLOR_TEXT_WHITE
+    p1.font.color.rgb = COLOR_TEXT_PRIMARY
 
-def add_card(slide, left, top, width, height, border_color=COLOR_CYAN, bg_color=COLOR_CARD):
+def add_card(slide, left, top, width, height, border_color=COLOR_BORDER, bg_color=COLOR_CARD):
     shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(left), Inches(top), Inches(width), Inches(height))
     shape.fill.solid()
     shape.fill.fore_color.rgb = bg_color
@@ -99,22 +107,22 @@ def create_deck():
     p1.text = "NEXUS AI"
     p1.font.size = Pt(44)
     p1.font.bold = True
-    p1.font.color.rgb = COLOR_CYAN
+    p1.font.color.rgb = COLOR_ACCENT
 
     p2 = tf_t.add_paragraph()
     p2.text = "Autonomous Decision Intelligence & VCG Dispatching for Rail Networks"
     p2.font.size = Pt(18)
-    p2.font.color.rgb = COLOR_TEXT_WHITE
+    p2.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # 3 KPI Cards (Right Column)
     kpis = [
-        ("318M / 1.45M", "Neural Model Scaling", COLOR_CYAN),
+        ("318M / 1.45M", "Neural Model Scaling", COLOR_ACCENT),
         ("2.05 ms", "p50 Sub-5ms Latency", COLOR_GREEN),
-        ("33.5%", "Historical Delay Reduction", COLOR_AMBER)
+        ("33.5%", "Historical Delay Reduction", COLOR_BLUE)
     ]
     for i, (val, label, col) in enumerate(kpis):
         top_pos = 1.2 + (i * 1.3)
-        add_card(s1, 8.2, top_pos, 4.3, 1.15, col, COLOR_CARD)
+        add_card(s1, 8.2, top_pos, 4.3, 1.15, COLOR_BORDER, COLOR_CARD)
         tb_kpi = s1.shapes.add_textbox(Inches(8.4), Inches(top_pos + 0.15), Inches(3.9), Inches(0.85))
         tf_k = tb_kpi.text_frame
         p_val = tf_k.paragraphs[0]
@@ -129,7 +137,7 @@ def create_deck():
         p_lbl.font.color.rgb = COLOR_TEXT_MUTED
 
     # Corridor Illustration Graphic (Bottom)
-    add_card(s1, 0.8, 5.0, 11.73, 1.8, COLOR_CYAN, COLOR_CARD)
+    add_card(s1, 0.8, 5.0, 11.73, 1.8, COLOR_BORDER, COLOR_CARD)
     tb_ill = s1.shapes.add_textbox(Inches(1.0), Inches(5.15), Inches(11.33), Inches(1.5))
     tf_i = tb_ill.text_frame
     tf_i.word_wrap = True
@@ -137,7 +145,7 @@ def create_deck():
     p_i.text = "🚆 HIGH-SPEED CORRIDOR INFOGRAPHIC MONITOR"
     p_i.font.size = Pt(12)
     p_i.font.bold = True
-    p_i.font.color.rgb = COLOR_CYAN
+    p_i.font.color.rgb = COLOR_ACCENT
 
     points_ill = [
         "• Western Corridor Topology: Mumbai - Vadodara - Ahmedabad (500 km Dynamic Track Graph)",
@@ -148,7 +156,7 @@ def create_deck():
         p = tf_i.add_paragraph()
         p.text = pt
         p.font.size = Pt(11)
-        p.font.color.rgb = COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # =========================================================================
     # SLIDE 2: CASCADING DISRUPTION VS NEXUS RECOVERY FLOWCHARTS
@@ -186,7 +194,7 @@ def create_deck():
         p.text = st
         p.font.size = Pt(10 if st == "↓" else 11)
         p.font.bold = True if st != "↓" else False
-        p.font.color.rgb = COLOR_AMBER if st == "↓" else COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_MUTED if st == "↓" else COLOR_TEXT_PRIMARY
 
     # Right Flowchart Card: NEXUS Recovery
     add_card(s2, 6.9, 1.6, 5.6, 5.3, COLOR_GREEN, COLOR_CARD)
@@ -217,7 +225,7 @@ def create_deck():
         p.text = st
         p.font.size = Pt(10 if st == "↓" else 11)
         p.font.bold = True if st != "↓" else False
-        p.font.color.rgb = COLOR_CYAN if st == "↓" else COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_ACCENT if st == "↓" else COLOR_TEXT_PRIMARY
 
     # =========================================================================
     # SLIDE 3: FULL SYSTEM ARCHITECTURE DIAGRAM
@@ -227,18 +235,18 @@ def create_deck():
     add_header(s3, "End-to-End NEXUS AI Closed-Loop Architecture", "System Design")
 
     layers = [
-        ("1. Human Cockpit UI", "React + MapLibre GL + Attention Hub", COLOR_CYAN),
-        ("2. FastAPI Gateway", "Async REST Endpoints & Streaming telemetry", COLOR_BLUE),
+        ("1. Human Cockpit UI", "React + MapLibre GL + Attention Hub", COLOR_BLUE),
+        ("2. FastAPI Gateway", "Async REST Endpoints & Streaming telemetry", COLOR_ACCENT),
         ("3. Digital Twin", "SimPy + NetworkX Physics Simulator", COLOR_PURPLE),
         ("4. Neural Core", "Spatiotemporal Transformer (1.45M / 318M)", COLOR_GREEN),
-        ("5. Safety & VCG", "Deterministic Guardrails & VCG Token Auction", COLOR_AMBER),
+        ("5. Safety & VCG", "Deterministic Guardrails & VCG Token Auction", COLOR_ACCENT),
         ("6. Memory & Audit", "SQLite Recovery Memory & Replay Logger", COLOR_RED)
     ]
 
     for i, (name, desc, col) in enumerate(layers):
         left_pos = 0.8 + (i % 3) * 3.95
         top_pos = 1.8 + (i // 3) * 2.6
-        add_card(s3, left_pos, top_pos, 3.7, 2.3, col, COLOR_CARD)
+        add_card(s3, left_pos, top_pos, 3.7, 2.3, COLOR_BORDER, COLOR_CARD)
         
         tb = s3.shapes.add_textbox(Inches(left_pos + 0.15), Inches(top_pos + 0.15), Inches(3.4), Inches(2.0))
         tf = tb.text_frame
@@ -253,16 +261,16 @@ def create_deck():
         p1 = tf.add_paragraph()
         p1.text = f"\n{desc}"
         p1.font.size = Pt(11)
-        p1.font.color.rgb = COLOR_TEXT_WHITE
+        p1.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # Loop Banner (Bottom)
-    add_card(s3, 0.8, 6.1, 11.73, 0.8, COLOR_CYAN, COLOR_CARD_ALT)
+    add_card(s3, 0.8, 6.1, 11.73, 0.8, COLOR_BORDER, COLOR_CARD_ALT)
     tb_loop = s3.shapes.add_textbox(Inches(1.0), Inches(6.2), Inches(11.33), Inches(0.6))
     p = tb_loop.text_frame.paragraphs[0]
     p.text = "🔄 CLOSED-LOOP DATA FLOW: Human → Cockpit UI → FastAPI → Digital Twin → Neural Model → Safety Verification → Execution"
     p.font.size = Pt(11)
     p.font.bold = True
-    p.font.color.rgb = COLOR_CYAN
+    p.font.color.rgb = COLOR_ACCENT
 
     # =========================================================================
     # SLIDE 4: COUNTERFACTUAL SIMULATION & POLICY MATRIX TABLE
@@ -272,7 +280,7 @@ def create_deck():
     add_header(s4, "Counterfactual Simulation & Candidate Policy Matrix", "Decision Engine")
 
     # Left Flowchart
-    add_card(s4, 0.8, 1.6, 4.0, 5.3, COLOR_PURPLE, COLOR_CARD)
+    add_card(s4, 0.8, 1.6, 4.0, 5.3, COLOR_BORDER, COLOR_CARD)
     tb_cf = s4.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(3.6), Inches(4.9))
     tf_cf = tb_cf.text_frame
     tf_cf.word_wrap = True
@@ -298,10 +306,10 @@ def create_deck():
         p.text = st
         p.font.size = Pt(10 if st == "↓" else 11)
         p.font.bold = True if st != "↓" else False
-        p.font.color.rgb = COLOR_CYAN if st == "↓" else COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_ACCENT if st == "↓" else COLOR_TEXT_PRIMARY
 
     # Right Candidate Policy Table
-    add_card(s4, 5.1, 1.6, 7.4, 5.3, COLOR_CYAN, COLOR_CARD)
+    add_card(s4, 5.1, 1.6, 7.4, 5.3, COLOR_BORDER, COLOR_CARD)
     tb_tbl = s4.shapes.add_textbox(Inches(5.3), Inches(1.8), Inches(7.0), Inches(4.9))
     tf_tbl = tb_tbl.text_frame
     tf_tbl.word_wrap = True
@@ -309,7 +317,7 @@ def create_deck():
     p.text = "📊 CANDIDATE RECOVERY POLICY COMPARISON MATRIX"
     p.font.size = Pt(13)
     p.font.bold = True
-    p.font.color.rgb = COLOR_CYAN
+    p.font.color.rgb = COLOR_ACCENT
 
     policies = [
         ("Policy A (Hold 4 min)", "-10.5 min (-35.0%)", "2 Conflicts", "LOW Risk", "🟢 RECOMMENDED"),
@@ -322,7 +330,7 @@ def create_deck():
         p = tf_tbl.add_paragraph()
         p.text = f"\n• {name}\n  Delay: {delay}  |  {conf}  |  {risk}  |  Status: {status}"
         p.font.size = Pt(11)
-        p.font.color.rgb = COLOR_GREEN if "RECOMMENDED" in status else (COLOR_RED if "REJECTED" in status else COLOR_TEXT_WHITE)
+        p.font.color.rgb = COLOR_GREEN if "RECOMMENDED" in status else (COLOR_RED if "REJECTED" in status else COLOR_TEXT_PRIMARY)
 
     # =========================================================================
     # SLIDE 5: VCG AUCTION & SAFETY INVARIANTS CARDS
@@ -332,7 +340,7 @@ def create_deck():
     add_header(s5, "Game-Theoretic VCG Auction & Formal Safety Invariants", "Safety & Allocation")
 
     # Left: VCG Auction Card
-    add_card(s5, 0.8, 1.6, 5.6, 5.3, COLOR_AMBER, COLOR_CARD)
+    add_card(s5, 0.8, 1.6, 5.6, 5.3, COLOR_BORDER, COLOR_CARD)
     tb_vcg = s5.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(5.2), Inches(4.9))
     tf_v = tb_vcg.text_frame
     tf_v.word_wrap = True
@@ -340,7 +348,7 @@ def create_deck():
     p.text = "⚖️ VICKREY-CLARKE-GROVES (VCG) AUCTION"
     p.font.size = Pt(14)
     p.font.bold = True
-    p.font.color.rgb = COLOR_AMBER
+    p.font.color.rgb = COLOR_ACCENT
 
     vcg_pts = [
         "• Token Bidding Formula: b_i = Priority_i * (Delay_i + 1.0)",
@@ -352,7 +360,7 @@ def create_deck():
         p = tf_v.add_paragraph()
         p.text = f"\n{pt}"
         p.font.size = Pt(11)
-        p.font.color.rgb = COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # Right: Formal Invariants Card
     add_card(s5, 6.9, 1.6, 5.6, 5.3, COLOR_GREEN, COLOR_CARD)
@@ -375,7 +383,7 @@ def create_deck():
         p = tf_inv.add_paragraph()
         p.text = f"\n{inv}"
         p.font.size = Pt(11)
-        p.font.color.rgb = COLOR_CYAN
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # =========================================================================
     # SLIDE 6: DISPATCHER COCKPIT MOCKUP, CRLI GAUGE & TRIAGE FUNNEL
@@ -385,7 +393,7 @@ def create_deck():
     add_header(s6, "Attention Management Hub: CRLI Meter & Alert Triage Funnel", "Human Factors")
 
     # Left: CRLI Meter Box
-    add_card(s6, 0.8, 1.6, 5.6, 5.3, COLOR_PURPLE, COLOR_CARD)
+    add_card(s6, 0.8, 1.6, 5.6, 5.3, COLOR_BORDER, COLOR_CARD)
     tb_crli = s6.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(5.2), Inches(4.9))
     tf_c = tb_crli.text_frame
     tf_c.word_wrap = True
@@ -408,10 +416,10 @@ def create_deck():
         p = tf_c.add_paragraph()
         p.text = info
         p.font.size = Pt(11)
-        p.font.color.rgb = COLOR_GREEN if "0 – 30" in info else (COLOR_AMBER if "35 – 74" in info else (COLOR_RED if "75 – 100" in info else COLOR_TEXT_WHITE))
+        p.font.color.rgb = COLOR_GREEN if "0 – 30" in info else (COLOR_ACCENT if "35 – 74" in info else (COLOR_RED if "75 – 100" in info else COLOR_TEXT_PRIMARY))
 
     # Right: 4-Tier Alert Funnel Box
-    add_card(s6, 6.9, 1.6, 5.6, 5.3, COLOR_CYAN, COLOR_CARD)
+    add_card(s6, 6.9, 1.6, 5.6, 5.3, COLOR_BORDER, COLOR_CARD)
     tb_fn = s6.shapes.add_textbox(Inches(7.1), Inches(1.8), Inches(5.2), Inches(4.9))
     tf_fn = tb_fn.text_frame
     tf_fn.word_wrap = True
@@ -419,7 +427,7 @@ def create_deck():
     p.text = "🔻 ALERT PRIORITY TRIAGE FUNNEL"
     p.font.size = Pt(14)
     p.font.bold = True
-    p.font.color.rgb = COLOR_CYAN
+    p.font.color.rgb = COLOR_ACCENT
 
     funnel_steps = [
         "🟢 QUIET (Conf ≥ 85%, 0 Hazards) → Background Auto-Execute",
@@ -434,7 +442,7 @@ def create_deck():
         p = tf_fn.add_paragraph()
         p.text = f"\n{st}"
         p.font.size = Pt(11)
-        p.font.color.rgb = COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # =========================================================================
     # SLIDE 7: REAL BENCHMARK CHARTS & SEVERITY LADDER
@@ -451,7 +459,6 @@ def create_deck():
     x, y, cx, cy = Inches(0.8), Inches(1.6), Inches(5.6), Inches(2.6)
     chart1 = s7.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, x, y, cx, cy, cd1).chart
     chart1.has_legend = False
-    chart1.value_axis.has_major_gridlines = True
 
     # Native Bar Chart 2: Latency Distribution (p50, p95, p99)
     cd2 = CategoryChartData()
@@ -463,7 +470,7 @@ def create_deck():
     chart2.has_legend = False
 
     # Severity Level Ladder Box (Bottom)
-    add_card(s7, 0.8, 4.5, 11.73, 2.4, COLOR_CYAN, COLOR_CARD)
+    add_card(s7, 0.8, 4.5, 11.73, 2.4, COLOR_BORDER, COLOR_CARD)
     tb_lad = s7.shapes.add_textbox(Inches(1.0), Inches(4.65), Inches(11.33), Inches(2.1))
     tf_l = tb_lad.text_frame
     tf_l.word_wrap = True
@@ -471,7 +478,7 @@ def create_deck():
     p.text = "🪜 NEXUS-RAILBENCH 5-LEVEL SEVERITY LADDER"
     p.font.size = Pt(13)
     p.font.bold = True
-    p.font.color.rgb = COLOR_CYAN
+    p.font.color.rgb = COLOR_ACCENT
 
     ladder = [
         "Level 1 (Minor Delay - 4 min)  ➔  Level 2 (Moderate Rain - 12 min)  ➔  Level 3 (Heavy Rain - 25 min)",
@@ -481,7 +488,7 @@ def create_deck():
         p = tf_l.add_paragraph()
         p.text = f"\n{row}"
         p.font.size = Pt(11)
-        p.font.color.rgb = COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # =========================================================================
     # SLIDE 8: 3 VISUAL SECTIONS (REPLAY, SAFETY DONUT, DISTILLATION)
@@ -491,7 +498,7 @@ def create_deck():
     add_header(s8, "Historical Replay, Safety Verification & Distillation Study", "Empirical Proof")
 
     # Section A: Historical Replay Card
-    add_card(s8, 0.8, 1.6, 3.7, 5.3, COLOR_AMBER, COLOR_CARD)
+    add_card(s8, 0.8, 1.6, 3.7, 5.3, COLOR_BORDER, COLOR_CARD)
     tb_sa = s8.shapes.add_textbox(Inches(0.95), Inches(1.8), Inches(3.4), Inches(4.9))
     tf_sa = tb_sa.text_frame
     tf_sa.word_wrap = True
@@ -499,7 +506,7 @@ def create_deck():
     p.text = "📜 SECTION A: HISTORICAL REPLAY"
     p.font.size = Pt(12)
     p.font.bold = True
-    p.font.color.rgb = COLOR_AMBER
+    p.font.color.rgb = COLOR_ACCENT
 
     pts_sa = [
         "• Incidents Replayed: 3 Major Indian Railways Disruption Events",
@@ -512,7 +519,7 @@ def create_deck():
         p = tf_sa.add_paragraph()
         p.text = f"\n{pt}"
         p.font.size = Pt(10)
-        p.font.color.rgb = COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # Section B: Property Safety Donut Chart Card
     add_card(s8, 4.8, 1.6, 3.7, 5.3, COLOR_GREEN, COLOR_CARD)
@@ -536,7 +543,7 @@ def create_deck():
     chart_d.legend.position = XL_LEGEND_POSITION.BOTTOM
 
     # Section C: Knowledge Distillation Card
-    add_card(s8, 8.8, 1.6, 3.7, 5.3, COLOR_PURPLE, COLOR_CARD)
+    add_card(s8, 8.8, 1.6, 3.7, 5.3, COLOR_BORDER, COLOR_CARD)
     tb_sc = s8.shapes.add_textbox(Inches(8.95), Inches(1.8), Inches(3.4), Inches(4.9))
     tf_sc = tb_sc.text_frame
     tf_sc.word_wrap = True
@@ -557,7 +564,7 @@ def create_deck():
         p = tf_sc.add_paragraph()
         p.text = f"\n{pt}"
         p.font.size = Pt(10)
-        p.font.color.rgb = COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # =========================================================================
     # SLIDE 9: KPI DASHBOARD & END-TO-END LATENCY WATERFALL CHART
@@ -568,11 +575,11 @@ def create_deck():
 
     # 8 Large KPI Cards (2x4 Grid on Left)
     kpi_cards = [
-        ("318M", "Heavy Model Params", COLOR_CYAN),
+        ("318M", "Heavy Model Params", COLOR_ACCENT),
         ("1.45M", "Edge Model Params", COLOR_GREEN),
         ("5.6 MB", "Edge Checkpoint", COLOR_PURPLE),
-        ("2.10 ms", "Sub-3ms p50 Speed", COLOR_AMBER),
-        ("3.297 ms", "End-to-End Latency", COLOR_CYAN),
+        ("2.10 ms", "Sub-3ms p50 Speed", COLOR_BLUE),
+        ("3.297 ms", "End-to-End Latency", COLOR_ACCENT),
         ("7.937 ms", "p95 Tail Latency", COLOR_BLUE),
         ("33.5%", "Delay Reduction", COLOR_GREEN),
         ("0 Violations", "Formal Invariants", COLOR_RED)
@@ -581,7 +588,7 @@ def create_deck():
     for i, (val, label, col) in enumerate(kpi_cards):
         left_pos = 0.8 + (i % 4) * 1.4
         top_pos = 1.6 + (i // 4) * 1.3
-        add_card(s9, left_pos, top_pos, 1.3, 1.15, col, COLOR_CARD)
+        add_card(s9, left_pos, top_pos, 1.3, 1.15, COLOR_BORDER, COLOR_CARD)
         tb_k = s9.shapes.add_textbox(Inches(left_pos + 0.05), Inches(top_pos + 0.1), Inches(1.2), Inches(0.95))
         tf_k = tb_k.text_frame
         p_v = tf_k.paragraphs[0]
@@ -612,7 +619,7 @@ def create_deck():
     add_header(s10, "Innovation Matrix, Future Roadmap & 7-Step Vision Chain", "Future Vision")
 
     # 2x4 Innovation Matrix Card
-    add_card(s10, 0.8, 1.6, 5.6, 2.5, COLOR_CYAN, COLOR_CARD)
+    add_card(s10, 0.8, 1.6, 5.6, 2.5, COLOR_BORDER, COLOR_CARD)
     tb_im = s10.shapes.add_textbox(Inches(1.0), Inches(1.7), Inches(5.2), Inches(2.3))
     tf_im = tb_im.text_frame
     tf_im.word_wrap = True
@@ -620,7 +627,7 @@ def create_deck():
     p.text = "⚡ 2x4 INNOVATION MATRIX"
     p.font.size = Pt(12)
     p.font.bold = True
-    p.font.color.rgb = COLOR_CYAN
+    p.font.color.rgb = COLOR_ACCENT
 
     inn_pts = [
         "1. Spatiotemporal GAT  |  2. TorchScript JIT  |  3. VCG Token Auction  |  4. CRLI Load Index",
@@ -630,7 +637,7 @@ def create_deck():
         p = tf_im.add_paragraph()
         p.text = f"\n{pt}"
         p.font.size = Pt(9)
-        p.font.color.rgb = COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # Future Roadmap Flowchart Card
     add_card(s10, 6.9, 1.6, 5.6, 2.5, COLOR_GREEN, COLOR_CARD)
@@ -652,10 +659,10 @@ def create_deck():
         p = tf_rm.add_paragraph()
         p.text = f"\n{pt}"
         p.font.size = Pt(9)
-        p.font.color.rgb = COLOR_TEXT_WHITE
+        p.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # Final 7-Step Vision Chain (Bottom)
-    add_card(s10, 0.8, 4.3, 11.73, 2.6, COLOR_PURPLE, COLOR_CARD_ALT)
+    add_card(s10, 0.8, 4.3, 11.73, 2.6, COLOR_BORDER, COLOR_CARD_ALT)
     tb_v = s10.shapes.add_textbox(Inches(1.0), Inches(4.45), Inches(11.33), Inches(2.3))
     tf_v = tb_v.text_frame
     tf_v.word_wrap = True
@@ -676,7 +683,7 @@ def create_deck():
         p.text = st
         p.font.size = Pt(12 if "PREDICT" in st else (14 if "TEAM POLARIS" in st else 10))
         p.font.bold = True
-        p.font.color.rgb = COLOR_GREEN if "PREDICT" in st else (COLOR_CYAN if "TEAM POLARIS" in st else COLOR_TEXT_MUTED)
+        p.font.color.rgb = COLOR_GREEN if "PREDICT" in st else (COLOR_ACCENT if "TEAM POLARIS" in st else COLOR_TEXT_MUTED)
 
     # SAVE TO PERMISSION SAFE PATHS
     paths = [
@@ -688,7 +695,7 @@ def create_deck():
     for pth in paths:
         try:
             prs.save(pth)
-            print(f"Ultimate Visual PPT Deck saved to: {pth}")
+            print(f"Pure White Research Deck saved to: {pth}")
         except PermissionError:
             print(f"Skipped open file: {pth}")
         except Exception as e:
