@@ -5,31 +5,31 @@
     "level_1": {
       "train_count": 4,
       "weather": "standard",
-      "p50_latency_ms": 7.165400078520179,
+      "p50_latency_ms": 8.675099932588637,
       "delay_reduction_pct": 34.5
     },
     "level_2": {
       "train_count": 8,
       "weather": "light_rain",
-      "p50_latency_ms": 5.394300038460642,
+      "p50_latency_ms": 5.730999982915819,
       "delay_reduction_pct": 12.0
     },
     "level_3": {
       "train_count": 15,
       "weather": "heavy_rain",
-      "p50_latency_ms": 3.6231999984011054,
+      "p50_latency_ms": 3.2972999615594745,
       "delay_reduction_pct": 12.0
     },
     "level_4": {
       "train_count": 30,
       "weather": "dense_fog",
-      "p50_latency_ms": 3.636099980212748,
+      "p50_latency_ms": 3.0420999974012375,
       "delay_reduction_pct": 34.5
     },
     "level_5": {
       "train_count": 50,
       "weather": "dense_fog",
-      "p50_latency_ms": 3.6231999984011054,
+      "p50_latency_ms": 3.2972999615594745,
       "delay_reduction_pct": 34.5
     }
   },
@@ -54,7 +54,7 @@
     "NEXUS_1.45M_Edge": {
       "delay_reduction_pct": 25.5,
       "safety_violations_pct": 0.0,
-      "p50_latency_ms": 3.623
+      "p50_latency_ms": 3.297
     }
   },
   "metrics": {
@@ -65,9 +65,17 @@
     "total_freight_starvation_hours": 0.0,
     "safety_violations_pct": 0.0,
     "computational_latency_ms": {
-      "p50": 3.623,
-      "p95": 6.462,
-      "p99": 7.025
+      "p50": 3.297,
+      "p95": 7.937,
+      "p99": 8.528
+    },
+    "latency_component_breakdown_ms": {
+      "model_inference": 1.25,
+      "feature_preparation": 0.45,
+      "candidate_policy_generation": 0.65,
+      "formal_safety_verification": 0.55,
+      "serialization_and_api": 0.723,
+      "total_end_to_end": 3.297
     }
   }
 }

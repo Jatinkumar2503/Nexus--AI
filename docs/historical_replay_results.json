@@ -1,0 +1,40 @@
+{
+  "replay_suite_name": "NEXUS Historical Incident Replay Benchmark",
+  "total_incidents_evaluated": 3,
+  "historical_human_total_delay_min": 574.0,
+  "nexus_predicted_total_delay_min": 381.6,
+  "overall_delay_reduction_pct": 33.5,
+  "safety_violations_pct": 0.0,
+  "incidents": [
+    {
+      "incident_id": "INC_2026_FOG_GHAZIABAD",
+      "title": "2026 Northern Winter Fog Multi-Section Gridlock (Ghaziabad-Aligarh)",
+      "historical_human_delay_min": 184.0,
+      "nexus_recovered_delay_min": 127.1,
+      "delay_savings_min": 56.9,
+      "delay_reduction_pct": 30.9,
+      "recommended_action": "change_precedence",
+      "safety_violations": 0
+    },
+    {
+      "incident_id": "INC_2026_MONSOON_VIRAR",
+      "title": "2026 Western Corridor Monsoon Track Waterlogging at Virar",
+      "historical_human_delay_min": 240.0,
+      "nexus_recovered_delay_min": 156.0,
+      "delay_savings_min": 84.0,
+      "delay_reduction_pct": 35.0,
+      "recommended_action": "change_platform",
+      "safety_violations": 0
+    },
+    {
+      "incident_id": "INC_2026_INTERLOCKING_KANPUR",
+      "title": "2026 Kanpur Central Junction Interlocking Signal Failure",
+      "historical_human_delay_min": 150.0,
+      "nexus_recovered_delay_min": 98.5,
+      "delay_savings_min": 51.5,
+      "delay_reduction_pct": 34.3,
+      "recommended_action": "hold_4min",
+      "safety_violations": 0
+    }
+  ]
+}

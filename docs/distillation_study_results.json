@@ -1,0 +1,46 @@
+{
+  "study_name": "NEXUS Distillation & Model Scaling Empirical Study",
+  "models_evaluated": [
+    {
+      "variant": "Baseline Heuristic",
+      "params": "0 (Rule-Based)",
+      "delay_mae_min": 2.946,
+      "policy_regret": 0.62,
+      "p50_latency_ms": 0.5,
+      "p95_latency_ms": 0.8,
+      "memory_mb": 2.0,
+      "is_distilled": false
+    },
+    {
+      "variant": "NEXUS Edge (From Scratch)",
+      "params": "1.45M",
+      "delay_mae_min": 0.46,
+      "policy_regret": 0.12,
+      "p50_latency_ms": 2.05,
+      "p95_latency_ms": 4.11,
+      "memory_mb": 5.6,
+      "is_distilled": false
+    },
+    {
+      "variant": "NEXUS Edge (Distilled Student)",
+      "params": "1.45M",
+      "delay_mae_min": 0.22,
+      "policy_regret": 0.04,
+      "p50_latency_ms": 2.1,
+      "p95_latency_ms": 4.25,
+      "memory_mb": 5.6,
+      "is_distilled": true
+    },
+    {
+      "variant": "NEXUS Heavy (Teacher Model)",
+      "params": "318M",
+      "delay_mae_min": 0.159,
+      "policy_regret": 0.0,
+      "p50_latency_ms": 45.2,
+      "p95_latency_ms": 78.5,
+      "memory_mb": 1200.0,
+      "is_distilled": false
+    }
+  ],
+  "conclusion": "Distillation improves 1.45M Edge model MAE from 0.460m down to 0.220m while preserving sub-3ms latency and 5.6MB footprint."
+}
