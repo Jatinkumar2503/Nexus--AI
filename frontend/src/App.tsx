@@ -30,6 +30,8 @@ import './App.css';
 
 import { NexusNeuralPanel } from './components/NexusNeuralPanel';
 import { LiveTrainingMonitor } from './components/LiveTrainingMonitor';
+import { AttentionManagementHub } from './components/AttentionManagementHub';
+
 
 const RailMap = lazy(() => import('./components/RailMap').then(({ RailMap: Component }) => ({ default: Component })));
 
@@ -105,7 +107,8 @@ function App() {
   const [showInjectModal, setShowInjectModal] = useState<boolean>(false);
 
   // UI Tabs for Sidebar
-  const [activeTab, setActiveTab] = useState<"trains" | "stations" | "logs" | "ai_dispatch" | "live_training">("live_training");
+  const [activeTab, setActiveTab] = useState<"trains" | "stations" | "logs" | "ai_dispatch" | "live_training" | "attention_hub">("attention_hub");
+
   const [selectedTrainId, setSelectedTrainId] = useState<string | null>(null);
 
   // Adaptive UI state
@@ -664,6 +667,14 @@ function App() {
           {/* Sidebar Tabs Controls */}
           <div className="flex border-b border-border/40 text-[11px] overflow-x-auto">
             <button 
+              onClick={() => { audioService.playClick(); setActiveTab("attention_hub"); }}
+              className={`flex-1 min-w-[95px] py-3 text-center font-bold border-b-2 transition-all ${
+                activeTab === "attention_hub" ? "border-purple-400 text-purple-300 bg-purple-500/10 shadow-sm" : "border-transparent text-zinc-500 hover:text-zinc-300"
+              }`}
+            >
+              🧠 Attention Hub
+            </button>
+            <button 
               onClick={() => { audioService.playClick(); setActiveTab("live_training"); }}
               className={`flex-1 min-w-[90px] py-3 text-center font-bold border-b-2 transition-all ${
                 activeTab === "live_training" ? "border-emerald-400 text-emerald-300 bg-emerald-500/10 shadow-sm" : "border-transparent text-zinc-500 hover:text-zinc-300"
@@ -707,6 +718,12 @@ function App() {
 
           {/* Tab Content Panel */}
           <div className="flex-1 overflow-y-auto p-4">
+            
+            {/* Tab: Attention & Default Behavior Hub */}
+            {activeTab === "attention_hub" && (
+              <AttentionManagementHub />
+            )}
+
             
             {/* Tab 1: Live Train Fleet */}
             {activeTab === "trains" && (

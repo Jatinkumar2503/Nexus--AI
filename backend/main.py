@@ -736,6 +736,54 @@ async def pause_live_training():
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
 
+# =============================================================================
+# ATTENTION MANAGEMENT & CONTEXT DEFAULT BEHAVIOR ENDPOINTS
+# =============================================================================
+@app.get("/api/nexus/attention/context-defaults")
+async def get_attention_context():
+    """Retrieve Cognitive Review Load Index (CRLI), active focus status, and sensible defaults."""
+    try:
+        from services.attention_engine import attention_engine
+        disruption_count = len(engine.disruptions)
+        pending_queue_count = len(engine.active_recovery_plans) if hasattr(engine, "active_recovery_plans") else 2
+        active_trains = len(engine.trains) if hasattr(engine, "trains") else 12
+
+        crli = attention_engine.calculate_crli(disruption_count, pending_queue_count, active_trains)
+        sample_context = attention_engine.derive_context_defaults({"current_delay_min": 12.0, "weather": "standard", "train_priority": 4.0})
+
+        return {
+            "status": "SUCCESS",
+            "crli": crli,
+            "sample_defaults": sample_context,
+            "editable_settings": attention_engine.settings
+        }
+    except Exception as e:
+        logger.error(f"Get attention context error: {e}")
+        return JSONResponse(status_code=500, content={"detail": str(e)})
+
+@app.post("/api/nexus/attention/settings")
+async def update_attention_settings(payload: Dict[str, Any]):
+    """Update editable attention management thresholds (auto-approval %, sensitivity, batch size)."""
+    try:
+        from services.attention_engine import attention_engine
+        res = attention_engine.update_settings(payload)
+        return res
+    except Exception as e:
+        logger.error(f"Update attention settings error: {e}")
+        return JSONResponse(status_code=500, content={"detail": str(e)})
+
+@app.post("/api/nexus/attention/derive-defaults")
+async def derive_sensible_defaults(payload: Dict[str, Any]):
+    """Derive context-aware default parameters for a specific operational state."""
+    try:
+        from services.attention_engine import attention_engine
+        res = attention_engine.derive_context_defaults(payload)
+        return res
+    except Exception as e:
+        logger.error(f"Derive defaults error: {e}")
+        return JSONResponse(status_code=500, content={"detail": str(e)})
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+
