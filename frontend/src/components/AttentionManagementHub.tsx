@@ -176,115 +176,111 @@ export const AttentionManagementHub: React.FC = () => {
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6">
+    <div className="bg-slate-900 border border-slate-800 rounded-xl p-3.5 shadow-2xl space-y-4 w-full overflow-x-hidden">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
-        <div>
-          <div className="flex items-center space-x-3">
-            <div className="p-2.5 bg-purple-500/10 border border-purple-500/30 rounded-xl text-purple-400">
-              <Brain className="w-6 h-6 animate-pulse" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                Attention & Focus Management Hub
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-950 border border-purple-500/40 text-purple-300 font-mono">
-                  Default Behavior Engine
-                </span>
-              </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Focus Control • Cognitive Review Load Meter (CRLI) • Context Pre-fill Engine • 100% Editable Controls
-              </p>
-            </div>
+      <div className="flex flex-col space-y-3 pb-3 border-b border-slate-800">
+        <div className="flex items-center space-x-2.5">
+          <div className="p-2 bg-purple-500/10 border border-purple-500/30 rounded-lg text-purple-400 shrink-0">
+            <Brain className="w-5 h-5 animate-pulse" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-slate-100 leading-tight">
+              Attention & Focus Manager
+            </h2>
+            <p className="text-[10px] text-slate-400 mt-0.5">
+              Cognitive Review Load Meter • Context Defaults
+            </p>
           </div>
         </div>
 
         {/* Cognitive Review Load Index (CRLI) Meter */}
-        <div className={`px-4 py-3 rounded-xl border flex items-center space-x-4 ${getLoadColor(crli.load_state)}`}>
-          <div className="text-right">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400">Review Load Index (CRLI)</div>
-            <div className="text-2xl font-black font-mono tracking-tight">{crli.crli_score} / 100</div>
+        <div className={`p-2.5 rounded-lg border flex items-center justify-between ${getLoadColor(crli.load_state)}`}>
+          <div>
+            <div className="text-[9px] font-mono uppercase tracking-wider text-slate-400">Review Load (CRLI)</div>
+            <div className="text-lg font-black font-mono tracking-tight">{crli.crli_score} / 100</div>
           </div>
-          <div className="h-10 w-px bg-slate-700/50" />
-          <div className="text-xs font-bold px-3 py-1 rounded-lg uppercase tracking-wider bg-slate-900/60 border border-slate-700">
-            {crli.load_state} STATE
+          <div className="text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-slate-900/80 border border-slate-700">
+            {crli.load_state}
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex space-x-2 border-b border-slate-800 pb-2 overflow-x-auto">
+      <div className="flex space-x-1 border-b border-slate-800 pb-1.5 overflow-x-auto text-[11px]">
         <button
           onClick={() => setActiveTab("defaults")}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
+          className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-lg font-semibold transition shrink-0 ${
             activeTab === "defaults"
               ? "bg-purple-500/20 text-purple-300 border border-purple-500/40"
               : "text-slate-400 hover:bg-slate-800"
           }`}
         >
-          <Sparkles className="w-4 h-4" />
-          <span>Context Pre-fills & Rationale</span>
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Pre-fills</span>
         </button>
 
         <button
           onClick={() => setActiveTab("triage")}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
+          className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-lg font-semibold transition shrink-0 ${
             activeTab === "triage"
               ? "bg-purple-500/20 text-purple-300 border border-purple-500/40"
               : "text-slate-400 hover:bg-slate-800"
           }`}
         >
-          <Bell className="w-4 h-4" />
-          <span>Interruption Triage Streams</span>
+          <Bell className="w-3.5 h-3.5" />
+          <span>Triage</span>
         </button>
 
         <button
           onClick={() => setActiveTab("learning")}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
+          className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-lg font-semibold transition shrink-0 ${
             activeTab === "learning"
               ? "bg-purple-500/20 text-purple-300 border border-purple-500/40"
               : "text-slate-400 hover:bg-slate-800"
           }`}
         >
-          <TrendingUp className="w-4 h-4" />
-          <span>Dispatcher Learning & Memory</span>
+          <TrendingUp className="w-3.5 h-3.5" />
+          <span>Memory</span>
         </button>
 
         <button
           onClick={() => setActiveTab("settings")}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
+          className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-lg font-semibold transition shrink-0 ${
             activeTab === "settings"
               ? "bg-purple-500/20 text-purple-300 border border-purple-500/40"
               : "text-slate-400 hover:bg-slate-800"
           }`}
         >
-          <Sliders className="w-4 h-4" />
-          <span>Editable Control Thresholds</span>
+          <Sliders className="w-3.5 h-3.5" />
+          <span>Controls</span>
         </button>
       </div>
 
       {/* TAB 1: CONTEXT PRE-FILLS & RATIONALE SIMULATOR */}
       {activeTab === "defaults" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="flex flex-col space-y-4">
           {/* Interactive Context Input & Sensible Defaults Panel */}
-          <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                <Edit3 className="w-4 h-4 text-purple-400" />
-                Pre-filled Recovery Defaults (Editable)
-              </h3>
-              <span className="text-[10px] font-mono px-2 py-0.5 bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 rounded">
+          <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 space-y-3">
+            <div className="flex flex-col space-y-1 border-b border-slate-800 pb-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                  <Edit3 className="w-3.5 h-3.5 text-purple-400" />
+                  Action Defaults (Editable)
+                </h3>
+              </div>
+              <span className="text-[9px] font-mono px-2 py-0.5 bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 rounded w-max">
                 🟢 CONTEXT PRE-FILL ACTIVE
               </span>
             </div>
 
             {/* Live Context Controls */}
-            <div className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 space-y-3">
-              <div className="text-[11px] font-bold text-purple-300 uppercase tracking-wider">
-                Simulate Operational Context Input
+            <div className="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800 space-y-2">
+              <div className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
+                Context Simulator Input
               </div>
-              <div className="grid grid-cols-3 gap-3 text-xs">
-                <div>
-                  <label className="block text-slate-400 mb-1">Delay (Min)</label>
+              <div className="flex flex-col space-y-2 text-[11px]">
+                <div className="flex items-center justify-between">
+                  <label className="text-slate-400">Delay (Min)</label>
                   <input
                     type="number"
                     value={simDelay}
@@ -293,11 +289,11 @@ export const AttentionManagementHub: React.FC = () => {
                       setSimDelay(v);
                       handleDeriveSimulatedDefaults(v, simWeather, simPriority);
                     }}
-                    className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-cyan-300 font-mono"
+                    className="w-20 bg-slate-950 border border-slate-700 rounded px-2 py-1 text-cyan-300 font-mono text-xs text-right"
                   />
                 </div>
-                <div>
-                  <label className="block text-slate-400 mb-1">Priority</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-slate-400">Priority</label>
                   <select
                     value={simPriority}
                     onChange={(e) => {
@@ -305,7 +301,7 @@ export const AttentionManagementHub: React.FC = () => {
                       setSimPriority(p);
                       handleDeriveSimulatedDefaults(simDelay, simWeather, p);
                     }}
-                    className="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-slate-200"
+                    className="w-28 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-slate-200 text-xs"
                   >
                     <option value={5}>5 (High Express)</option>
                     <option value={4}>4 (Express)</option>
@@ -313,8 +309,8 @@ export const AttentionManagementHub: React.FC = () => {
                     <option value={2}>2 (Freight)</option>
                   </select>
                 </div>
-                <div>
-                  <label className="block text-slate-400 mb-1">Weather</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-slate-400">Weather</label>
                   <select
                     value={simWeather}
                     onChange={(e) => {
@@ -322,7 +318,7 @@ export const AttentionManagementHub: React.FC = () => {
                       setSimWeather(w);
                       handleDeriveSimulatedDefaults(simDelay, w, simPriority);
                     }}
-                    className="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-slate-200"
+                    className="w-28 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-slate-200 text-xs"
                   >
                     <option value="standard">Standard</option>
                     <option value="dense_fog">Dense Fog</option>
@@ -333,7 +329,7 @@ export const AttentionManagementHub: React.FC = () => {
             </div>
 
             {/* Derived Defaults Form */}
-            <div className="space-y-3.5 text-xs">
+            <div className="space-y-2.5 text-[11px]">
               <div>
                 <label className="block text-slate-400 mb-1 font-medium">Hold Duration (Minutes)</label>
                 <input
@@ -345,12 +341,12 @@ export const AttentionManagementHub: React.FC = () => {
                       defaults: { ...defaults.defaults, hold_duration_min: Number(e.target.value) }
                     })
                   }
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-purple-300 font-mono text-sm focus:border-purple-500 outline-none"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-purple-300 font-mono text-xs focus:border-purple-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1 font-medium font-sans">Recommended Platform Assignment</label>
+                <label className="block text-slate-400 mb-1 font-medium">Recommended Platform</label>
                 <input
                   type="text"
                   value={defaults.defaults.recommended_platform}
@@ -360,12 +356,12 @@ export const AttentionManagementHub: React.FC = () => {
                       defaults: { ...defaults.defaults, recommended_platform: e.target.value }
                     })
                   }
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 text-xs focus:border-purple-500 outline-none font-mono"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 text-xs focus:border-purple-500 outline-none font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1 font-medium">Detour Path Strategy</label>
+                <label className="block text-slate-400 mb-1 font-medium">Detour Strategy</label>
                 <select
                   value={defaults.defaults.detour_route}
                   onChange={(e) =>
@@ -374,10 +370,10 @@ export const AttentionManagementHub: React.FC = () => {
                       defaults: { ...defaults.defaults, detour_route: e.target.value }
                     })
                   }
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 text-xs focus:border-purple-500 outline-none"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-slate-200 text-xs focus:border-purple-500 outline-none"
                 >
-                  <option value="MAIN_CORRIDOR">Main Corridor (Standard)</option>
-                  <option value="FAST_LINE_BYPASS">Fast-Line Bypass Detour</option>
+                  <option value="MAIN_CORRIDOR">Main Corridor</option>
+                  <option value="FAST_LINE_BYPASS">Fast-Line Bypass</option>
                   <option value="SLOW_LINE_CROSSOVER">Slow-Line Crossover</option>
                 </select>
               </div>
@@ -385,32 +381,32 @@ export const AttentionManagementHub: React.FC = () => {
           </div>
 
           {/* Context Rationale Explanation Box */}
-          <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 space-y-4">
-            <div className="border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                Context Derivation Rationale
+          <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 space-y-3">
+            <div className="border-b border-slate-800 pb-2">
+              <h3 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                Derivation Rationale
               </h3>
-              <p className="text-[11px] text-slate-400 mt-0.5">Transparent explanation of why these parameters were pre-filled</p>
+              <p className="text-[10px] text-slate-400 mt-0.5">Why parameters were pre-filled</p>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {defaults.rationale.map((item, idx) => (
-                <div key={idx} className="flex items-start space-x-2.5 bg-slate-900/80 p-2.5 rounded-lg border border-slate-800/80">
-                  <ChevronRight className="w-4 h-4 text-purple-400 mt-0.5 shrink-0" />
-                  <span className="text-xs text-slate-300 leading-relaxed">{item}</span>
+                <div key={idx} className="flex items-start space-x-2 bg-slate-900/80 p-2 rounded-lg border border-slate-800/80 text-[11px]">
+                  <ChevronRight className="w-3.5 h-3.5 text-purple-400 mt-0.5 shrink-0" />
+                  <span className="text-slate-300 leading-normal">{item}</span>
                 </div>
               ))}
             </div>
 
             {defaults.historical_learning && (
-              <div className="p-3 bg-purple-950/20 border border-purple-500/30 rounded-xl space-y-1">
-                <div className="flex items-center justify-between text-purple-300 font-bold text-xs">
-                  <span>Dispatcher Acceptance Confidence</span>
-                  <span className="font-mono text-emerald-400">{defaults.historical_learning.historical_acceptance_rate_pct}% Accepted</span>
+              <div className="p-2.5 bg-purple-950/20 border border-purple-500/30 rounded-lg space-y-1 text-[10px]">
+                <div className="flex items-center justify-between text-purple-300 font-bold">
+                  <span>Acceptance Confidence</span>
+                  <span className="font-mono text-emerald-400">{defaults.historical_learning.historical_acceptance_rate_pct}%</span>
                 </div>
-                <p className="text-[11px] text-slate-400">
-                  Based on {defaults.historical_learning.total_decisions_analyzed} historical human dispatcher recovery decisions.
+                <p className="text-slate-400">
+                  Based on {defaults.historical_learning.total_decisions_analyzed} historical dispatcher decisions.
                 </p>
               </div>
             )}
@@ -420,37 +416,37 @@ export const AttentionManagementHub: React.FC = () => {
 
       {/* TAB 2: INTERRUPTION TRIAGE */}
       {activeTab === "triage" && (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-emerald-950/20 border border-emerald-500/30 p-4 rounded-xl space-y-2">
-              <div className="flex items-center justify-between text-emerald-400 font-bold text-xs">
+        <div className="space-y-3">
+          <div className="flex flex-col space-y-3 text-xs">
+            <div className="bg-emerald-950/20 border border-emerald-500/30 p-3 rounded-lg space-y-1">
+              <div className="flex items-center justify-between text-emerald-400 font-bold">
                 <span>QUIET AUTO-EXECUTE</span>
-                <Zap className="w-4 h-4" />
+                <Zap className="w-3.5 h-3.5" />
               </div>
-              <p className="text-xs text-slate-300">Confidence &gt; {settings.auto_approve_confidence_threshold}% with 0 safety hazards</p>
-              <div className="text-[10px] text-emerald-400/80 pt-2 flex items-center gap-1">
-                <Check className="w-3 h-3" /> Runs in quiet background audit mode
+              <p className="text-[11px] text-slate-300">Confidence &gt; {settings.auto_approve_confidence_threshold}% with 0 hazards</p>
+              <div className="text-[9px] text-emerald-400/80 pt-1 flex items-center gap-1">
+                <Check className="w-3 h-3" /> Quiet background audit mode
               </div>
             </div>
 
-            <div className="bg-amber-950/20 border border-amber-500/30 p-4 rounded-xl space-y-2">
-              <div className="flex items-center justify-between text-amber-400 font-bold text-xs">
+            <div className="bg-amber-950/20 border border-amber-500/30 p-3 rounded-lg space-y-1">
+              <div className="flex items-center justify-between text-amber-400 font-bold">
                 <span>BATCHED REVIEW QUEUE</span>
-                <Layers className="w-4 h-4" />
+                <Layers className="w-3.5 h-3.5" />
               </div>
-              <p className="text-xs text-slate-300">Routine advisories bundled every {settings.batch_review_interval_sec}s</p>
-              <div className="text-[10px] text-amber-400/80 pt-2 flex items-center gap-1">
+              <p className="text-[11px] text-slate-300">Routine advisories bundled every {settings.batch_review_interval_sec}s</p>
+              <div className="text-[9px] text-amber-400/80 pt-1 flex items-center gap-1">
                 <Layers className="w-3 h-3" /> One-click bulk approval
               </div>
             </div>
 
-            <div className="bg-rose-950/20 border border-rose-500/30 p-4 rounded-xl space-y-2">
-              <div className="flex items-center justify-between text-rose-400 font-bold text-xs">
+            <div className="bg-rose-950/20 border border-rose-500/30 p-3 rounded-lg space-y-1">
+              <div className="flex items-center justify-between text-rose-400 font-bold">
                 <span>IMMEDIATE INTERRUPT</span>
-                <AlertTriangle className="w-4 h-4" />
+                <AlertTriangle className="w-3.5 h-3.5" />
               </div>
-              <p className="text-xs text-slate-300">Safety constraint trip or Out-of-Distribution hazard</p>
-              <div className="text-[10px] text-rose-400/80 pt-2 flex items-center gap-1">
+              <p className="text-[11px] text-slate-300">Safety constraint trip or OOD hazard</p>
+              <div className="text-[9px] text-rose-400/80 pt-1 flex items-center gap-1">
                 <AlertTriangle className="w-3 h-3" /> Spotlight focus drawer on map
               </div>
             </div>
@@ -460,35 +456,35 @@ export const AttentionManagementHub: React.FC = () => {
 
       {/* TAB 3: DISPATCHER LEARNING & MEMORY */}
       {activeTab === "learning" && (
-        <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 space-y-4">
-          <div className="border-b border-slate-800 pb-3 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-purple-400" />
-              Dispatcher Default Acceptance & Override Memory
+        <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 space-y-3">
+          <div className="border-b border-slate-800 pb-2 flex items-center justify-between">
+            <h3 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+              <TrendingUp className="w-3.5 h-3.5 text-purple-400" />
+              Acceptance Memory
             </h3>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/40 px-2.5 py-0.5 rounded">
-              83.3% Acceptance Rate
+            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-500/40 px-2 py-0.5 rounded">
+              83.3% Rate
             </span>
           </div>
 
-          <div className="space-y-3 text-xs">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl space-y-1">
-                <div className="text-slate-400">Accepted AI Defaults</div>
-                <div className="text-xl font-bold text-emerald-400 flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-emerald-400" /> 10 Recovery Plans
+          <div className="space-y-2.5 text-xs">
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-lg space-y-0.5">
+                <div className="text-slate-400 text-[10px]">Accepted Defaults</div>
+                <div className="text-sm font-bold text-emerald-400 flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-400" /> 10 Plans
                 </div>
               </div>
-              <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl space-y-1">
-                <div className="text-slate-400">Human Overridden Defaults</div>
-                <div className="text-xl font-bold text-amber-400 flex items-center gap-2">
-                  <XCircle className="w-5 h-5 text-amber-400" /> 2 Recovery Plans
+              <div className="p-2.5 bg-slate-900 border border-slate-800 rounded-lg space-y-0.5">
+                <div className="text-slate-400 text-[10px]">Overridden Defaults</div>
+                <div className="text-sm font-bold text-amber-400 flex items-center gap-1">
+                  <XCircle className="w-3.5 h-3.5 text-amber-400" /> 2 Plans
                 </div>
               </div>
             </div>
 
-            <p className="text-slate-400 leading-relaxed text-[11px] pt-2">
-              The Attention Engine continuously records dispatcher edits to default parameters (such as hold times or platform switches) and refines future default confidence bounds accordingly.
+            <p className="text-slate-400 text-[10px] leading-relaxed pt-1">
+              Records dispatcher edits to default parameters (such as hold times or platform switches) to refine future default confidence bounds.
             </p>
           </div>
         </div>
@@ -496,20 +492,20 @@ export const AttentionManagementHub: React.FC = () => {
 
       {/* TAB 4: EDITABLE CONTROL THRESHOLDS */}
       {activeTab === "settings" && (
-        <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-5 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 text-purple-400" />
-              Dispatcher Attention Control Panel
+        <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-purple-400" />
+              Attention Controls
             </h3>
-            {isSaved && <span className="text-xs text-emerald-400 font-bold animate-pulse">✓ Settings Saved</span>}
+            {isSaved && <span className="text-[10px] text-emerald-400 font-bold animate-pulse">✓ Saved</span>}
           </div>
 
-          <div className="space-y-6 text-xs">
+          <div className="space-y-4 text-xs">
             {/* Auto Approve Threshold Slider */}
-            <div className="space-y-2">
-              <div className="flex justify-between font-medium">
-                <span className="text-slate-300">Auto-Approval Confidence Threshold</span>
+            <div className="space-y-1.5">
+              <div className="flex justify-between font-medium text-[11px]">
+                <span className="text-slate-300">Auto-Approve Threshold</span>
                 <span className="font-mono text-purple-400 font-bold">{settings.auto_approve_confidence_threshold}%</span>
               </div>
               <input
@@ -520,18 +516,17 @@ export const AttentionManagementHub: React.FC = () => {
                 onChange={(e) => handleSaveSettings({ auto_approve_confidence_threshold: Number(e.target.value) })}
                 className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-400"
               />
-              <p className="text-[11px] text-slate-500">AI recovery actions with confidence higher than this limit auto-execute quietly.</p>
             </div>
 
             {/* Interruption Sensitivity */}
-            <div className="space-y-2">
-              <span className="text-slate-300 font-medium block">Interruption Sensitivity Profile</span>
-              <div className="grid grid-cols-3 gap-3">
+            <div className="space-y-1.5">
+              <span className="text-slate-300 font-medium block text-[11px]">Sensitivity Profile</span>
+              <div className="grid grid-cols-3 gap-2">
                 {(["LOW", "BALANCED", "HIGH"] as const).map((mode) => (
                   <button
                     key={mode}
                     onClick={() => handleSaveSettings({ interruption_sensitivity: mode })}
-                    className={`py-2 px-3 rounded-lg border font-mono text-xs font-bold transition ${
+                    className={`py-1.5 px-2 rounded-lg border font-mono text-[10px] font-bold transition ${
                       settings.interruption_sensitivity === mode
                         ? "bg-purple-500/20 border-purple-500 text-purple-300"
                         : "bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-800"
@@ -544,25 +539,25 @@ export const AttentionManagementHub: React.FC = () => {
             </div>
 
             {/* Toggles */}
-            <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <label className="flex items-center space-x-3 p-3 bg-slate-900 border border-slate-800 rounded-lg cursor-pointer">
+            <div className="pt-1 flex flex-col space-y-2 text-[11px]">
+              <label className="flex items-center space-x-2.5 p-2 bg-slate-900 border border-slate-800 rounded-lg cursor-pointer">
                 <input
                   type="checkbox"
                   checked={settings.enable_auto_approval}
                   onChange={(e) => handleSaveSettings({ enable_auto_approval: e.target.checked })}
                   className="rounded accent-purple-400"
                 />
-                <span className="text-slate-200">Enable Background Auto-Approvals</span>
+                <span className="text-slate-200">Auto-Approvals</span>
               </label>
 
-              <label className="flex items-center space-x-3 p-3 bg-slate-900 border border-slate-800 rounded-lg cursor-pointer">
+              <label className="flex items-center space-x-2.5 p-2 bg-slate-900 border border-slate-800 rounded-lg cursor-pointer">
                 <input
                   type="checkbox"
                   checked={settings.enable_smart_prefill}
                   onChange={(e) => handleSaveSettings({ enable_smart_prefill: e.target.checked })}
                   className="rounded accent-purple-400"
                 />
-                <span className="text-slate-200">Enable Smart Context Pre-filling</span>
+                <span className="text-slate-200">Smart Context Pre-filling</span>
               </label>
             </div>
           </div>

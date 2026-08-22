@@ -6,14 +6,14 @@
     "tabular_linear_mae_minutes": 2.946037499344322
   },
   "nexus_foundation_model": {
-    "delay_prediction_mae_minutes": 0.35844409465789795,
-    "action_policy_accuracy_pct": 100.0,
-    "optimality_gap_pct": 0.0,
+    "delay_prediction_mae_minutes": 7.628764629364014,
+    "action_policy_accuracy_pct": 62.5,
+    "optimality_gap_pct": 1.5,
     "safety_constraint_violations_pct": 0.0,
     "inference_latency_ms": {
-      "p50": 2.052350013400428,
-      "p95": 4.113530012546106,
-      "p99": 4.913811003207227
+      "p50": 4.531749989837408,
+      "p95": 6.201084988424552,
+      "p99": 41.04245697148131
     }
   },
   "speedup_vs_cpsat_solver": "125x faster inference"
