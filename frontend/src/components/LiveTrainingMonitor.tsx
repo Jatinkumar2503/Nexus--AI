@@ -35,8 +35,9 @@ const DEFAULT_STATUS: TrainingStatus = {
   val_mae: 0.358,
   action_accuracy: 100.0,
   throughput_samples_sec: 4850.0,
-  parameters_millions: 298.5,
+  parameters_millions: 318.3,
   device: "NVIDIA GeForce RTX 3050 (CUDA 12.6)",
+
   recent_logs: [
     "[System] NEXUS Live Neural Training Service Initialized.",
     "[Curriculum] Stage 1: Spatial Graph Representation Pretraining Converged.",
@@ -171,7 +172,8 @@ export const LiveTrainingMonitor: React.FC = () => {
           <div className="text-lg font-black text-cyan-400 mt-0.5 font-mono">
             {status.parameters_millions}M
           </div>
-          <div className="text-[9px] text-slate-500">14-Layer Causal Mamba</div>
+          <div className="text-[9px] text-slate-500">16-Layer Transformer</div>
+
         </div>
 
         <div className="bg-slate-900/70 p-2.5 rounded-xl border border-slate-800/80">

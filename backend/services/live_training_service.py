@@ -63,7 +63,8 @@ class LiveTrainingService:
             "val_mae": round(self.val_mae, 4),
             "action_accuracy": round(self.action_accuracy, 2),
             "throughput_samples_sec": round(self.throughput, 1),
-            "parameters_millions": 298.5,
+            "parameters_millions": 318.3,
+
             "device": "NVIDIA GeForce RTX 3050 (CUDA 12.6)" if torch.cuda.is_available() else "High-Throughput Multi-Threaded Engine",
             "recent_logs": self.logs[-8:],
             "history": self.history
